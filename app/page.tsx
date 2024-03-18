@@ -1,10 +1,25 @@
+// UI Import
 import Navbar from "./ui/home/Navbar";
 import Background from "./ui/home/Background";
 import RecipeCard from "./ui/home/RecipeCard";
 import ReminderCard from "./ui/home/ReminderCard";
 import CommunityCard from "./ui/home/CommunityCard";
 
+//Library Import
+import { redirect } from 'next/navigation';
+
+
 export default function Home() {
+
+  //TEMP Until DB CONNECTION IS WORKING
+  const loginUser = false;
+  const loginPass = true;
+
+  // Redirect to login page if user is not logged in
+  if (!loginUser) {
+    redirect('/pages/login');
+  }
+
   return (
     <>
       <Background>
@@ -30,3 +45,5 @@ export default function Home() {
     </>
   );
 }
+
+
