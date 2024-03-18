@@ -18,8 +18,8 @@ export default function RegistrationPage() {
                                 <div className="bg-gray-100 w-64 p-4 flex items-center mb-3">
                                     <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" />
                                 </div>
-                                <Link href="/pages/registration" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:">Sign Up</Link>
-                                <Link href="/pages/login" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:">Back</Link>
+                                <Link href="/pages/registration" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Sign Up</Link>
+                                <Link href="/pages/login" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Back</Link>
                             </div>
                         </div>
                     </div>
