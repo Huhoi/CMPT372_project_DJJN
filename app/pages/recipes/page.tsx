@@ -1,3 +1,3 @@
 export default function RecipePage() {
-    return <p>Recipes Page</p>;
-  }
+  return <p>Recipe Page</p>;
+}
