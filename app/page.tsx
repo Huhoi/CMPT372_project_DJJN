@@ -19,35 +19,6 @@ export default function Home() {
   //   redirect('/pages/login');
   // }
 
-  const fetchDataFromDB = async () => {
-    try {
-      const client = await pool.connect();
-      console.log("Connected to db");
-  
-      const result = await client.query("SELECT * FROM users");
-      const data = result.rows;
-      console.log("Fetched data:", data);
-  
-      client.release(); // Release the client back to the pool
-      return data;
-    }
-    catch (e) {
-      console.log("Received data:", e)
-      throw e;
-    }
-  };
-  
-  // Call fetchDataFromDB
-  fetchDataFromDB()
-  .then(data => {
-      console.log("Received data:", data);
-      // Handle the received  data here
-  })
-  .catch(e => {
-      // Handle the error here
-      console.error("Error fetching data:", e);
-  });
-
   return (
     <>
       <Background>
