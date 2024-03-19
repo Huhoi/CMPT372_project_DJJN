@@ -14,16 +14,22 @@ export default function LoginPage() {
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
+                body: JSON.stringify({ username: username, password: password }),
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
+                    'Content-Type': 'application/json'
+                }
             });
-
             if (response.ok) {
-                // Redirect to homepage
-                router.push('/');
+                const data = await response.json();
+                if (data.message === 'User successful login') {
+                    // Redirect to homepage
+                    router.push('/');
+                } else {
+                    // Server returned success status but user authentication failed
+                    setError(data.error || 'Login failed');
+                }
             } else {
+                // Server returned error status
                 const data = await response.json();
                 setError(data.error || 'Login failed');
             }
