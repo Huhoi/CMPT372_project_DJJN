@@ -4,6 +4,12 @@ import { NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from '../../utils/connectDB';
 
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
 // To handle a GET request to /api/register
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -20,10 +26,11 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 // To handle a POST request to /api/register
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
     if (req.method === 'POST') {
+    
         console.log("register POST Request")
-        const { username, password } = req.body;
+        const {username, password} = await req.json();
         console.log( username, password)
 
         try {
@@ -46,5 +53,6 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
 
             return NextResponse.json({ error: 'internal server error' });
         }
+
     }
 }
