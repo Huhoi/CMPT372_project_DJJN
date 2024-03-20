@@ -36,21 +36,21 @@ export const login = async (
     if (response.ok) {
         // Handle the response data accordingly (e.g., set session, redirect, etc.)
         const data = await response.json();
-        console.log(data);
 
-        session.uid = data.uid;
-        session.isLoggedIn = true;
+        if (data && data.message === 'User successful login') {
+            session.uid = data.uid;
+            session.isLoggedIn = true;
 
-        console.log(session.uid)
-
-        await session.save();
-        redirect('/')
+            await session.save();
+            redirect('/');
+        } else {
+            redirect('/pages/login');
+        }
 
     } else {
         // Handle error response from the API
-        throw new Error('Login failed');
+        redirect('/pages/login');
     }
-
 }
 
 export const logout = async () => {

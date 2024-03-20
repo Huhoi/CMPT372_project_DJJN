@@ -1,8 +1,5 @@
 "use client"
 
-import { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-
 export interface ModalProps {
     title: string;
     isOpen: boolean;
@@ -19,7 +16,6 @@ const Modal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) => {
     }
 
     return (
-            
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog onClose={onClose} className="relative z-10">
                 <Transition.Child
@@ -61,7 +57,6 @@ const Modal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) => {
                                     
                                 </div>
                             </Dialog.Panel>
-
                         </Transition.Child>
                     </div>
                 </div>

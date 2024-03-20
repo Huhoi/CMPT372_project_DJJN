@@ -15,13 +15,12 @@ export async function POST(req: Request) {
             // User not found or incorrect password
             if (result.rows.length === 0) {
                 client.release();
-                return NextResponse.json({ error: 'Invalid username or password' });          
+              
+                return NextResponse.json({ error: 'Invalid username or password' });
             }
 
             // Retrieve the authenticated user
             const user = result.rows[0];
-
-
 
             // Authentication successful
             client.release();
