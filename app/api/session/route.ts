@@ -18,6 +18,7 @@ export async function GET(res: Response) {
             session.isLoggedIn = defaultSession.isLoggedIn;
         }
 
+        console.log(session)
         return NextResponse.json(session);
     } catch (error) {
         console.error('Error fetching session:', error);

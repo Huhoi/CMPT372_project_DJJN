@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import Modal, { ModalProps } from './Modal'
 import CreatableSelect from 'react-select/creatable'
+import { SessionData } from '@/app/utils/lib'
+import { UserData } from '@/app/pages/account/page'
 
 
 
@@ -12,13 +14,79 @@ export interface Ingredient {
     rid: number
 }
 
-const RecipeModal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) => {
-    const [name, setName] = useState("");
+const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, children}) => {
+    const [userData, setUserData] = useState<UserData[]>([]);
+    const [sessionData, setSessionData] = useState<SessionData | null>(null);
+
+    const [title, setTitle] = useState("");
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-    const [directions, setDirections] = useState("");
+    const [instructions, setInstructions] = useState("");
+    const [favorite, setFavorite] = useState(false);
 
     const [selected, setSelected] = useState<any[]>([])
     const [selectOptions, setSelectOptions] = useState<any[]>([]);
+
+    // The values from a multi-change input returns an object-- use 
+    // this function to handle the values 
+    function handleMultiChange(values: any) {
+        setSelected(values);
+    }
+
+    const handleCheckbox = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setFavorite(event.target.checked);
+    };
+
+    function reset() {
+        setTitle("");
+        setInstructions("");
+        setSelected([]);
+        setIngredients([]);
+    }
+
+    // Fetch ingredients and UID on page load
+    useEffect(() => {
+        const handlePageLoad = async () => {
+            try {
+                // First get ingredients
+                const response1 = await fetch(`/api/recipes`)
+            
+                if (!response1.ok) {
+                    throw new Error('Failed to GET')
+                }
+            
+                const fetched = await response1.json();
+                console.log(fetched)
+                const items: Ingredient[] = fetched.map((item: any) => ({
+                    iid: item.iid,
+                    iname: item.name,
+                }))
+                setIngredients(items)
+
+                // Add as Select form options
+                var selectOptionsList: any[] = [];
+                items.forEach(ingredient => {
+                    selectOptionsList.push({ value: ingredient.iname, label: ingredient.iname });
+                });
+                setSelectOptions(selectOptionsList);
+
+                // Now get session data
+                const response2 = await fetch('/api/session');
+                if (response2.ok) {
+                    const data = await response2.json();
+    
+                    console.log(data)
+                    setSessionData(data);
+                } else {
+                    console.error('Failed to fetch session data:', response2.statusText);
+                }
+
+            } catch (error) {
+                console.error('Error with GET')
+            }
+        };
+
+        handlePageLoad();
+    }, []);
 
     // Every time the "selected" variable (aka. the values of the input)
     // is changed, detect it and adjust list of selected ingredients
@@ -33,60 +101,31 @@ const RecipeModal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) =
         }
     }, [selected])
 
-    // The values from a multi-change input returns an object-- use 
-    // this function to handle the values 
-    function handleMultiChange(values: any) {
-        setSelected(values);
-    }
-
-    // Fetch ingredients on page load
-    useEffect(() => {
-        const handleReadIngredients = async () => {
-            try {
-                const response = await fetch(`/api/recipes`)
-                console.log(response.json());
-            
-                if (!response.ok) {
-                    throw new Error('Failed to GET')
-                }
-            
-                const fetched = await response.json();
-                const items: Ingredient[] = fetched.map((item: any) => ({
-                    iid: item.iid,
-                    iname: item.iname,
-                    rid: item.rid
-                }))
-                setIngredients(items)
-
-                // Add as Select form options
-                var selectOptionsList: any[] = [];
-                items.forEach(ingredient => {
-                    selectOptionsList.push({ value: ingredient.iname, label: ingredient.iname });
-                });
-                setSelectOptions(selectOptionsList);
-
-            } catch (error) {
-                console.error('Error with GET')
-            }
-        };
-
-        handleReadIngredients();
-    }, []);
-
-    function reset() {
-        setName("");
-        setDirections("");
-        setSelected([]);
-        setIngredients([]);
+    async function handleCreate(e: { preventDefault: () => void }) {
+        try {
+          const response = await fetch(`/api/recipes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: new Date().toString(), favorite: favorite })
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to POST')
+          }
+    
+        } catch (error) {
+          console.error('Error with POST', error)
+        }
+        
     }
 
     return (
-        <Modal title={"Untitled recipe"} isOpen={isOpen} onClose={onClose}>
+        <Modal modalTitle={modalTitle} isOpen={isOpen} onClose={onClose}>
             <form className="h-screen">
                 <div id="titleInput">
                     <p className="py-2 text-2xl">Recipe name</p>
-                    <input value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    <input value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
                     className="bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500" 
                     type="text" 
@@ -94,6 +133,7 @@ const RecipeModal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) =
                 </div>
 
                 <div id="ingredientInput">
+                    <p className="py-2 text-2xl">Ingredients</p>
                     <CreatableSelect 
                     value={selected}
                     onChange={handleMultiChange}
@@ -170,18 +210,26 @@ const RecipeModal: React.FC<ModalProps> = ({title, isOpen, onClose, children}) =
 
                 <div id="instructionInput">
                     <p className="py-2 text-2xl">Instructions</p>
-                    <textarea value={directions} 
-                    onChange={(e) => setDirections(e.target.value)}
+                    <textarea value={instructions} 
+                    onChange={(e) => setInstructions(e.target.value)}
                     required
                     className="min-h-[150px] resize-none bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500" 
-                    placeholder="Enter directions"></textarea>
+                    placeholder="Enter instructions"></textarea>
                 </div>
 
                 <div id="favoriteInput">
-                    <input name="favorite" type="checkbox" />
+                    <input name="favorite"
+                    type="checkbox" 
+                    checked={favorite} 
+                    onChange={handleCheckbox}/>
                     <label htmlFor="favorite">Favorite</label>
                 </div>
             </form>
+            <div id="buttonContainer" className="absolute px-4 bottom-0 left-0 h-1/8 w-full bg-gradient-to-r from-blue-100 to-indigo-100 grid grid-cols-5 grid-rows-1 gap-2 justify-center items-center">
+                <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold col-start-1 col-end-1 text-indigo-400 hover:text-white bg-transparent hover:bg-indigo-500 border-2 border-indigo-400 hover:border-indigo-500 rounded-md flex justify-center items-center" onClick={reset}>Reset</button>
+                <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold hover:bg-slate-900/10 text-slate-500 hover:text-slate-950 col-start-4 col-end-4 rounded-md flex justify-center items-center" onClick={onClose}>Cancel</button>
+                <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={handleCreate}>Save</button>
+            </div>
         </Modal>
     )
 }
