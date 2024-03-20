@@ -1,6 +1,5 @@
 import { dm_sans, dm_mono } from "../ui/fonts";
 import Sidebar from "@/app/ui/pages/Sidebar";
-import AddRecipe from "../ui/recipes/AddRecipe";
 
 export default function Layout({
   children,
