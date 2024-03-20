@@ -77,6 +77,7 @@ export default function LoginPage() {
                                             name="username"
                                             placeholder="Username"
                                             className="bg-gray-100 outline-none text-sm flex-1"
+                                            autoComplete="username"
                                             required
                                         />
 
@@ -87,6 +88,7 @@ export default function LoginPage() {
                                             name="password"
                                             placeholder="Password"
                                             className="bg-gray-100 outline-none text-sm flex-1"
+                                            autoComplete="password"
                                             required
                                         />
                                     </div>
