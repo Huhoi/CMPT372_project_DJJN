@@ -1,9 +1,26 @@
+// UI Import
 import Navbar from "./ui/home/Navbar";
+import Background from "./ui/home/Background";
 import RecipeModule from "./ui/home/RecipeModule";
 import ReminderModule from "./ui/home/ReminderModule";
 import CommunityModule from "./ui/home/CommunityModule";
 
-export default function Home() {
+import pool from './utils/connectDB';
+
+//Library Import
+import { redirect } from 'next/navigation';
+import { getSession } from './utils/actions'
+
+
+export default async function Home() {
+  const session = await getSession()
+
+  console.log(session)
+  if (!session.isLoggedIn) {
+    redirect('/pages/login');
+  }
+
+
   return (
     <>
       <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
