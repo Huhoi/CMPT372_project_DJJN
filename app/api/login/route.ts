@@ -15,6 +15,7 @@ export async function POST(req: Request) {
             // User not found or incorrect password
             if (result.rows.length === 0) {
                 client.release();
+              
                 return NextResponse.json({ error: 'Invalid username or password' });
             }
 

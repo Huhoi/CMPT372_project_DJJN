@@ -10,6 +10,7 @@ import { SessionData } from '@/app/utils/lib';
 export default function LoginPage() {
     const [error, setError] = useState('');
     const [state, formAction] = useFormState<any, FormData>(login, undefined);
+
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
     // Define a function to fetch session data
@@ -45,7 +46,6 @@ export default function LoginPage() {
             redirect('/'); // Redirect to the desired page
         }
     }, [sessionData]); // Trigger the effect whenever sessionData changes
-
 
     return (
         <Background>

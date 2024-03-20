@@ -13,6 +13,7 @@ export default function RegistrationPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -103,7 +104,6 @@ export default function RegistrationPage() {
                 <button type="submit" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Sign Up</button>
                 <button onClick={() => router.push('/pages/login')} className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Back</button>
               </form>
-
             </div>
           </div>
         </main>

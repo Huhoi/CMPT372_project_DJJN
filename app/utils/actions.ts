@@ -36,6 +36,7 @@ export const login = async (
     if (response.ok) {
         // Handle the response data accordingly (e.g., set session, redirect, etc.)
         const data = await response.json();
+
         if (data && data.message === 'User successful login') {
             session.uid = data.uid;
             session.isLoggedIn = true;
