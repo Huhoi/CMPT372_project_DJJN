@@ -8,6 +8,7 @@ export const config = {
         bodyParser: true,
     },
 };
+
 // To handle a POST request to /api/login
 export async function POST(req: Request) {
     if (req.method === 'POST') {
