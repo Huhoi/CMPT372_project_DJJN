@@ -43,8 +43,8 @@ const Modal: React.FC<ModalProps> = ({isOpen, onClose, children}) => {
                             leaveTo="opacity-0"
                         >
 
-                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                <Dialog.Description as="p" className="text-sm text-gray-500">
+                            <Dialog.Panel className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Description as="div" className="text-sm text-gray-500">
                                     {children}
                                 </Dialog.Description>
                                 <button onClick={onClose}>Close</button>
