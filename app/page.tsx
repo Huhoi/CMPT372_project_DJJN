@@ -1,9 +1,10 @@
 // UI Import
 import Navbar from "./ui/home/Navbar";
 import Background from "./ui/home/Background";
-import RecipeCard from "./ui/home/RecipeCard";
-import ReminderCard from "./ui/home/ReminderCard";
-import CommunityCard from "./ui/home/CommunityCard";
+import RecipeModule from "./ui/home/RecipeModule";
+import ReminderModule from "./ui/home/ReminderModule";
+import CommunityModule from "./ui/home/CommunityModule";
+
 import pool from './utils/connectDB';
 
 //Library Import
@@ -50,26 +51,24 @@ export default function Home() {
 
   return (
     <>
-      <Background>
-        <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
-          <div className="row-start-3 row-end-7 col-start-4 col-end-6">
-            <ReminderCard />
-          </div>
-          <div className="row-start-3 row-end-7 col-start-6 col-end-10">
-            <RecipeCard />
-          </div>
-          <div className="row-start-7 row-end-11 col-start-4 col-end-8">
-            <ReminderCard />
-          </div>
-          <div className="row-start-7 row-end-11 col-start-8 col-end-10">
-            <ReminderCard />
-          </div>
-          <div className="row-start-11 row-end-12 col-start-7 col-end-10">
-            <CommunityCard />
-          </div>
+      <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
+        <div className="row-start-3 row-end-7 col-start-4 col-end-6">
+          <ReminderModule />
         </div>
-        <Navbar />
-      </Background>
+        <div className="row-start-3 row-end-7 col-start-6 col-end-10">
+          <RecipeModule />
+        </div>
+        <div className="row-start-7 row-end-11 col-start-4 col-end-8">
+          <ReminderModule />
+        </div>
+        <div className="row-start-7 row-end-11 col-start-8 col-end-10">
+          <ReminderModule />
+        </div>
+        <div className="row-start-11 row-end-12 col-start-7 col-end-10">
+          <CommunityModule />
+        </div>
+      </div>
+      <Navbar />
     </>
   );
 }

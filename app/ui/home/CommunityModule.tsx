@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion } from "framer-motion";
 import Link from 'next/link';
 
-function CommunityCard() {
+function CommunityModule() {
   return (
     <Link href="/pages/community" className="font-dm_mono tracking-widester text-sm font-medium">
         <motion.div className="bg-neutral-500/20 shadow-xl backdrop-blur-sm rounded-xl" style={{ height: "100%", width: "100%" }}
@@ -17,4 +17,4 @@ function CommunityCard() {
   )
 }
 
-export default CommunityCard
+export default CommunityModule
