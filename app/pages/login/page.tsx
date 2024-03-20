@@ -5,12 +5,47 @@ import { login } from '../../utils/actions';
 import { useFormState } from "react-dom";
 import { redirect } from 'next/navigation';
 import { getSession } from '../../utils/actions'
+import { SessionData } from '@/app/utils/lib';
 
 export default function LoginPage() {
     const [error, setError] = useState('');
     const [state, formAction] = useFormState<any, FormData>(login, undefined);
+    const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
-    
+    // Define a function to fetch session data
+    const fetchSessionData = async () => {
+        try {
+            // Make a GET request to the /api/session endpoint
+            const response = await fetch('/api/session');
+
+            // Check if the response is successful (status code 200)
+            if (response.ok) {
+                // Parse the JSON response
+                const data = await response.json();
+                // Update the session data state with the response data
+                setSessionData(data);
+            } else {
+                // Handle error response
+                console.error('Failed to fetch session data:', response.statusText);
+            }
+        } catch (error) {
+            // Handle network or other errors
+            console.error('Error fetching session data:', error);
+        }
+    };
+
+    // Use the useEffect hook to fetch session data when the component mounts
+    useEffect(() => {
+        fetchSessionData();
+    }, []);
+
+    // If sessionData is loaded and user is logged in, redirect
+    useEffect(() => {
+        if (sessionData && sessionData.isLoggedIn) {
+            redirect('/'); // Redirect to the desired page
+        }
+    }, [sessionData]); // Trigger the effect whenever sessionData changes
+
 
     return (
         <Background>
