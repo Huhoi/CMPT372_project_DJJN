@@ -1,16 +1,15 @@
 "use server"
-import { NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from "next";
 import { sessionOptions, SessionData, defaultSession } from '../utils/lib';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 
+
 export const getSession = async () => {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-
     if (!session.isLoggedIn) {
         session.isLoggedIn = defaultSession.isLoggedIn;
-
     }
     return session;
 
@@ -24,9 +23,6 @@ export const login = async (
 
     const formUsername = formData.get("username") as string
     const formPassword = formData.get("password") as string
-
-    console.log(formUsername)
-    console.log(formPassword)
 
     // Check user in DB by sending a POST request to /api/login
     const response = await fetch('http://localhost:3000/api/login', {
@@ -42,8 +38,10 @@ export const login = async (
         const data = await response.json();
         console.log(data);
 
-        session.id = data.id;
+        session.uid = data.uid;
         session.isLoggedIn = true;
+
+        console.log(session.uid)
 
         await session.save();
         redirect('/')
@@ -58,6 +56,6 @@ export const login = async (
 }
 
 export const logout = async () => {
-    "use server"
+
 }
 

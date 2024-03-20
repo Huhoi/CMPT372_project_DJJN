@@ -1,46 +1,16 @@
 'use client'
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Background from "../../ui/home/Background";
 import { login } from '../../utils/actions';
 import { useFormState } from "react-dom";
+import { redirect } from 'next/navigation';
+import { getSession } from '../../utils/actions'
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const router = useRouter();
     const [state, formAction] = useFormState<any, FormData>(login, undefined);
 
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await fetch('/api/login', {
-    //             method: 'POST',
-    //             body: JSON.stringify({ username: username, password: password }),
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             }
-    //         });
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             if (data.message === 'User successful login') {
-    //                 // Redirect to homepage
-    //                 router.push('/');
-    //             } else {
-    //                 // Server returned success status but user authentication failed
-    //                 setError(data.error || 'Login failed');
-    //             }
-    //         } else {
-    //             // Server returned error status
-    //             const data = await response.json();
-    //             setError(data.error || 'Login failed');
-    //         }
-    //     } catch (error) {
-    //         console.error('Login error:', error);
-    //         setError('Internal server error');
-    //     }
-    // };
+    
 
     return (
         <Background>
@@ -72,7 +42,6 @@ export default function LoginPage() {
                                             name="username"
                                             placeholder="Username"
                                             className="bg-gray-100 outline-none text-sm flex-1"
-                                            onChange={(e) => setUsername(e.target.value)}
                                             required
                                         />
 
@@ -83,7 +52,6 @@ export default function LoginPage() {
                                             name="password"
                                             placeholder="Password"
                                             className="bg-gray-100 outline-none text-sm flex-1"
-                                            onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />
                                     </div>
