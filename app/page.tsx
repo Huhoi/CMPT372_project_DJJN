@@ -7,16 +7,21 @@ import CommunityCard from "./ui/home/CommunityCard";
 
 //Library Import
 import { redirect } from 'next/navigation';
+import { getSession } from './utils/actions'
 
+export default async function Home() {
+  const session = await getSession()
+  // //TEMP Until DB CONNECTION IS WORKING
+  // const loginUser = false;
 
-export default function Home() {
+  // // Redirect to login page if user is not logged in
+  // if (!loginUser) {
+  //   redirect('/pages/login');
+  // }
 
-  //TEMP Until DB CONNECTION IS WORKING
-  const loginUser = false;
-  const loginPass = true;
-
-  // Redirect to login page if user is not logged in
-  if (!loginUser) {
+  
+  console.log(session)
+  if (!session.isLoggedIn) {
     redirect('/pages/login');
   }
 
