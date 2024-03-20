@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { Dialog } from "@headlessui/react";
 
 export default function InventoryPage() {
+
+    
     return (
         <div className="flex justify-center items-center h-screen">
             <CategoryModal />
