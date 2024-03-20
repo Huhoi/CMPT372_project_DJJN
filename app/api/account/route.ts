@@ -15,26 +15,20 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         try {
             const session = await getSession();
             if (!session.isLoggedIn) {
-                NextResponse.json({ error: 'User not authenticated' });
+                return NextResponse.json({ error: 'User not authenticated' });
             }
 
             const client = await pool.connect();
-            const result = await client.query('SELECT * FROM users WHERE uid = $1', [session.uid]);
-
-            // User not found
-            if (result.rows.length === 0) {
-                client.release();
-                return NextResponse.json({ error: 'User not found' });
-            }
+            const result = await client.query('SELECT * FROM users');
 
             // Retrieve the user data
-            const user = result.rows[0];
+            const users = result.rows;
 
             // Release client
             client.release();
 
             // Return user data
-            NextResponse.json({ user });
+            return NextResponse.json({ users });
         } catch (error) {
             console.error('Error fetching user data:', error);
             return NextResponse.json({ error: 'Internal server error' });
