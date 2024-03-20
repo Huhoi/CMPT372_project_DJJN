@@ -17,8 +17,6 @@ interface UserData {
 export default function AccountPage() {
     const [userData, setUserData] = useState<UserData[]>([]);
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
-
-    console.log(userData, 'asd');
     // Define a function to fetch session data
     const fetchSessionData = async () => {
         try {
@@ -54,6 +52,7 @@ export default function AccountPage() {
                             const response = await fetch('/api/account');
                             if (response.ok) {
                                 const data = await response.json();
+
                                 setUserData(data.users);
                             } else {
                                 console.error('Failed to fetch user data:', response.statusText);
@@ -70,6 +69,29 @@ export default function AccountPage() {
     }, [sessionData?.uid]);
 
 
+    const handleDelete = async (uid: number) => {
+        console.log(uid)
+        try {
+            const data = { uid: uid };
+
+            // Send a DELETE request to the API to delete the user with the given UID
+            const response = await fetch(`/api/account/`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                // If deletion is successful, remove the deleted user from the userData state
+                setUserData(userData.filter(user => user.uid !== uid));
+            } else {
+                console.error('Failed to delete user:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
+
     return (
         <Background>
             <div className="flex flex-col items-center justify-center h-full">
@@ -83,18 +105,27 @@ export default function AccountPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {userData.map((user) => (
-                                <tr key={user.uid}>
-                                    <td className="border border-black px-4 py-2">{user.username}</td>
-                                </tr>
-                            ))}
+                            {userData
+                                .filter(user => user.uid !== 1) // Filter out the user with uid equal to 1
+                                .map((user) => (
+                                    <tr key={user.uid}>
+                                        <td className="border border-black px-4 py-2">{user.username}</td>
+                                        <td className="border border-black px-4 py-2">
+                                            <button onClick={() => handleDelete(user.uid)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
+
                 )}
+                <form action={logout}>
+                    <button className="border-2 border-blackrounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">logout</button>
+                </form>
             </div>
-            <form action={logout}>
-                <button className="border-2 border-blackrounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">logout</button>
-            </form>
+
         </Background>
+
     );
 }

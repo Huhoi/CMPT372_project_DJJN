@@ -37,3 +37,39 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
     }
 }
+
+// To handle a DELETE request to /api/account/
+export async function DELETE(req: Request) {
+
+    if (req.method === 'DELETE') {
+        try {
+            const { uid } = await req.json();
+            console.log(uid)
+
+            if (!uid) {
+                return NextResponse.json({ error: 'User ID is required' });
+            }
+
+            const client = await pool.connect();
+            const result = await client.query('DELETE FROM users WHERE uid = $1', [uid]);
+
+            // Check if the user was deleted
+            if (result.rowCount === 0) {
+                client.release();
+                return NextResponse.json({ error: 'User not found' });
+
+            }
+
+            // Release client
+            client.release();
+
+            // Return success message
+            return NextResponse.json({ message: 'User deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return NextResponse.json({ error: 'Internal server error' });
+        }
+    } else {
+        return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
+    }
+}
