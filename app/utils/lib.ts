@@ -16,6 +16,7 @@ export const sessionOptions: SessionOptions = {
     cookieOptions: {
         httpOnly: true,
         secure: false,
+        maxAge: 3600000, // 1 hour in milliseconds
     }
 
 }

@@ -51,11 +51,11 @@ export const login = async (
         throw new Error('Login failed');
     }
 
-
-
 }
 
 export const logout = async () => {
-
+    const session = await getSession();
+    session.destroy();
+    redirect('/');
 }
 

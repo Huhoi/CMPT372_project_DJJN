@@ -20,6 +20,7 @@ export default async function Home() {
     redirect('/pages/login');
   }
 
+
   return (
     <>
       <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
