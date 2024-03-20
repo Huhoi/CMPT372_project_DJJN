@@ -37,16 +37,13 @@ export default function AccountPage() {
             console.error('Error fetching session data:', error);
         }
     };
-
     useEffect(() => {
         // Call fetchSessionData
         fetchSessionData()
             .then(() => {
                 // Define fetchUserData inside the useEffect callback
                 const fetchUserData = async () => {
-
-                    console.log(sessionData?.uid)
-                    console.log(typeof (sessionData?.uid))
+    
                     try {
                         if (parseInt(sessionData?.uid || '0') === 1) {
                             const response = await fetch('/api/account');
@@ -67,7 +64,6 @@ export default function AccountPage() {
                 fetchUserData();
             });
     }, [sessionData?.uid]);
-
 
     const handleDelete = async (uid: number) => {
         console.log(uid)
