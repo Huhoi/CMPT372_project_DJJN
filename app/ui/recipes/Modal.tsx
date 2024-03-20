@@ -1,5 +1,8 @@
 "use client"
 
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+
 export interface ModalProps {
     title: string;
     isOpen: boolean;
