@@ -18,7 +18,7 @@ export default function AccountPage() {
     const [userData, setUserData] = useState<UserData[]>([]);
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
-    console.log(userData);
+    console.log(userData, 'asd');
     // Define a function to fetch session data
     const fetchSessionData = async () => {
         try {
@@ -48,12 +48,13 @@ export default function AccountPage() {
                 const fetchUserData = async () => {
 
                     console.log(sessionData?.uid)
+                    console.log(typeof (sessionData?.uid))
                     try {
-                        if (sessionData?.uid === '1') {
+                        if (parseInt(sessionData?.uid || '0') === 1) {
                             const response = await fetch('/api/account');
                             if (response.ok) {
                                 const data = await response.json();
-                                setUserData(data);
+                                setUserData(data.users);
                             } else {
                                 console.error('Failed to fetch user data:', response.statusText);
                             }
@@ -74,7 +75,7 @@ export default function AccountPage() {
             <div className="flex flex-col items-center justify-center h-full">
                 <p className="text-2xl font-semibold mb-4">Account Page</p>
 
-                {(sessionData?.uid === '1') && (
+                {(parseInt(sessionData?.uid || '0') === 1) && (
                     <table className="border-collapse border border-black">
                         <thead>
                             <tr>
