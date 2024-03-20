@@ -1,4 +1,5 @@
 'use client'
+
 import { logout } from '../../utils/actions'
 import { login } from '../../utils/actions';
 import { useState, useEffect } from 'react';

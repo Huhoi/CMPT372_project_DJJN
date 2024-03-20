@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 function RecipeCard() {
   return (
-    <motion.div className="bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl" style={{ height: "100%", width: "100%" }}
+    <motion.div className="h-full w-full bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl"
       whileHover={{ scale: 1.05, transition: { duration: 0.5 }, }}>
       <Link href="/pages/recipes">
         <div className="relative rounded-t-xl bg-gradient-to-r from-blue-300/20 to-indigo-300/20 h-screen flex items-center" style={{ height: "25%", width: "100%" }}>
