@@ -19,3 +19,20 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
     }
 }
+
+export async function GET(req: Request) {
+    if (req.method === 'GET') {
+        try {
+            const client = await pool.connect();
+            const result = await client.query('SELECT * FROM Ingredient');
+
+            return NextResponse.json(result.rows);
+        } catch (error) {
+            console.error("Error with getting ingredients: ", error);
+            return NextResponse.json({ error: "internal server error" });
+        }
+    }
+    else {
+        return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
+    }
+}

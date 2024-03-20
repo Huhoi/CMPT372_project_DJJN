@@ -30,7 +30,7 @@ function AddButton() {
         onMouseLeave={() => setImage("/circle-plus-1.png")}
         onFocus={() => setImage("/circle-plus-1.png")}>
         <motion.div className="p-6 flex flex-grow justify-center items-center gap-2" whileHover={{ scale: 1.03, transition: { duration: 0.3 }, }}>
-          <Image className="pointer-events-none select-none" src={image} alt="icon" width={50} height={50}></Image>
+          <Image className="pointer-events-none select-none" priority src={image} alt="icon" width={50} height={50}></Image>
           <p className="font-dm_sans text-4xl font-bold tracking-tighter">Create a new recipe</p>
         </motion.div>
         <RecipeModal title={"Untitled recipe"} isOpen={checkIsOpen} onClose={closeModal} children={undefined} />
