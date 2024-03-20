@@ -29,22 +29,22 @@ export default function RegistrationPage() {
       });
 
       if (response.ok) {
-        // User registered successfully
-        // Redirect or show success message
-        router.push('/pages/login');
-      } else {
-        if (response.status === 500) {
-          setError('Internal server error');
+        const data = await response.json();
+        if (data.message === 'User sucessfully added') {
+            router.push('/pages/login');
         } else {
-          // Handle registration error
+            // Server returned success status but user authentication failed
+            setError(data.error || 'Registration failed');
+        }
+      } else {
+          // Server returned error status
           const data = await response.json();
           setError(data.error || 'Registration failed');
-        }
       }
-    } catch (error) {
-      console.error('Registration error:', error);
-      setError('Internal server error');
-    }
+      } catch (error) {
+          console.error('Registration error:', error);
+          setError('Internal server error');
+      }
   };
 
   return (

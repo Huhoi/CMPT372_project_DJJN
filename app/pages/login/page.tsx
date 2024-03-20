@@ -68,6 +68,13 @@ export default function LoginPage() {
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <div className="bg-gray-100 w-64 p-4 flex items-center mb-3">
+
+                                        <input type="text" name="username" placeholder="Username" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => setUsername(e.target.value)} autoComplete='username' required/>
+
+                                    </div>
+                                    <div className="bg-gray-100 w-64 p-4 flex items-center mb-3">
+                                        <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => setPassword(e.target.value)} autoComplete='current-password' required/>
+
                                         <input type="text"
                                             name="username"
                                             placeholder="Username"
@@ -86,6 +93,7 @@ export default function LoginPage() {
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />
+
                                     </div>
                                     {error && <div className="text-red-500 mb-2">{error}</div>}
                                     <button className="border-2 border-text-slate-800 rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Sign In</button>

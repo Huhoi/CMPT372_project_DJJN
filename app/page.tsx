@@ -22,11 +22,14 @@ export default async function Home() {
   //   redirect('/pages/login');
   // }
 
+
+
   
   console.log(session)
   if (!session.isLoggedIn) {
     redirect('/pages/login');
   }
+
 
   return (
     <>
