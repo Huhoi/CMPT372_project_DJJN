@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 
-function ReminderCard() {
+function ReminderModule() {
   return (
     <motion.div className="bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl" style={{ height: "100%", width: "100%" }}
       whileHover={{ scale: 1.05, transition: { duration: 0.5 }, }}>
@@ -20,4 +20,4 @@ function ReminderCard() {
   )
 }
 
-export default ReminderCard
+export default ReminderModule
