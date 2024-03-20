@@ -1,46 +1,16 @@
 'use client'
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Background from "../../ui/home/Background";
 import { login } from '../../utils/actions';
 import { useFormState } from "react-dom";
+import { redirect } from 'next/navigation';
+import { getSession } from '../../utils/actions'
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const router = useRouter();
     const [state, formAction] = useFormState<any, FormData>(login, undefined);
 
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await fetch('/api/login', {
-    //             method: 'POST',
-    //             body: JSON.stringify({ username: username, password: password }),
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             }
-    //         });
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             if (data.message === 'User successful login') {
-    //                 // Redirect to homepage
-    //                 router.push('/');
-    //             } else {
-    //                 // Server returned success status but user authentication failed
-    //                 setError(data.error || 'Login failed');
-    //             }
-    //         } else {
-    //             // Server returned error status
-    //             const data = await response.json();
-    //             setError(data.error || 'Login failed');
-    //         }
-    //     } catch (error) {
-    //         console.error('Login error:', error);
-    //         setError('Internal server error');
-    //     }
-    // };
+    
 
     return (
         <Background>
@@ -68,10 +38,22 @@ export default function LoginPage() {
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <div className="bg-gray-100 w-64 p-4 flex items-center mb-3">
-                                        <input type="text" name="username" placeholder="Username" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => setUsername(e.target.value)} autoComplete='username' required/>
+                                        <input type="text"
+                                            name="username"
+                                            placeholder="Username"
+                                            className="bg-gray-100 outline-none text-sm flex-1"
+                                            required
+                                        />
+
                                     </div>
                                     <div className="bg-gray-100 w-64 p-4 flex items-center mb-3">
-                                        <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => setPassword(e.target.value)} autoComplete='current-password' required/>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            placeholder="Password"
+                                            className="bg-gray-100 outline-none text-sm flex-1"
+                                            required
+                                        />
                                     </div>
                                     {error && <div className="text-red-500 mb-2">{error}</div>}
                                     <button className="border-2 border-text-slate-800 rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Sign In</button>

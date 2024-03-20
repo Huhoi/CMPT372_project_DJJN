@@ -14,17 +14,7 @@ import { getSession } from './utils/actions'
 
 export default async function Home() {
   const session = await getSession()
-  // //TEMP Until DB CONNECTION IS WORKING
-  // const loginUser = false;
 
-  // // Redirect to login page if user is not logged in
-  // if (!loginUser) {
-  //   redirect('/pages/login');
-  // }
-
-
-
-  
   console.log(session)
   if (!session.isLoggedIn) {
     redirect('/pages/login');

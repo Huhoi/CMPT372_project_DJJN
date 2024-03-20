@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
             // Authentication successful
             client.release();
-            return NextResponse.json({ message: 'User successful login', user: { id: user.id, username: user.username } });
+            return NextResponse.json({ message: 'User successful login', uid: user.uid, username: user.username });
         } catch (error) {
             console.error('Error authenticating user:', error);
             return NextResponse.json({ error: 'Internal server error' });
