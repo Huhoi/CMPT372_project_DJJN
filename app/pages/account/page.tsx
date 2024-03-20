@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 import { getSession } from '../../utils/actions'
 import { SessionData } from '@/app/utils/lib';
 
-interface UserData {
+export interface UserData {
     uid: number;
     username: string;
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from '../../utils/connectDB';
+import { getSession } from '@/app/utils/actions';
 
 export async function POST(req: Request) {
     if (req.method === 'POST') {
