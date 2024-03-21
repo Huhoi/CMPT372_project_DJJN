@@ -1,12 +1,12 @@
 'use client'
 
-import { logout } from '../../utils/actions'
-import { login } from '../../utils/actions';
+import { logout } from '../../../utils/actions'
+import { login } from '../../../utils/actions';
 import { useState, useEffect } from 'react';
-import Background from "../../ui/home/Background";
+import Background from "../../../ui/home/Background";
 import { useFormState } from "react-dom";
 import { redirect } from 'next/navigation';
-import { getSession } from '../../utils/actions'
+import { getSession } from '../../../utils/actions'
 import { SessionData } from '@/app/utils/lib';
 
 export interface UserData {
@@ -43,7 +43,7 @@ export default function AccountPage() {
             .then(() => {
                 // Define fetchUserData inside the useEffect callback
                 const fetchUserData = async () => {
-    
+
                     try {
                         if (parseInt(sessionData?.uid || '0') === 1) {
                             const response = await fetch('/api/account');

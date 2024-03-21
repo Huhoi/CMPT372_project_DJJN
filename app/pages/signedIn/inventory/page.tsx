@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import Background from "../../ui/home/Background";
-import CategoryModal from "../../ui/recipes/CategoryModal";
+import Background from "../../../ui/home/Background";
+import CategoryModal from "../../../ui/recipes/CategoryModal";
 import { useRouter } from 'next/navigation';
 import { Dialog } from "@headlessui/react";
 
