@@ -1,11 +1,10 @@
 "use client"
 
-import { Fragment, useState } from "react";
-import Background from "../home/Background";
-import { useRouter } from 'next/navigation';
 import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
-interface ModalProps {
+export interface ModalProps {
+    modalTitle: string;
     isOpen: boolean;
     onClose: () => void;
     children: React.ReactNode;
@@ -13,10 +12,13 @@ interface ModalProps {
 
 
 // base component for modal, contents are passed in as children
-const Modal: React.FC<ModalProps> = ({isOpen, onClose, children}) => {
+const Modal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, children}) => {
+
+    function handleSubmit() {
+
+    }
 
     return (
-            
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog onClose={onClose} className="relative z-10">
                 <Transition.Child
@@ -43,13 +45,14 @@ const Modal: React.FC<ModalProps> = ({isOpen, onClose, children}) => {
                             leaveTo="opacity-0"
                         >
 
-                            <Dialog.Panel className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                <Dialog.Description as="div" className="text-sm text-gray-500">
-                                    {children}
-                                </Dialog.Description>
-                                <button onClick={onClose}>Close</button>
+                            <Dialog.Panel className="pb-1 w-full max-w-3xl transform overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-left align-middle shadow-xl transition-all">
+                                <div className="transform overflow-hidden rounded-lg bg-white text-left align-middle transition-all">
+                                    <Dialog.Title className="font-dm_sans tracking-tighter text-2xl font-bold text-slate-800 p-6">{modalTitle}</Dialog.Title>
+                                    <Dialog.Description as="div" className="px-6 text-sm text-slate-800">
+                                        {children}
+                                    </Dialog.Description>
+                                </div>
                             </Dialog.Panel>
-
                         </Transition.Child>
                     </div>
                 </div>

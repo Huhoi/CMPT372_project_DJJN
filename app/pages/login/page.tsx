@@ -7,9 +7,11 @@ import { redirect } from 'next/navigation';
 import { getSession } from '../../utils/actions'
 import { SessionData } from '@/app/utils/lib';
 
+
 export default function LoginPage() {
     const [error, setError] = useState('');
     const [state, formAction] = useFormState<any, FormData>(login, undefined);
+
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
     // Define a function to fetch session data
@@ -46,7 +48,6 @@ export default function LoginPage() {
         }
     }, [sessionData]); // Trigger the effect whenever sessionData changes
 
-
     return (
         <Background>
             <div id="loginPageContainer" className="absolute inset-0 flex items-center justify-center">
@@ -77,6 +78,7 @@ export default function LoginPage() {
                                             name="username"
                                             placeholder="Username"
                                             className="bg-gray-100 outline-none text-sm flex-1"
+                                            autoComplete="username"
                                             required
                                         />
 
@@ -87,6 +89,7 @@ export default function LoginPage() {
                                             name="password"
                                             placeholder="Password"
                                             className="bg-gray-100 outline-none text-sm flex-1"
+                                            autoComplete="password"
                                             required
                                         />
                                     </div>

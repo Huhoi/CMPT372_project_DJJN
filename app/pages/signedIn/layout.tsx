@@ -1,4 +1,4 @@
-import { dm_sans, dm_mono } from "../ui/fonts";
+import { dm_sans, dm_mono } from "../../ui/fonts";
 import Sidebar from "@/app/ui/pages/Sidebar";
 
 export default function Layout({
@@ -13,7 +13,7 @@ export default function Layout({
           <Sidebar />
         </div>
 
-        <div id="scrollableContainer" className="pt-8">
+        <div id="scrollableContainer" className="pt-4 row-start-1 row-end-13 col-start-4 col-end-12">
           {children}
         </div>
       </div>

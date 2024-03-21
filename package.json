@@ -23,7 +23,8 @@
     "pg": "^8.11.3",
     "pool": "^0.4.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-select": "^5.8.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
