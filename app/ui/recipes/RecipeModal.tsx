@@ -130,7 +130,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                     <input value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
-                        className="bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500"
+                        className="bg-slate-200 appearance-none border-2 border-slate-300 rounded w-full py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
                         type="text"
                         placeholder="Enter name" />
                 </div>
@@ -216,7 +216,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                     <textarea value={instructions}
                         onChange={(e) => setInstructions(e.target.value)}
                         required
-                        className="min-h-[150px] resize-none bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500"
+                        className="bg-slate-200 appearance-none border-2 border-slate-300 rounded w-full py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
                         placeholder="Enter instructions"></textarea>
                 </div>
 
