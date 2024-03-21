@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Background from "../../../ui/home/Background";
-import CategoryModal from "../../../ui/recipes/CategoryModal";
+import CategoryModal from "../../../ui/ingredients/CategoryModal";
 import { useRouter } from 'next/navigation';
 import { getSession } from '../../../utils/actions'
 import { SessionData } from '@/app/utils/lib';
+import AddModal from "@/app/ui/ingredients/AddModal";
 
 interface Category {
     cid: number;
@@ -59,10 +60,8 @@ export default function InventoryPage() {
 
             if (response.ok) {
                 const data = await response.json(); // data is list of categories and list of ingredients
-                // console.log(data.categories, data.ingredients);
                 setCategories(data.categories);
                 setIngredients(data.ingredients);
-                // console.log(categories, ingredients)
             } else {
                 console.error('Failed to fetch ingredients:', response.statusText);
             }
@@ -117,6 +116,7 @@ export default function InventoryPage() {
                                         <li key={ingredient.iid} className="mb-1">{ingredient.name}</li>
                                     ))}
                             </ul>
+                            <AddModal cid={category.cid} />
                         </div>
                     ))}
                 </div>
