@@ -14,10 +14,6 @@ export interface ModalProps {
 // base component for modal, contents are passed in as children
 const Modal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, children}) => {
 
-    function handleSubmit() {
-
-    }
-
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog onClose={onClose} className="relative z-10">
