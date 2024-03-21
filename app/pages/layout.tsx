@@ -13,7 +13,7 @@ export default function Layout({
           <Sidebar />
         </div>
 
-        <div id="scrollableContainer" className="pt-4 row-start-1 row-end-13 col-start-4 col-end-12">
+        <div id="scrollableContainer" className="pt-4 row-start-1 row-end-13 col-start-4 col-end-12 overflow-auto no-scrollbar">
           {children}
         </div>
       </div>
