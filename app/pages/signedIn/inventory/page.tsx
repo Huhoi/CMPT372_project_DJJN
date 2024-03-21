@@ -78,6 +78,26 @@ export default function InventoryPage() {
             console.log('No session data')
     }, [sessionData]);
 
+    const handleDeleteCategory = async (categoryId: number) => {
+        try {
+            const data = { cid: categoryId };
+            const response = await fetch(`/api/categories/`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+
+            if (response.ok) {
+                // If deletion is successful, remove the deleted category from the state
+                setCategories(categories.filter(category => category.cid !== categoryId));
+            } else {
+                console.error('Failed to delete category:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
+    };
     return (
         <>
             <div className="flex justify-center items-center h-screen">
@@ -85,14 +105,16 @@ export default function InventoryPage() {
                 <div className="flex flex-wrap gap-4">
                     {categories.map(category => (
                         <div key={category.cid} className="p-4 border border-gray-200 rounded">
-                            <h2 className="text-lg font-semibold mb-2">{category.category_name}</h2>
+                            <div className="flex justify-between items-center mb-2">
+                                <h2 className="text-lg font-semibold">{category.category_name}</h2>
+                                <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete</button>
+                            </div>
                             <ul>
                                 {ingredients
                                     .filter(ingredient => ingredient.cid === category.cid)
                                     .map(ingredient => (
                                         <li key={ingredient.iid} className="mb-1">{ingredient.name}</li>
-                                        
-                                ))}
+                                    ))}
                             </ul>
                             <AddModal cid={category.cid} />
                         </div>

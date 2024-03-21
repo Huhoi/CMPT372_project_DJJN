@@ -4,10 +4,10 @@ import pool from '../../utils/connectDB';
 
 
 export async function POST(req: NextRequest) {
-    if (req.method === 'POST'){
+    if (req.method === 'POST') {
         try {
             const { category_name, uid } = await req.json();
-            
+
             try {
                 const query = "INSERT INTO category (category_name, uid) VALUES ($1, $2)";
                 const client = await pool.connect();
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
     try {
         const uid = req.nextUrl.searchParams.get('uid');
         const client = await pool.connect();
@@ -48,5 +48,41 @@ export async function GET(req: NextRequest, res: NextResponse) {
     } catch (error) {
         console.error('Error getting categories: ', error);
         return NextResponse.json({ error: 'Internal server error' });
+    }
+}
+
+// To handle a DELETE request to /api/account/
+export async function DELETE(req: Request) {
+
+    if (req.method === 'DELETE') {
+        try {
+            const { cid } = await req.json();
+            console.log(cid)
+
+            if (!cid) {
+                return NextResponse.json({ error: 'Category ID is required' });
+            }
+
+            const client = await pool.connect();
+            const result = await client.query('DELETE FROM category WHERE cid = $1', [cid]);
+
+            // Check if the user was deleted
+            if (result.rowCount === 0) {
+                client.release();
+                return NextResponse.json({ error: 'Category not found' });
+
+            }
+            
+            // Release client
+            client.release();
+
+            // Return success message
+            return NextResponse.json({ message: 'Category deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return NextResponse.json({ error: 'Internal server error' });
+        }
+    } else {
+        return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
     }
 }
