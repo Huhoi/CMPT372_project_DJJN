@@ -81,21 +81,20 @@ export default function InventoryPage() {
 
     return (
         <>
-            {/* <div className="flex justify-center items-center h-screen">
+            <div className="flex justify-center items-center h-screen">
                 <CategoryModal />
-
-            </div> */}
-            <div className="flex flex-wrap gap-4">
-            {categories.map(category => (
-                <div key={category.cid} className="p-4 border border-gray-200 rounded">
-                    <h2 className="text-lg font-semibold mb-2">{category.category_name}</h2>
-                    <ul>
-                        {ingredients.map(ingredient => (
-                            <li key={ingredient.iid} className="mb-1">{ingredient.name}</li>
-                        ))}
-                    </ul>
-        </div>
-      ))}
+                <div className="flex flex-wrap gap-4">
+                    {categories.map(category => (
+                        <div key={category.cid} className="p-4 border border-gray-200 rounded">
+                            <h2 className="text-lg font-semibold mb-2">{category.category_name}</h2>
+                            <ul>
+                                {ingredients.map(ingredient => (
+                                    <li key={ingredient.iid} className="mb-1">{ingredient.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
