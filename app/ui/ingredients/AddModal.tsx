@@ -9,7 +9,7 @@ interface Category {
 }
 
 // modal for adding a new category using Modal component
-const AddModal: React.FC<Category> = ({cid}) => {
+const AddModal: React.FC<Category> = ({ cid }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
@@ -46,14 +46,14 @@ const AddModal: React.FC<Category> = ({cid}) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         try {
             const response = await fetch('../../api/inventory', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: ingredientName, expiration: expiration, amount: amount, cid: cid}),
+                body: JSON.stringify({ name: ingredientName, expiration: expiration, amount: amount, cid: cid }),
             });
 
             if (response.ok) {
@@ -63,12 +63,13 @@ const AddModal: React.FC<Category> = ({cid}) => {
                     setIngredientName('');
                     setAmount('');
                 }
+                window.location.href = "/pages/signedIn/inventory"
             }
             else {
                 const res = await response.json();
                 console.error("Error adding ingredient: ", res.error);
             }
-        } 
+        }
         catch (error) {
             console.error("Error adding ingredient: ", error);
         }
@@ -82,23 +83,23 @@ const AddModal: React.FC<Category> = ({cid}) => {
             <Modal modalTitle="Add Ingredient" isOpen={isOpen} onClose={closeModal}>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="ingredient">Ingredient Name: </label>
-                    <input 
-                        type="text" 
-                        id="ingredient" 
-                        value={ingredientName} 
+                    <input
+                        type="text"
+                        id="ingredient"
+                        value={ingredientName}
                         onChange={(e) => setIngredientName(e.target.value)}
                     /> <br />
                     <label htmlFor="expiration">Expiration Date: </label>
-                    <input 
-                        type="date" 
-                        id="expiration" 
+                    <input
+                        type="date"
+                        id="expiration"
                         onChange={(e) => setExpiration(new Date(e.target.value))}
                     /> <br />
                     <label htmlFor="amount">Amount: </label>
-                    <input 
+                    <input
                         type="text"
-                        id="amount" 
-                        value={amount} 
+                        id="amount"
+                        value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                     /> <br />
                     <button type="submit">Add</button><br></br>

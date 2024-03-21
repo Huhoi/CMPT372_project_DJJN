@@ -91,7 +91,7 @@ export default function AccountPage() {
     return (
         <Background>
             <div className="flex flex-col items-center justify-center h-full">
-                <p className="text-2xl font-semibold mb-4">Registered Users</p>
+                <p className="text-2xl font-semibold mb-4">Account Page</p>
 
                 {(parseInt(sessionData?.uid || '0') === 1) && (
                     <table className="border-collapse border border-black">

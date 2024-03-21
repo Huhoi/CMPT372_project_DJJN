@@ -63,7 +63,7 @@ export default function LoginPage() {
                         {/* Sign in section */}
                         <div className="w-3/5 py-14 relative">
                             <div className="absolute top-0 right-0 m-5 text-right font-bold">
-                                <span className="text-slate-800 italic">ChronnoPlanner 2 :eyes:</span>
+                                <span className="text-slate-800 italic">Recipe.app</span>
                             </div>
 
                             {/* Login Form */}
