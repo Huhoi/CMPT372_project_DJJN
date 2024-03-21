@@ -13,7 +13,6 @@ const CategoryModal: React.FC = () => {
 
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
-    console.log('sessionData: ', sessionData)
 
     const fetchSessionData = async () => {
         try {
@@ -24,7 +23,6 @@ const CategoryModal: React.FC = () => {
             if (response.ok) {
                 // Parse the JSON response
                 const data = await response.json();
-                console.log(data)
                 // Update the session data state with the response data
                 setSessionData(data);
             } else {
