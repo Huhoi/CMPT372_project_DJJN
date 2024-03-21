@@ -11,7 +11,7 @@ import { getSession } from '@/app/utils/actions';
 import pool from '../../utils/connectDB';
 
 
-export async function GET(res: Response) {
+export async function GET() {
     try {
         const session = await getSession();
         if (!session.isLoggedIn) {
