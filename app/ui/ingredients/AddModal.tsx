@@ -9,9 +9,11 @@ interface Category {
 }
 
 // modal for adding a new category using Modal component
-const AddModal: React.FC<Category> = () => {
+const AddModal: React.FC<Category> = ({cid}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [ingredient, setIngredient] = useState('' as string);
+    const [ingredientName, setIngredientName] = useState('' as string);
+    const [expiration, setExpiration] = useState(null as Date | null);
+    const [amount, setAmount] = useState(0 as number);
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
     const openModal = () => setIsOpen(true);
@@ -44,31 +46,32 @@ const AddModal: React.FC<Category> = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const uid: string = sessionData!.uid as string;
-        // try {
-        //     const response = await fetch('../../api/categories', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ category_name: category, uid: uid }),
-        //     });
+        
+        try {
+            const response = await fetch('../../api/inventory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: ingredientName, expiration: expiration, amount: amount, cid: cid}),
+            });
 
-        //     if (response.ok) {
-        //         const res = await response.json();
-        //         if (res.message === 'Category successfully added') {
-        //             closeModal();
-        //             setCategory('');
-        //         }
-        //     }
-        //     else {
-        //         const res = await response.json();
-        //         console.error("Error adding category: ", res.error);
-        //     }
-        // } 
-        // catch (error) {
-        //     console.error("Error adding category: ", error);
-        // }
+            if (response.ok) {
+                const res = await response.json();
+                if (res.message === 'Ingredient successfully added') {
+                    closeModal();
+                    setIngredientName('');
+                    setAmount(0);
+                }
+            }
+            else {
+                const res = await response.json();
+                console.error("Error adding ingredient: ", res.error);
+            }
+        } 
+        catch (error) {
+            console.error("Error adding ingredient: ", error);
+        }
     };
 
     return (
@@ -76,16 +79,28 @@ const AddModal: React.FC<Category> = () => {
             <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={openModal}>
                 Add Ingredient
             </button>
-            <Modal modalTitle="Ingredient" isOpen={isOpen} onClose={closeModal}>
-                <h3>Add Ingredient</h3>
+            <Modal modalTitle="Add Ingredient" isOpen={isOpen} onClose={closeModal}>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="ingredient">Ingredient Name: </label>
                     <input 
                         type="text" 
                         id="ingredient" 
-                        value={ingredient} 
-                        onChange={(e) => setIngredient(e.target.value)}
-                    /> <br></br>
+                        value={ingredientName} 
+                        onChange={(e) => setIngredientName(e.target.value)}
+                    /> <br />
+                    <label htmlFor="expiration">Expiration Date: </label>
+                    <input 
+                        type="date" 
+                        id="expiration" 
+                        onChange={(e) => setExpiration(new Date(e.target.value))}
+                    /> <br />
+                    <label htmlFor="amount">Amount: </label>
+                    <input 
+                        type="number"
+                        id="amount" 
+                        value={amount} 
+                        onChange={(e) => setAmount(e.target.value)}
+                    /> <br />
                     <button type="submit">Add</button><br></br>
                     <button onClick={closeModal}>Close</button>
                 </form>

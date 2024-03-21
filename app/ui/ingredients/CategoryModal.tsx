@@ -74,7 +74,6 @@ const CategoryModal: React.FC = () => {
                 Add Category
             </button>
             <Modal modalTitle="New Category" isOpen={isOpen} onClose={closeModal}>
-                <h3>Add Category</h3>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="category">Category: </label>
                     <input 
