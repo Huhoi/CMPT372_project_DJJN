@@ -72,7 +72,7 @@ export default function InventoryPage() {
     }
 
     useEffect(() => {
-        if(sessionData){
+        if (sessionData) {
             fetchIngredients();
         }
         else
