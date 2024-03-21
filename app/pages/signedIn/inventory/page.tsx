@@ -60,10 +60,8 @@ export default function InventoryPage() {
 
             if (response.ok) {
                 const data = await response.json(); // data is list of categories and list of ingredients
-                // console.log(data.categories, data.ingredients);
                 setCategories(data.categories);
                 setIngredients(data.ingredients);
-                // console.log(categories, ingredients)
             } else {
                 console.error('Failed to fetch ingredients:', response.statusText);
             }

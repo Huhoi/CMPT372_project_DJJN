@@ -13,7 +13,7 @@ const AddModal: React.FC<Category> = ({cid}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
-    const [amount, setAmount] = useState(0 as number);
+    const [amount, setAmount] = useState('' as string);
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
     const openModal = () => setIsOpen(true);
@@ -61,7 +61,7 @@ const AddModal: React.FC<Category> = ({cid}) => {
                 if (res.message === 'Ingredient successfully added') {
                     closeModal();
                     setIngredientName('');
-                    setAmount(0);
+                    setAmount('');
                 }
             }
             else {
@@ -96,7 +96,7 @@ const AddModal: React.FC<Category> = ({cid}) => {
                     /> <br />
                     <label htmlFor="amount">Amount: </label>
                     <input 
-                        type="number"
+                        type="text"
                         id="amount" 
                         value={amount} 
                         onChange={(e) => setAmount(e.target.value)}
