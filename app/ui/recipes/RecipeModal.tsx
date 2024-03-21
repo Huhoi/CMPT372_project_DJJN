@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Modal, { ModalProps } from './Modal'
 import CreatableSelect from 'react-select/creatable'
 import { SessionData } from '@/app/utils/lib'
-import { UserData } from '@/app/pages/account/page'
+import { UserData } from '@/app/pages/signedIn/account/page'
 
 
 
@@ -14,7 +14,7 @@ export interface Ingredient {
     rid: number
 }
 
-const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, children}) => {
+const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [userData, setUserData] = useState<UserData[]>([]);
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
@@ -49,11 +49,11 @@ const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, childre
             try {
                 // First get ingredients
                 const response1 = await fetch(`/api/recipes`)
-            
+
                 if (!response1.ok) {
                     throw new Error('Failed to GET')
                 }
-            
+
                 const fetched = await response1.json();
                 console.log(fetched)
                 const items: Ingredient[] = fetched.map((item: any) => ({
@@ -73,7 +73,7 @@ const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, childre
                 const response2 = await fetch('/api/session');
                 if (response2.ok) {
                     const data = await response2.json();
-    
+
                     console.log(data)
                     setSessionData(data);
                 } else {
@@ -92,31 +92,31 @@ const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, childre
     // is changed, detect it and adjust list of selected ingredients
     useEffect(() => {
         if (selected) {
-        const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
-            iid: 0, // Unknown until created
-            iname: selection.label,
-            rid: 0  // Unknown until created
-        }));
-        setIngredients(selectedIngredients);      
+            const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
+                iid: 0, // Unknown until created
+                iname: selection.label,
+                rid: 0  // Unknown until created
+            }));
+            setIngredients(selectedIngredients);
         }
     }, [selected])
 
     async function handleCreate(e: { preventDefault: () => void }) {
         try {
-          const response = await fetch(`/api/recipes`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: new Date().toString(), favorite: favorite })
-          });
-      
-          if (!response.ok) {
-            throw new Error('Failed to POST')
-          }
-    
+            const response = await fetch(`/api/recipes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: new Date().toString(), favorite: favorite })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to POST')
+            }
+
         } catch (error) {
-          console.error('Error with POST', error)
+            console.error('Error with POST', error)
         }
-        
+
     }
 
     return (
@@ -125,103 +125,103 @@ const RecipeModal: React.FC<ModalProps> = ({modalTitle, isOpen, onClose, childre
                 <div id="titleInput">
                     <p className="py-2 text-2xl">Recipe name</p>
                     <input value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                    className="bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500" 
-                    type="text" 
-                    placeholder="Enter name" />
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                        className="bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500"
+                        type="text"
+                        placeholder="Enter name" />
                 </div>
 
                 <div id="ingredientInput">
                     <p className="py-2 text-2xl">Ingredients</p>
-                    <CreatableSelect 
-                    value={selected}
-                    onChange={handleMultiChange}
-                    options={selectOptions}
-                    required
-                    isMulti
-                    isClearable
-                    styles={{
-                        option: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "black"
-                        }),
-                        clearIndicator: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "white",
-                            borderColor: "rgb(14 165 233)",
-                        ":hover": { 
-                            color: "rgb(203 213 225)",
-                            cursor: "pointer"
-                        }
-                        }),
-                        dropdownIndicator: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "white",
-                            borderColor: "rgb(14 165 233)",
-                        ":hover": { 
-                            color: "rgb(203 213 225)",
-                            cursor: "default" 
-                        }
-                        }),
-                        placeholder: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "rgb(156 163 174)",
-                            paddingLeft: "7px"
-                        }),
-                        input: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "rgb(203 213 225)",
-                            paddingLeft: "7px",
-                        }),
-                        control: (defaultStyles, state) => ({
-                        ...defaultStyles,
-                        ":hover": { 
-                            borderColor: state.isFocused ? "rgb(14 165 233)": "rgb(75 85 99)",
-                            borderWidth: "1px",
-                            cursor: "text" 
-                        },
-                            boxShadow: 'none', // Disable blue border
-                            backgroundColor: "rgb(51 65 85)", 
-                            borderColor: state.isFocused ? "rgb(14 165 233)": "rgb(75 85 99)",
-                            borderWidth: "1px",
-                            color: "black"
-                        }),
-                        multiValue: defaultStyles => ({
-                            ...defaultStyles,
-                            backgroundColor: "rgb(224 242 254)",
-                            marginLeft: "8px"
-                        }),
-                        multiValueLabel: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "rgb(3 105 161)"
-                        }),
-                        multiValueRemove: defaultStyles => ({
-                            ...defaultStyles,
-                            color: "rgb(3 105 161)",
-                            backgroundColor: "rgb(224 242 254)",
-                        ":hover": { 
-                            color: "rgb(224 242 254)",
-                            backgroundColor: "rgb(3 105 161)"
-                        }
-                        })
-                    }}/>
+                    <CreatableSelect
+                        value={selected}
+                        onChange={handleMultiChange}
+                        options={selectOptions}
+                        required
+                        isMulti
+                        isClearable
+                        styles={{
+                            option: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "black"
+                            }),
+                            clearIndicator: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "white",
+                                borderColor: "rgb(14 165 233)",
+                                ":hover": {
+                                    color: "rgb(203 213 225)",
+                                    cursor: "pointer"
+                                }
+                            }),
+                            dropdownIndicator: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "white",
+                                borderColor: "rgb(14 165 233)",
+                                ":hover": {
+                                    color: "rgb(203 213 225)",
+                                    cursor: "default"
+                                }
+                            }),
+                            placeholder: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "rgb(156 163 174)",
+                                paddingLeft: "7px"
+                            }),
+                            input: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "rgb(203 213 225)",
+                                paddingLeft: "7px",
+                            }),
+                            control: (defaultStyles, state) => ({
+                                ...defaultStyles,
+                                ":hover": {
+                                    borderColor: state.isFocused ? "rgb(14 165 233)" : "rgb(75 85 99)",
+                                    borderWidth: "1px",
+                                    cursor: "text"
+                                },
+                                boxShadow: 'none', // Disable blue border
+                                backgroundColor: "rgb(51 65 85)",
+                                borderColor: state.isFocused ? "rgb(14 165 233)" : "rgb(75 85 99)",
+                                borderWidth: "1px",
+                                color: "black"
+                            }),
+                            multiValue: defaultStyles => ({
+                                ...defaultStyles,
+                                backgroundColor: "rgb(224 242 254)",
+                                marginLeft: "8px"
+                            }),
+                            multiValueLabel: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "rgb(3 105 161)"
+                            }),
+                            multiValueRemove: defaultStyles => ({
+                                ...defaultStyles,
+                                color: "rgb(3 105 161)",
+                                backgroundColor: "rgb(224 242 254)",
+                                ":hover": {
+                                    color: "rgb(224 242 254)",
+                                    backgroundColor: "rgb(3 105 161)"
+                                }
+                            })
+                        }} />
                 </div>
 
                 <div id="instructionInput">
                     <p className="py-2 text-2xl">Instructions</p>
-                    <textarea value={instructions} 
-                    onChange={(e) => setInstructions(e.target.value)}
-                    required
-                    className="min-h-[150px] resize-none bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500" 
-                    placeholder="Enter instructions"></textarea>
+                    <textarea value={instructions}
+                        onChange={(e) => setInstructions(e.target.value)}
+                        required
+                        className="min-h-[150px] resize-none bg-slate-700 appearance-none border-2 border-gray-600 rounded w-full py-2 px-4 text-slate-300 leading-tight focus:outline-none focus:text-slate-200 focus:border-sky-500"
+                        placeholder="Enter instructions"></textarea>
                 </div>
 
                 <div id="favoriteInput">
                     <input name="favorite"
-                    type="checkbox" 
-                    checked={favorite} 
-                    onChange={handleCheckbox}/>
+                        type="checkbox"
+                        checked={favorite}
+                        onChange={handleCheckbox} />
                     <label htmlFor="favorite">Favorite</label>
                 </div>
             </form>

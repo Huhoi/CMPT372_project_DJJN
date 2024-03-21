@@ -91,7 +91,7 @@ export default function AccountPage() {
     return (
         <Background>
             <div className="flex flex-col items-center justify-center h-full">
-                <p className="text-2xl font-semibold mb-4">Account Page</p>
+                <p className="text-2xl font-semibold mb-4">Registered Users</p>
 
                 {(parseInt(sessionData?.uid || '0') === 1) && (
                     <table className="border-collapse border border-black">
@@ -107,7 +107,8 @@ export default function AccountPage() {
                                     <tr key={user.uid}>
                                         <td className="border border-black px-4 py-2">{user.username}</td>
                                         <td className="border border-black px-4 py-2">
-                                            <button onClick={() => handleDelete(user.uid)}>Delete</button>
+                                            <button onClick={() => handleDelete(user.uid)}
+                                                className="border-2 border-blackrounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Delete</button>
                                         </td>
                                     </tr>
                                 ))
