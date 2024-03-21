@@ -33,7 +33,7 @@ function AddButton() {
           <Image className="pointer-events-none select-none" priority src={image} alt="icon" width={50} height={50}></Image>
           <p className="font-dm_sans text-4xl font-bold tracking-tighter">Create a new recipe</p>
         </motion.div>
-        <RecipeModal title={"Untitled recipe"} isOpen={checkIsOpen} onClose={closeModal} children={undefined} />
+        <RecipeModal modalTitle={"Untitled recipe"} isOpen={checkIsOpen} onClose={closeModal}> </RecipeModal>
       </div>
     </>
     
