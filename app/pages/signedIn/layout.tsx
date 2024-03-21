@@ -1,4 +1,4 @@
-import { dm_sans, dm_mono } from "../ui/fonts";
+import { dm_sans, dm_mono } from "../../ui/fonts";
 import Sidebar from "@/app/ui/pages/Sidebar";
 
 export default function Layout({
