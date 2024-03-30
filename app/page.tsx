@@ -48,7 +48,7 @@ export default function LoginPage() {
           alert(JSON.stringify(data));
     
           // redirect the user to /dashboard
-          router.push('/dashboard')
+          router.push('/protected/dashboard')
         } catch (e) {
           const error = e as AxiosError;
     

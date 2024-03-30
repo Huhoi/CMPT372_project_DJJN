@@ -5,7 +5,7 @@ import { serialize } from "cookie";
 import pool from '../../utils/connectDB';
 import { COOKIE_NAME } from "@/constants";
 
-const MAX_AGE = 10 * 1000; 
+const MAX_AGE = 60 * 60; // 1 hour
 
 // To handle a POST request to /api/login
 export async function POST(req: Request) {

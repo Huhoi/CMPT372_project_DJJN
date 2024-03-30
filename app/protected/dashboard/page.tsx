@@ -1,9 +1,9 @@
 // UI Import
-import Navbar from "../ui/home/Navbar";
-import Background from "../ui/home/Background";
-import RecipeModule from "../ui/home/RecipeModule";
-import ReminderModule from "../ui/home/ReminderModule";
-import CommunityModule from "../ui/home/CommunityModule";
+import Navbar from "../../ui/home/Navbar";
+import Background from "../../ui/home/Background";
+import RecipeModule from "../../ui/home/RecipeModule";
+import ReminderModule from "../../ui/home/ReminderModule";
+import CommunityModule from "../../ui/home/CommunityModule";
 
 
 export default async function Home() {
