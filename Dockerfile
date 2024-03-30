@@ -10,7 +10,9 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+COPY .env .env
 COPY . .
+
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
