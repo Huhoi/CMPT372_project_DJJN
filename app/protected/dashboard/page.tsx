@@ -17,8 +17,8 @@ interface JwtPayload {
 
 export default async function Home() {
 
-  var data;
-
+  //Grab Cookie and decode
+  var data: JwtPayload | undefined;
   const fetchData = async () => {
     try {
       const cookieStore = cookies();
