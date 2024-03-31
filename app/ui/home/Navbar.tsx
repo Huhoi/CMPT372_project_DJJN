@@ -8,10 +8,10 @@ function Navbar() {
         <Link href="/pages/dashboard" className="font-dm_sans tracking-tighter text-2xl font-bold">Recipe.app</Link>
       </nav>
       <nav id="navigation" className="pt-2 col-span-4 col-start-5 flex flex-row justify-around">
-        <Link href="/pages/signedIn/recipes" className="font-dm_mono tracking-widester text-sm font-medium">RECIPES</Link>
-        <Link href="/pages/signedIn/inventory" className="font-dm_mono tracking-widester text-sm font-medium">INVENTORY</Link>
-        <Link href="/pages/signedIn/community" className="font-dm_mono tracking-widester text-sm font-medium">COMMUNITY</Link>
-        <Link href="/pages/signedIn/account" className="font-dm_mono tracking-widester text-sm font-medium">ACCOUNT</Link>
+        <Link href="/protected/signedIn/recipes" className="font-dm_mono tracking-widester text-sm font-medium">RECIPES</Link>
+        <Link href="/protected/signedIn/inventory" className="font-dm_mono tracking-widester text-sm font-medium">INVENTORY</Link>
+        <Link href="/protected/signedIn/community" className="font-dm_mono tracking-widester text-sm font-medium">COMMUNITY</Link>
+        <Link href="/protected/signedIn/account" className="font-dm_mono tracking-widester text-sm font-medium">ACCOUNT</Link>
       </nav>
     </div>
   )

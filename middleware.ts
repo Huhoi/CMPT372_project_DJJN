@@ -2,7 +2,13 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const currentUser = request.cookies.get('auth')?.value;
-  const protectedPages = ['/protected/dashboard', '/protected/test']; // Add more protected page paths as needed
+  const protectedPages = [
+    '/protected/dashboard',
+    '/protected/signedIn/account',
+    '/protected/signedIn/community',
+    '/protected/signedIn/recipes',
+    '/protected/signedIn/inventory',
+    '/protected/test']; // Add more protected page paths as needed
 
   if (currentUser) {
     // If user is authenticated, check if requested path is not a protected page

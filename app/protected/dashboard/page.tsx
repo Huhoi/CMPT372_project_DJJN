@@ -1,12 +1,27 @@
+
 // UI Import
 import Navbar from "../../ui/home/Navbar";
-import Background from "../../ui/home/Background";
 import RecipeModule from "../../ui/home/RecipeModule";
 import ReminderModule from "../../ui/home/ReminderModule";
 import CommunityModule from "../../ui/home/CommunityModule";
+import { cookies } from "next/headers";
+import { COOKIE_NAME } from "@/constants";
+import { verify } from "jsonwebtoken";
+import axios, { AxiosError } from 'axios';
 
+interface JwtPayload {
+  username: string,
+  uid: string
+}
 
 export default async function Home() {
+
+
+
+
+
+  console.log(cook, 'SHitdasdas');
+
   return (
     <>
       <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
