@@ -1,9 +1,10 @@
 "use client";
 
 import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
+
 
 interface User {
   token: string;
@@ -16,7 +17,13 @@ interface UserResponse {
   error: AxiosError | null;
 }
 
-export default function DashboardLayout({ children, }: { children: React.ReactNode; }) {
+const TestContext = createContext<number>(0);
+
+export function useTestContext(){
+  return useContext(TestContext);
+}
+
+export default function DashboardLayout({children,}: {children: React.ReactNode;}) {
   const [user, setUser] = useState<User | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { push } = useRouter();
@@ -33,7 +40,6 @@ export default function DashboardLayout({ children, }: { children: React.ReactNo
       // if the error did not happen, if everything is alright
       setUser(user);
       setIsSuccess(true);
-
     })();
   }, [push]);
 
@@ -41,10 +47,11 @@ export default function DashboardLayout({ children, }: { children: React.ReactNo
     return <p>Loading...</p>;
   }
 
-
   return (
     <main>
-      {children}
+      <TestContext.Provider value={user ? user.uid : 0}>
+        {children}
+      </TestContext.Provider>
     </main>
   );
 }
