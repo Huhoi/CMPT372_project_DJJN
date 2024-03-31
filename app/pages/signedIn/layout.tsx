@@ -1,6 +1,5 @@
-import { dm_sans, dm_mono } from "../ui/fonts";
+import { dm_sans, dm_mono } from "../../ui/fonts";
 import Sidebar from "@/app/ui/pages/Sidebar";
-import AddRecipe from "../ui/recipes/AddRecipe";
 
 export default function Layout({
   children,
@@ -14,7 +13,7 @@ export default function Layout({
           <Sidebar />
         </div>
 
-        <div id="scrollableContainer" className="pt-4 row-start-1 row-end-13 col-start-4 col-end-12">
+        <div id="scrollableContainer" className="pt-4 row-start-1 row-end-13 col-start-4 col-end-12 overflow-auto no-scrollbar">
           {children}
         </div>
       </div>

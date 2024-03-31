@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
-import RecipeModal from './RecipeModal';
+import SelectionModal from './SelectionModal';
 
 function AddButton() {
   const [image, setImage] = useState("/circle-plus-1.png");
@@ -31,10 +31,10 @@ function AddButton() {
         onFocus={() => setImage("/circle-plus-1.png")}>
         <motion.div className="p-6 flex flex-grow justify-center items-center gap-2" whileHover={{ scale: 1.03, transition: { duration: 0.3 }, }}>
           <Image className="pointer-events-none select-none" priority src={image} alt="icon" width={50} height={50}></Image>
-          <p className="font-dm_sans text-4xl font-bold tracking-tighter">Create recipe</p>
+          <p className="font-dm_sans text-4xl font-bold tracking-tighter">New inventory item</p>
         </motion.div>
       </div>
-      <RecipeModal modalTitle={"Create a new recipe"} isOpen={checkIsOpen} onClose={closeModal}> </RecipeModal>
+      <SelectionModal modalTitle={"Select action"} isOpen={checkIsOpen} onClose={closeModal}> </SelectionModal>
     </>
     
   )
