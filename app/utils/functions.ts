@@ -4,8 +4,7 @@ import { COOKIE_NAME } from "@/constants";
 import { verify } from "jsonwebtoken";
 import { JwtPayload } from "@/app/utils/interfaces";
 
-
-
+//Only works in server components
 export async function fetchData() {
     //Grab Cookie and decode
     var data: JwtPayload | undefined;
