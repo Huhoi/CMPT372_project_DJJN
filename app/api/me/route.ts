@@ -4,13 +4,12 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 interface JwtPayload {
-  username: string,
-  uid: string
+  username: string;
+  uid: string;
 }
 
 export async function GET() {
   const cookieStore = cookies();
-
   const token = cookieStore.get(COOKIE_NAME);
 
   if (!token) {
@@ -30,20 +29,20 @@ export async function GET() {
   const secret = process.env.JWT_SECRET || "";
 
   try {
-    const decodedToken = verify(value, secret) as JwtPayload;
+    const decodedToken = await verifyAsync(value, secret) as JwtPayload; // Await the verification
 
     const username = decodedToken.username;
-    const uid = decodedToken.uid
+    const uid = decodedToken.uid;
 
     const response = {
       token: token.name,
       username: username,
       uid: uid
     };
-    console.log(response)
-    return new Response(JSON.stringify(response), {
-      status: 200,
-    });
+
+    console.log(response);
+
+    return NextResponse.json(response, { status: 200 }); // Return a Next.js JSON response
   } catch (e) {
     return NextResponse.json(
       {
@@ -54,4 +53,17 @@ export async function GET() {
       }
     );
   }
+}
+
+// Wrap verify function in a promise
+function verifyAsync(token: string, secret: string): Promise<JwtPayload> {
+  return new Promise((resolve, reject) => {
+    verify(token, secret, (err, decoded) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(decoded as JwtPayload);
+      }
+    });
+  });
 }

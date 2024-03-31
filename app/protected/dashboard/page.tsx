@@ -7,7 +7,7 @@ import CommunityModule from "../../ui/home/CommunityModule";
 
 //UID GRAB
 import { fetchData } from "@/app/utils/functions";
-
+export const dynamic = "force-dynamic"
 export default async function Home() {
 
   const data = await fetchData();
