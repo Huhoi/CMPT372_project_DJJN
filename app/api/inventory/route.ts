@@ -5,12 +5,12 @@ import pool from '../../utils/connectDB';
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
         try {
-            const { name, expiration, amount, cid } = await req.json();
+            const { name, expiration, amount, uid } = await req.json();
 
             try {
-                const query = "INSERT INTO ingredient (name, expiration , amount, cid ) VALUES ($1, $2, $3, $4)";
+                const query = "INSERT INTO ingredient (name, expiration , amount, uid ) VALUES ($1, $2, $3, $4)";
                 const client = await pool.connect();
-                await client.query(query, [name, expiration, amount, cid]);
+                await client.query(query, [name, expiration, amount, uid]);
                 client.release();
             } catch (error) {
                 console.error('Error adding ingredient: ', error);

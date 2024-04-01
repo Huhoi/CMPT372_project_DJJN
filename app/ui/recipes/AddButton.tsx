@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import RecipeModal from './RecipeModal';
+import RecipeModal from './RecipeModal';
 
 function AddButton() {
   const [image, setImage] = useState("/circle-plus-1.png");

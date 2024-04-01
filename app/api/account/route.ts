@@ -10,7 +10,7 @@ import { getSession } from '@/app/utils/actions';
 import pool from '../../utils/connectDB';
 
 // To handle a GET request to /api/account
-export async function GET(req: Request) {
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
         try {
             const session = await getSession();
