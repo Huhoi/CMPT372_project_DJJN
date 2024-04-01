@@ -174,6 +174,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                 ...defaultStyles,
                                 color: "#020617",
                                 paddingLeft: "7px",
+                                boxShadow: 'none', // Disable blue border
                             }),
                             control: (defaultStyles, state) => ({
                                 ...defaultStyles,

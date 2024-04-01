@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
+input[type='text']:focus { box-shadow: none; }
 
 #background {
   display: grid;
