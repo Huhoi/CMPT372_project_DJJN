@@ -49,7 +49,6 @@ export default function InventoryPage() {
                 body: JSON.stringify(data)
             });
 
-
             if (response.ok) {
                 // If deletion is successful, remove the deleted category from the state
                 setCategories(categories.filter(category => category.cid !== categoryId));
@@ -60,6 +59,7 @@ export default function InventoryPage() {
             console.error('Error deleting category:', error);
         }
     };
+
     return (
         <>
             <AddButton />

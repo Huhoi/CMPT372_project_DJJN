@@ -3,17 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import Modal, { ModalProps } from '../Modal'
 import CreatableSelect from 'react-select/creatable'
-import { SessionData } from '@/app/utils/lib'
-import { UserData } from '@/app/pages/signedIn/account/page'
 import { Switch } from '@headlessui/react'
 import { Ingredient } from '../inventory/IngredientModal'
-
-
+import { useTestContext } from '@/app/protected/layout'
 
 const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
-    const [userData, setUserData] = useState<UserData[]>([]);
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
-
     const [title, setTitle] = useState("");
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [instructions, setInstructions] = useState("");
@@ -21,6 +15,8 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
 
     const [selected, setSelected] = useState<any[]>([])
     const [selectOptions, setSelectOptions] = useState<any[]>([]);
+
+    const uid = useTestContext()
 
     // The values from a multi-change input returns an object-- use 
     // this function to handle the values 
@@ -67,17 +63,6 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                 });
                 setSelectOptions(selectOptionsList);
 
-                // Now get session data
-                const response2 = await fetch('/api/session');
-                if (response2.ok) {
-                    const data = await response2.json();
-
-                    console.log(data)
-                    setSessionData(data);
-                } else {
-                    console.error('Failed to fetch session data:', response2.statusText);
-                }
-
             } catch (error) {
                 console.error('Error with retrieving: ', error);
             }
@@ -106,7 +91,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
             const response = await fetch(`/api/recipes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: new Date().toString(), favorite: favorite, uid: sessionData?.uid })
+                body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: new Date().toString(), favorite: favorite, uid: uid})
             });
 
             if (!response.ok) {
