@@ -14,16 +14,11 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
 ## Deployed on Google Cloud Run Through Dockerfile
+
+# [Link](https://recipe-app-m5abqncbtq-uc.a.run.app/)
+
+If login does not work, that means we ran out of credits for the database
 
 Set ENV Variables
 - PGHOST
@@ -33,3 +28,13 @@ Set ENV Variables
 - PGPASSWORD
 - JWT_SECRET
 - NODE_ENV
+
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
