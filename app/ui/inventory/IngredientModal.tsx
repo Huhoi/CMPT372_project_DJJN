@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import Modal, { ModalProps } from '../Modal'
 import CreatableSelect from 'react-select/creatable'
-import { SessionData } from '@/app/utils/lib';
-import { UserData } from '@/app/pages/signedIn/account/page';
 import { Category } from './CategoryModal';
 import moment from 'moment';
 
@@ -15,9 +13,6 @@ export interface Ingredient {
 }
 
 const IngredientModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
-    const [userData, setUserData] = useState<UserData[]>([]);
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
-
     const [name, setName] = useState("");
     const [category, setCategory] = useState<Category[]>([]);
     const [expiration, setExpiration] = useState("");

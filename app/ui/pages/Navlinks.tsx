@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 import { QueueListIcon, CircleStackIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 const links = [
-  { name: 'Recipes', href: '/pages/signedIn/recipes', icon: QueueListIcon },
-  { name: 'Inventory', href: '/pages/signedIn/inventory', icon: CircleStackIcon },
-  { name: 'Community', href: '/pages/signedIn/community', icon: UserGroupIcon },
+  { name: 'Recipes', href: '/protected/signedIn/recipes', icon: QueueListIcon },
+  { name: 'Inventory', href: '/protected/signedIn/inventory', icon: CircleStackIcon },
+  { name: 'Community', href: '/protected/signedIn/community', icon: UserGroupIcon },
 ];
 
 function Navlinks() {

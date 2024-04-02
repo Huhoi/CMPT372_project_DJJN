@@ -1,35 +1,56 @@
 // app/api/login/route.ts
 import { NextResponse } from "next/server";
-import { NextApiRequest, NextApiResponse } from "next";
+import { sign } from "jsonwebtoken";
+import { serialize } from "cookie";
 import pool from '../../utils/connectDB';
+import { COOKIE_NAME } from "@/constants";
+
+const MAX_AGE = 60 * 60; // 1 hour
 
 // To handle a POST request to /api/login
 export async function POST(req: Request) {
-    if (req.method === 'POST') {
-        try {
-            const { username, password } = await req.json();
 
-            const client = await pool.connect();
-            const result = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+    const { username, password } = await req.json();
 
-            // User not found or incorrect password
-            if (result.rows.length === 0) {
-                client.release();
-              
-                return NextResponse.json({ error: 'Invalid username or password' });
-            }
+    const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
+    const client = await pool.connect();
+    const result = await client.query(query, [username, password]);
 
-            // Retrieve the authenticated user
-            const user = result.rows[0];
-
-            // Authentication successful
-            client.release();
-            return NextResponse.json({ message: 'User successful login', uid: user.uid, username: user.username });
-        } catch (error) {
-            console.error('Error authenticating user:', error);
-            return NextResponse.json({ error: 'Internal server error' });
-        }
-    } else {
-        return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
+    // User not found or incorrect password
+    if (result.rows.length === 0) {
+        client.release();
+        return NextResponse.json({ message: 'Invalid username or password', }, { status: 401, });
     }
+
+    // Retrieve the authenticated user
+    const user = result.rows[0];
+    console.log("Authenticated User", user.uid, user.username, user.password);
+
+    // Always check this
+    const secret = process.env.JWT_SECRET || "";
+    const token = sign(
+        { uid: user.uid, username: user.username },
+        secret, {
+        expiresIn: MAX_AGE,
+    }
+    )
+
+    const seralized = serialize(COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: MAX_AGE,
+        path: "/",
+    });
+
+    const response = { message: 'Authenticated' }
+
+    // Authentication successful
+    client.release();
+    // return NextResponse.json({ message: 'User successful login', uid: user.uid, username: user.username });
+
+    return new Response(JSON.stringify(response), {
+        status: 200,
+        headers: { "Set-Cookie": seralized },
+    });
 }

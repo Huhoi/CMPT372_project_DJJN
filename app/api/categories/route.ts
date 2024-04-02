@@ -4,10 +4,10 @@ import pool from '../../utils/connectDB';
 
 
 export async function POST(req: NextRequest) {
-    if (req.method === 'POST'){
+    if (req.method === 'POST') {
         try {
             const { category_name, uid } = await req.json();
-            
+
             try {
                 const query = "INSERT INTO category (category_name, uid) VALUES ($1, $2)";
                 const client = await pool.connect();
@@ -40,6 +40,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         for (const category of categoryResult.rows) {
             const ingredientQuery = "SELECT * FROM ingredient WHERE cid = $1"; // Get all ingredients for the category
             const ingredientResult = await client.query(ingredientQuery, [category.cid]);
+            
             for (const ingredient of ingredientResult.rows) {
                 ingredientArray.push(ingredient);
             }

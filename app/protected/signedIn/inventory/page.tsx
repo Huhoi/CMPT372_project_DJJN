@@ -1,13 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import Background from "../../../ui/home/Background";
-import CategoryModal from "../../../ui/inventory/CategoryModal";
-import { useRouter } from 'next/navigation';
-import { getSession } from '../../../utils/actions'
-import { SessionData } from '@/app/utils/lib';
-import AddModal from "@/app/ui/inventory/AddModal";
+import { useTestContext } from "../../layout";
 import AddButton from "@/app/ui/inventory/AddButton";
+import AddModal from "@/app/ui/inventory/AddModal";
 
 interface Category {
     cid: number;
@@ -22,41 +18,12 @@ interface Ingredient {
 }
 
 export default function InventoryPage() {
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
 
-    // Define a function to fetch session data
-    const fetchSessionData = async () => {
-        try {
-            // Make a GET request to the /api/session endpoint
-            const response = await fetch('/api/session');
-
-            // Check if the response is successful (status code 200)
-            if (response.ok) {
-                // Parse the JSON response
-                const data = await response.json();
-                console.log(data)
-                // Update the session data state with the response data
-                setSessionData(data);
-            } else {
-                // Handle error response
-                console.error('Failed to fetch session data:', response.statusText);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error fetching session data:', error);
-        }
-    };
-
-    // Use the useEffect hook to fetch session data when the component mounts
-    useEffect(() => {
-        fetchSessionData();
-    }, []);
-
     const fetchIngredients = async () => {
         try {
-            const uid: string = sessionData!.uid as string;
+            const uid = useTestContext();
             const response = await fetch('/api/categories?uid=' + uid);
 
             if (response.ok) {
@@ -70,14 +37,6 @@ export default function InventoryPage() {
             console.error('Error fetching ingredients:', error);
         }
     }
-
-    useEffect(() => {
-        if (sessionData) {
-            fetchIngredients();
-        }
-        else
-            console.log('No session data')
-    }, [sessionData]);
 
     const handleDeleteCategory = async (categoryId: number) => {
         try {

@@ -1,8 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
 import Modal, { ModalProps } from "../Modal";
-import { getSession } from '../../utils/actions'
-import { SessionData } from '@/app/utils/lib';
 import { motion } from "framer-motion";
 import Image from "next/image";
 import CategoryModal from "./CategoryModal";

@@ -1,8 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
 import Modal from "../Modal";
-import { getSession } from '../../utils/actions'
-import { SessionData } from '@/app/utils/lib';
 
 interface Category {
     cid: number;
@@ -14,35 +12,9 @@ const AddModal: React.FC<Category> = ({ cid }) => {
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
     const [amount, setAmount] = useState('' as string);
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
-
-    const fetchSessionData = async () => {
-        try {
-            // Make a GET request to the /api/session endpoint
-            const response = await fetch('/api/session');
-
-            // Check if the response is successful (status code 200)
-            if (response.ok) {
-                // Parse the JSON response
-                const data = await response.json();
-                // Update the session data state with the response data
-                setSessionData(data);
-            } else {
-                // Handle error response
-                console.error('Failed to fetch session data:', response.statusText);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error fetching session data:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchSessionData();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

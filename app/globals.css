@@ -2,25 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type='text']:focus { box-shadow: none; }
+
 
 #background {
   display: grid;
   place-items: center;
   min-height: 100vh;
   position: relative;
-}
-
-@layer utilities {
-  /* Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
 }
 
 /* :root {

@@ -1,8 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Modal, { ModalProps } from "../Modal";
-import { getSession } from '../../utils/actions'
-import { SessionData } from '@/app/utils/lib';
+import { useTestContext } from "@/app/protected/layout";
 
 export interface Category {
     cid: number,
@@ -13,36 +12,10 @@ export interface Category {
 // modal for adding a new category using Modal component
 const CategoryModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [category, setCategory] = useState('' as string);
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
-
-    const fetchSessionData = async () => {
-        try {
-            // Make a GET request to the /api/session endpoint
-            const response = await fetch('/api/session');
-
-            // Check if the response is successful (status code 200)
-            if (response.ok) {
-                // Parse the JSON response
-                const data = await response.json();
-                // Update the session data state with the response data
-                setSessionData(data);
-            } else {
-                // Handle error response
-                console.error('Failed to fetch session data:', response.statusText);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error fetching session data:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchSessionData();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const uid: string = sessionData!.uid as string;
+        const uid = useTestContext();
         try {
             const response = await fetch('../../api/categories', {
                 method: 'POST',
