@@ -7,10 +7,11 @@ export async function POST(req: Request) {
         try {
             const { title, instruction, last_modified, favorite, uid } = await req.json();
 
-            const query = 'INSERT INTO Recipe(title, instruction, last_modified, favorite, uid) VALUES($1, $2, $3, $4, $5)';
+            const query = 'INSERT INTO recipes(title, instruction, last_modified, favorite, uid) VALUES($1, $2, $3, $4, $5)';
             const client = await pool.connect();
-            const result = await client.query(query, [title, instruction, last_modified, favorite, uid]);
+            await client.query(query, [title, instruction, last_modified, favorite, uid]);
 
+            client.release();
         } catch (error) {
             console.error("Error with adding recipe: ", error);
             return NextResponse.json({ error: "internal server error" });
@@ -29,7 +30,7 @@ export async function GET(req: Request) {
             const result = await client.query(query);
 
             return NextResponse.json(result.rows);
-            
+
         } catch (error) {
             console.error("Error with getting ingredients: ", error);
             return NextResponse.json({ error: "internal server error" });
