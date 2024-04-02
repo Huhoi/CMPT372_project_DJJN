@@ -3,6 +3,8 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from 'next/navigation';
 import { useTestContext } from "../../layout";
 import { useState, useEffect } from 'react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { TrashIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 
 interface UserData {
     uid: number;
@@ -36,7 +38,7 @@ export default function AccountPage() {
     }, [uid]);
 
 
-    const handleDelete = async (uid: number) => {
+    const handleDelete: (uid: number) => void = async (uid: number) => {
         try {
             const data = { uid: uid };
 
@@ -57,6 +59,30 @@ export default function AccountPage() {
             console.error('Error deleting user:', error);
         }
     };
+    
+    const handleFetch = async () => {
+        const query = 'pasta'
+        const apiKey = '66a1a479f6384fcf8319c6a701e0637b'
+
+        const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${apiKey}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+            } else {
+                console.error('Failed to fetch data:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
 
 
     const logout = async () => {
@@ -73,37 +99,51 @@ export default function AccountPage() {
     };
 
 
+    if (uid !== 1) {
+        return (
+            <div>
+                <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
+                    <ArrowLeftEndOnRectangleIcon className="h-6 w-6 hover:text-red-600 mr-2" />
+                    Log Out
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div>
-            <p>Account Page</p>
-
-            <table className="border-collapse border border-black">
-                <thead>
-                    <tr>
-                        <th className="border border-black px-4 py-2">Username</th>
-                        <th className="border border-black px-4 py-2">User ID</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <h1 className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
+                Table of Registered Users</h1>
+            <Table aria-label="User data table" className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
+                <TableHeader >
+                    <TableColumn>Username</TableColumn>
+                    <TableColumn>User ID</TableColumn>
+                    <TableColumn> </TableColumn>
+                </TableHeader>
+                <TableBody className="border-2 border-blackrounded-full">
                     {userData.map((user) => (
-                        <tr key={user.uid}>
-                            <td className="border border-black px-4 py-2">{user.username}</td>
-                            <td className="border border-black px-4 py-2">{user.uid}</td>
-                            <td className="border border-black px-4 py-2">
-                                <button onClick={() => handleDelete(user.uid)}
-                                    className="border-2 border-blackrounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white">Delete</button>
-                            </td>
-                        </tr>
+                        <TableRow key={user.uid}>
+                            <TableCell>{user.username}</TableCell>
+                            <TableCell>{user.uid}</TableCell>
+                            <TableCell>
+                                <button onClick={() => handleDelete(user.uid)}>
+                                    <TrashIcon className="h-6 w-6 hover:text-red-600" />
+                                </button>
+
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
-            <button
-                onClick={logout}
-                className="border-2 border-text-slate-800 rounded-full px-12 py-2 inline-block font-semibold hover:bg-slate-800 hover:text-white"
-            >
+                </TableBody>
+
+            </Table>
+            <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
+                <ArrowLeftEndOnRectangleIcon className="h-6 w-6 hover:text-red-600 mr-2" />
                 Log Out
             </button>
 
+            <button onClick={handleFetch} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
+                test
+            </button>
         </div>
     );
 }

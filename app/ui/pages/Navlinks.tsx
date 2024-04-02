@@ -3,12 +3,13 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { QueueListIcon, CircleStackIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { QueueListIcon, CircleStackIcon, UserGroupIcon, UserIcon } from '@heroicons/react/24/outline';
 
 const links = [
   { name: 'Recipes', href: '/protected/signedIn/recipes', icon: QueueListIcon },
   { name: 'Inventory', href: '/protected/signedIn/inventory', icon: CircleStackIcon },
   { name: 'Community', href: '/protected/signedIn/community', icon: UserGroupIcon },
+  { name: 'Account', href: '/protected/signedIn/account', icon: UserIcon },
 ];
 
 function Navlinks() {
