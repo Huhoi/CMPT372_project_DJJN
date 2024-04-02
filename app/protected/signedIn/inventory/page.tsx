@@ -21,9 +21,11 @@ export default function InventoryPage() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
 
+    const uid = useTestContext();
+
     const fetchIngredients = async () => {
         try {
-            const uid = useTestContext();
+
             const response = await fetch('/api/categories?uid=' + uid);
 
             if (response.ok) {

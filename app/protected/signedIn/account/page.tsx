@@ -59,7 +59,9 @@ export default function AccountPage() {
             console.error('Error deleting user:', error);
         }
     };
-    
+
+    // Move this to recipe page afterwards
+    //Remember to test that it only request 1 per submission capped at 150
     const handleFetch = async () => {
         const query = 'pasta'
         const apiKey = '66a1a479f6384fcf8319c6a701e0637b'

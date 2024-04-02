@@ -11,9 +11,11 @@ const CategoryModal: React.FC = () => {
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
+    const uid = useTestContext();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const uid = useTestContext();
+
         try {
             const response = await fetch('../../api/categories', {
                 method: 'POST',
@@ -34,7 +36,7 @@ const CategoryModal: React.FC = () => {
                 const res = await response.json();
                 console.error("Error adding category: ", res.error);
             }
-        } 
+        }
         catch (error) {
             console.error("Error adding category: ", error);
         }
@@ -49,10 +51,10 @@ const CategoryModal: React.FC = () => {
                 <h3>Add Category</h3>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="category">Category: </label>
-                    <input 
-                        type="text" 
-                        id="category" 
-                        value={category} 
+                    <input
+                        type="text"
+                        id="category"
+                        value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     /> <br></br>
                     <button type="submit">Add</button>
