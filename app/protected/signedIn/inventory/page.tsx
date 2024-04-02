@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 import { useTestContext } from "../../layout";
 import AddButton from "@/app/ui/inventory/AddButton";
 import AddModal from "@/app/ui/inventory/AddModal";
-
-interface Category {
-    cid: number;
-    category_name: string;
-    uid: string;
-}
-
-interface Ingredient {
-    iid: number;
-    name: string;
-    cid: number;
-}
+import { Category, Ingredient } from "@/app/utils/interfaces";
 
 export default function InventoryPage() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -40,10 +29,14 @@ export default function InventoryPage() {
         }
     }
 
+    useEffect(() => {
+        fetchIngredients();
+    }, []);
+
     const handleDeleteCategory = async (categoryId: number) => {
         try {
             const data = { cid: categoryId };
-            const response = await fetch(`/api/categories/`, {
+            const response = await fetch(`/api/categories?cid=` + data.cid, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

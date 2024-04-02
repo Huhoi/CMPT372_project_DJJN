@@ -6,11 +6,12 @@ export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
 
         try {
-            const { ingredient_name, expiration, amount, uid } = await req.json();
+            const { ingredient_name, expiration, amount, amount_type, cid } = await req.json();
+            console.log(ingredient_name, expiration, amount, amount_type, cid);
             
-            const query = "INSERT INTO ingredient (ingredient_name, expiration , amount, uid ) VALUES ($1, $2, $3, $4)";
+            const query = "INSERT INTO inventory (ingredient_name, expiration, amount, cid, amount_type ) VALUES ($1, $2, $3, $4, $5)";
             const client = await pool.connect();
-            await client.query(query, [ingredient_name, expiration, amount, uid]);
+            await client.query(query, [ingredient_name, expiration, amount, cid, amount_type]);
             
             client.release();
 

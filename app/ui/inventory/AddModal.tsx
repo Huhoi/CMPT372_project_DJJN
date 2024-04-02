@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Modal from "../Modal";
+import { AmountType } from "@/app/utils/interfaces";
 
 interface Category {
     cid: number;
@@ -12,6 +13,7 @@ const AddModal: React.FC<Category> = ({ cid }) => {
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
     const [amount, setAmount] = useState('' as string);
+    const [amountType, setAmountType] = useState(AmountType.GRAM);
 
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
@@ -25,7 +27,7 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: ingredientName, expiration: expiration, amount: amount, cid: cid }),
+                body: JSON.stringify({ ingredient_name: ingredientName, expiration: expiration, amount: amount, amount_type: amountType, cid: cid }),
             });
 
             if (response.ok) {
@@ -73,7 +75,13 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                         id="amount"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                    /> <br />
+                    />
+                    <select name="amountType" id="amountType" value={amountType} onChange={(e) => setAmountType(e.target.value as AmountType)}>
+                        {Object.values(AmountType).map((type) => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
+                    <br />
                     <button type="submit">Add</button><br></br>
                     <button onClick={closeModal}>Close</button>
                 </form>

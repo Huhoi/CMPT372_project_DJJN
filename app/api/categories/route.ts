@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         const categoryResult = await client.query(categoryQuery, [uid]);
 
         for (const category of categoryResult.rows) {
-            const ingredientQuery = "SELECT * FROM ingredient WHERE cid = $1"; // Get all ingredients for the category
+            const ingredientQuery = "SELECT * FROM inventory WHERE cid = $1"; // Get all ingredients for the category
             const ingredientResult = await client.query(ingredientQuery, [category.cid]);
             
             for (const ingredient of ingredientResult.rows) {
@@ -49,5 +49,24 @@ export async function GET(req: NextRequest, res: NextResponse) {
     } catch (error) {
         console.error('Error getting categories: ', error);
         return NextResponse.json({ error: 'Internal server error' });
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    if (req.method === 'DELETE') {
+        try {
+            const cid = parseInt(req.nextUrl.searchParams.get('cid') as string);
+            const client = await pool.connect();
+            const query = "DELETE FROM category WHERE cid = $1";
+            await client.query(query, [cid]);
+            client.release();
+            return NextResponse.json({ message: 'Category successfully deleted' });
+        } catch (error) {
+            console.error('Error deleting category: ', error);
+            return NextResponse.json({ error: 'Internal server error' });
+        }
+    }
+    else {
+        return NextResponse.json({ error: 'Method not allowed' });
     }
 }
