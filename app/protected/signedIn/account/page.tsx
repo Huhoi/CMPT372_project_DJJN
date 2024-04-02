@@ -143,8 +143,13 @@ export default function AccountPage() {
                 Log Out
             </button>
 
+            <div>
+                dasd
+                asd
+                asd
+            </div>
             <button onClick={handleFetch} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
-                test
+                TEST SPOONACULAR API DONT CLICK UNLESS ITS NEEDED
             </button>
         </div>
     );
