@@ -12,10 +12,12 @@ export interface Category {
 // modal for adding a new category using Modal component
 const CategoryModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [category, setCategory] = useState('' as string);
+    const uid = useTestContext();
 
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const uid = useTestContext();
+
         try {
             const response = await fetch('../../api/categories', {
                 method: 'POST',
@@ -36,7 +38,7 @@ const CategoryModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, chil
                 const res = await response.json();
                 console.error("Error adding category: ", res.error);
             }
-        } 
+        }
         catch (error) {
             console.error("Error adding category: ", error);
         }
@@ -47,10 +49,10 @@ const CategoryModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, chil
             <Modal modalTitle="Create a new category" isOpen={isOpen} onClose={onClose}>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="category">Category: </label>
-                    <input 
-                        type="text" 
-                        id="category" 
-                        value={category} 
+                    <input
+                        type="text"
+                        id="category"
+                        value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     /> <br></br>
                     <button type="submit">Add</button><br></br>
