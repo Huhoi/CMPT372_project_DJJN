@@ -59,6 +59,7 @@ export default function InventoryPage() {
         }
     };
 
+
     const handleDeleteIngredient = async (ingredientId: number) => {
         try {
             const data = { iid: ingredientId };

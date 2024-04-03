@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
         try {
             const { ingredient_name, expiration, amount, amount_type, cid } = await req.json();
             const query = "INSERT INTO inventory (ingredient_name, expiration, amount, cid, amount_type ) VALUES ($1, $2, $3, $4, $5)";
+
             const client = await pool.connect();
             await client.query(query, [ingredient_name, expiration, amount, cid, amount_type]);
             
