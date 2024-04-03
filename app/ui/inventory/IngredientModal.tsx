@@ -57,7 +57,7 @@ const IngredientModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, ch
                             onChange={(e) => setAmount(e.target.value)}
                             required
                             className="min-h-[100px] resize-none bg-slate-200 appearance-none border-2 border-slate-300 rounded w-full py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
-                            placeholder="Enter instructions"></textarea>
+                            placeholder="Enter amount"></textarea>
                     </div>
 
                     <div id="categoryInput" className="py-2">
