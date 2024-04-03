@@ -38,20 +38,19 @@ export default function InventoryPage() {
 
     useEffect(() => {
         fetchIngredients();
-    }, []);
+    });
 
     const handleDeleteCategory = async (categoryId: number) => {
         try {
             const data = { cid: categoryId };
             const response = await fetch(`/api/categories?cid=` + data.cid, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                method: 'DELETE'
             });
 
             if (response.ok) {
                 // If deletion is successful, remove the deleted category from the state
                 setCategories(categories.filter(category => category.cid !== categoryId));
+                fetchIngredients();
             } else {
                 console.error('Failed to delete category:', response.statusText);
             }

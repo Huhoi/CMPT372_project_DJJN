@@ -5,24 +5,19 @@ import pool from '../../utils/connectDB';
 
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
+
+        const { category_name, uid } = await req.json();
         try {
-            const { category_name, uid } = await req.json();
-
-            try {
-                const query = "INSERT INTO category (category_name, uid) VALUES ($1, $2)";
-                const client = await pool.connect();
-                await client.query(query, [category_name, uid]);
-                client.release();
-            } catch (error) {
-                console.error('Error adding category: ', error);
-                return NextResponse.json({ error: 'Internal server error' });
-            }
-
-            return NextResponse.json({ message: 'Category successfully added' });
+            const query = "INSERT INTO category (category_name, uid) VALUES ($1, $2)";
+            const client = await pool.connect();
+            await client.query(query, [category_name, uid]);
+            client.release();
         } catch (error) {
-            console.log('Error getting session: ', error);
+            console.error('Error adding category: ', error);
             return NextResponse.json({ error: 'Internal server error' });
         }
+
+        return NextResponse.json({ message: 'Category successfully added' });
     }
     else {
         return NextResponse.json({ error: 'Method not allowed' });
@@ -46,6 +41,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
                 ingredientArray.push(ingredient);
             }
         }
+        client.release();
         return NextResponse.json({ categories: categoryResult.rows, ingredients: ingredientArray });
     } catch (error) {
         console.error('Error getting categories: ', error);

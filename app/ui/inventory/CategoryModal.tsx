@@ -47,7 +47,7 @@ const CategoryModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, chil
     return (
         <>
             <Modal modalTitle="Create a new category" isOpen={isOpen} onClose={onClose}>
-                <form onSubmit={handleSubmit} className="font-dm_sans h-[380px]">
+                <form onSubmit={handleSubmit} className="font-dm_sans h-[580px]">
                 <p className="py-2 text-2xl">Category Name</p>
                     <input
                         type="text"
