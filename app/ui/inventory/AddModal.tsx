@@ -12,7 +12,7 @@ const AddModal: React.FC<Category> = ({ cid }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
-    const [amount, setAmount] = useState('' as string);
+    const [amount, setAmount] = useState(0 as number);
     const [amountType, setAmountType] = useState(AmountType.GRAM);
 
     const openModal = () => setIsOpen(true);
@@ -35,7 +35,7 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                 if (res.message === 'Ingredient successfully added') {
                     closeModal();
                     setIngredientName('');
-                    setAmount('');
+                    setAmount(0);
                 }
                 window.location.href = "/pages/signedIn/inventory"
             }
@@ -71,10 +71,10 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                     /> <br />
                     <label htmlFor="amount">Amount: </label>
                     <input
-                        type="text"
+                        type="number"
                         id="amount"
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => setAmount(e.target.valueAsNumber)}
                     />
                     <select name="amountType" id="amountType" value={amountType} onChange={(e) => setAmountType(e.target.value as AmountType)}>
                         {Object.values(AmountType).map((type) => (

@@ -7,7 +7,7 @@ export enum AmountType {
     GRAM = 'g',
     KILOGRAM = 'kg',
     MILLILITER = 'ml',
-    LITER = 'l',
+    LITER = 'litre',
     COUNT = 'count',
 
     POUND = 'lb',
@@ -29,7 +29,7 @@ export interface Category {
 
 export interface Ingredient {
     iid: number;
-    name: string;
+    ingredient_name: string;
     expiration: Date;
     amount: number;
     amount_type: AmountType;

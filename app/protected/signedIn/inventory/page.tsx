@@ -19,6 +19,7 @@ export default function InventoryPage() {
 
             if (response.ok) {
                 const data = await response.json(); // data is list of categories and list of ingredients
+                console.log(data);
                 setCategories(data.categories);
                 setIngredients(data.ingredients);
             } else {
@@ -42,7 +43,6 @@ export default function InventoryPage() {
                 body: JSON.stringify(data)
             });
 
-
             if (response.ok) {
                 // If deletion is successful, remove the deleted category from the state
                 setCategories(categories.filter(category => category.cid !== categoryId));
@@ -53,6 +53,11 @@ export default function InventoryPage() {
             console.error('Error deleting category:', error);
         }
     };
+
+    const convertDate = (date: Date) => {
+        return date.toISOString().split('T')[0];
+    };
+
     return (
         <>
             <AddButton />
@@ -68,7 +73,11 @@ export default function InventoryPage() {
                                 {ingredients
                                     .filter(ingredient => ingredient.cid === category.cid)
                                     .map(ingredient => (
-                                        <li key={ingredient.iid} className="mb-1">{ingredient.name}</li>
+                                        <li key={ingredient.iid} className="mb-1">
+                                            {ingredient.ingredient_name + " "}
+                                            {ingredient.amount} {ingredient.amount_type + " "} 
+                                            {convertDate(new Date(ingredient.expiration))}
+                                        </li>
                                     ))}
                             </ul>
                             <AddModal cid={category.cid} />

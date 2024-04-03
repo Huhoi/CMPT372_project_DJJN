@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
-        const uid = req.nextUrl.searchParams.get('uid');
+        const uid = parseInt(req.nextUrl.searchParams.get('uid') as string);
         const client = await pool.connect();
         const ingredientArray = [];
         const categoryQuery = "SELECT * FROM category WHERE uid = $1"; // Get all categories for the user
@@ -42,6 +42,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
             const ingredientResult = await client.query(ingredientQuery, [category.cid]);
             
             for (const ingredient of ingredientResult.rows) {
+                ingredient.amount = parseFloat(ingredient.amount); // For some reason, postgres returns amount as a string
                 ingredientArray.push(ingredient);
             }
         }
