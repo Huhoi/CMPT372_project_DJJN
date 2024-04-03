@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
+import ExpireSoonList from '../inventory/ExpireSoonList';
 
 function ReminderModule() {
   return (
@@ -15,6 +16,9 @@ function ReminderModule() {
         <p className="absolute top-3 left-16 pl-2 font-dm_sans tracking-tighter text-xl font-bold text-slate-800 select-none">Reminders</p>
         <Image className="absolute top-9 left-16 pt-1 pl-2 pointer-events-none select-none" src="/clock.png" alt="icon" width={23} height={23}></Image>
         <p className="absolute top-9 left-20 pt-0.5 pl-2.5 font-dm_mono text-sm tracking-tighter text-slate-500 select-none">UPCOMING</p>
+      </div>
+      <div>
+        <ExpireSoonList />
       </div>
     </motion.div>
   )
