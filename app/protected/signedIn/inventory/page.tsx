@@ -9,6 +9,7 @@ import { Category, Ingredient } from "@/app/utils/interfaces";
 export default function InventoryPage() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     const uid = useTestContext();
 
@@ -19,7 +20,6 @@ export default function InventoryPage() {
 
             if (response.ok) {
                 const data = await response.json(); // data is list of categories and list of ingredients
-                console.log(data);
                 setCategories(data.categories);
                 setIngredients(data.ingredients);
             } else {
@@ -54,9 +54,39 @@ export default function InventoryPage() {
         }
     };
 
+    const handleDeleteIngredient = async (ingredientId: number) => {
+        try {
+            const data = { iid: ingredientId };
+            const response = await fetch(`/api/inventory?iid=` + data.iid, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                // If deletion is successful, remove the deleted ingredient from the state
+                setIngredients(ingredients.filter(ingredient => ingredient.iid !== ingredientId));
+            } else {
+                console.error('Failed to delete ingredient:', response.statusText);
+            }
+        }
+        catch (error) {
+            console.error('Error deleting ingredient:', error);
+        }
+    };
+
     const convertDate = (date: Date) => {
         return date.toISOString().split('T')[0];
     };
+
+    const handleModalClose = () => {
+        setIsOpen(false);
+        fetchIngredients();
+    }
+
+    const handleModalOpen = () => {
+        setIsOpen(true);
+    }
 
     return (
         <>
@@ -67,7 +97,7 @@ export default function InventoryPage() {
                         <div key={category.cid} className="p-4 border border-gray-200 rounded">
                             <div className="flex justify-between items-center mb-2">
                                 <h2 className="text-lg font-semibold">{category.category_name}</h2>
-                                <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete</button>
+                                <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete Category</button>
                             </div>
                             <ul>
                                 {ingredients
@@ -77,10 +107,11 @@ export default function InventoryPage() {
                                             {ingredient.ingredient_name + " "}
                                             {ingredient.amount} {ingredient.amount_type + " "} 
                                             {convertDate(new Date(ingredient.expiration))}
+                                            <button onClick={() => handleDeleteIngredient(ingredient.iid)} className="text-red-500 ml-2">Delete Ingredient</button>
                                         </li>
                                     ))}
                             </ul>
-                            <AddModal cid={category.cid} />
+                            <AddModal cid={category.cid} isOpen={isOpen} onClose={handleModalClose} onOpen={handleModalOpen}/>
                         </div>
                     ))}
                 </div>

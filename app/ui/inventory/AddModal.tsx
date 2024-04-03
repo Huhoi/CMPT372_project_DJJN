@@ -3,20 +3,26 @@ import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { AmountType } from "@/app/utils/interfaces";
 
-interface Category {
+interface AddModalProps {
     cid: number;
+    isOpen: boolean;
+    onClose: () => void;
+    onOpen: () => void;
 }
 
 // modal for adding a new category using Modal component
-const AddModal: React.FC<Category> = ({ cid }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const AddModal: React.FC<AddModalProps> = ({ cid , isOpen , onClose, onOpen}) => {
+    // const [isOpen, setIsOpen] = useState(false);
     const [ingredientName, setIngredientName] = useState('' as string);
     const [expiration, setExpiration] = useState(null as Date | null);
     const [amount, setAmount] = useState(0 as number);
     const [amountType, setAmountType] = useState(AmountType.GRAM);
 
-    const openModal = () => setIsOpen(true);
-    const closeModal = () => setIsOpen(false);
+    const openModal = () => onOpen();
+    const closeModal = () => onClose();
+
+    // const openModal = () => setIsOpen(true);
+    // const closeModal = () => setIsOpen(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,7 +43,6 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                     setIngredientName('');
                     setAmount(0);
                 }
-                window.location.href = "/pages/signedIn/inventory"
             }
             else {
                 const res = await response.json();
@@ -83,7 +88,7 @@ const AddModal: React.FC<Category> = ({ cid }) => {
                     </select>
                     <br />
                     <button type="submit">Add</button><br></br>
-                    <button onClick={closeModal}>Close</button>
+                    <button type="button" onClick={closeModal}>Close</button>
                 </form>
             </Modal>
         </>
