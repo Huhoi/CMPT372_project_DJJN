@@ -7,7 +7,15 @@ import { Switch } from '@headlessui/react'
 import { Ingredient } from '../inventory/IngredientModal'
 import { useTestContext } from '@/app/protected/layout'
 
-const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
+export interface EditModalProps {
+    rid: number,
+    modalTitle: string;
+    isOpen: boolean;
+    onClose: () => void;
+    children: React.ReactNode;
+}
+
+const EditRecipeModal: React.FC<EditModalProps> = ({ rid, modalTitle, isOpen, onClose, children }) => {
     const [title, setTitle] = useState("");
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [instructions, setInstructions] = useState("");
@@ -28,49 +36,6 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         setFavorite(event.target.checked);
     };
 
-    function reset() {
-        setTitle("");
-        setInstructions("");
-        setSelected([]);
-        setIngredients([]);
-        setFavorite(false);
-    }
-
-    // Fetch ingredients and UID on page load
-    useEffect(() => {
-        const handlePageLoad = async () => {
-            try {
-                // First get ingredients
-                const response1 = await fetch(`../../api/recipes`);
-
-                if (!response1.ok) {
-                    throw new Error('Failed to GET');
-                }
-
-                var fetched = await response1.json();
-                fetched = fetched.ingredients;
-                console.log(fetched);
-                const items: Ingredient[] = fetched.map((item: any) => ({
-                    iid: item.iid,
-                    iname: item.name,
-                }))
-                setIngredients(items);
-
-                // Add as Select form options
-                var selectOptionsList: any[] = [];
-                items.forEach(ingredient => {
-                    selectOptionsList.push({ value: ingredient.iname, label: ingredient.iname });
-                });
-                setSelectOptions(selectOptionsList);
-
-            } catch (error) {
-                console.error('Error with retrieving: ', error);
-            }
-        };
-
-        handlePageLoad();
-    }, []);
-
     // Every time the "selected" variable (aka. the values of the input)
     // is changed, detect it and adjust list of selected ingredients
     useEffect(() => {
@@ -86,28 +51,30 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         }
     }, [selected])
 
-    async function handleCreate(e: { preventDefault: () => void }) {
-        const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    async function handleDelete() {
         try {
-            const response = await fetch(`../../api/recipes`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: formattedDate, favorite: favorite, uid: uid})
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to POST')
-            }
-
+          const response = await fetch(`../../api/recipes`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rid: rid, uid: uid })
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to DELETE');
+          }
+    
         } catch (error) {
-            console.error('Error with POST', error)
+          console.error('Error with DELETE', error);
         }
-
+    
+        // Then delete from view
+        // TEMPORARY FIX: REFRESH PAGE
+        // window.location.href = "/pages/signedIn/recipes"
     }
 
     return (
         <Modal modalTitle={modalTitle} isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={handleCreate} className="font-dm_sans h-[550px]">
+            <form className="font-dm_sans h-[550px]">
                 <div id="titleInput" className="py-2">
                     <p className="py-2 text-2xl">Recipe name</p>
                     <input value={title}
@@ -222,7 +189,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                 </div>
 
                 <div id="buttonContainer" className="absolute px-4 bottom-0 left-0 h-1/8 w-full bg-gradient-to-r from-blue-100 to-indigo-100 grid grid-cols-5 grid-rows-1 gap-2 justify-center items-center">
-                    <button type="reset" className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold col-start-1 col-end-1 text-indigo-400 hover:text-white bg-transparent hover:bg-indigo-500 border-2 border-indigo-400 hover:border-indigo-500 rounded-md flex justify-center items-center" onClick={reset}>Reset</button>
+                    <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold col-start-1 col-end-1 text-red-400 hover:text-white bg-transparent hover:bg-red-500 border-2 border-red-400 hover:border-red-500 rounded-md flex justify-center items-center" onClick={handleDelete}>Delete</button>
                     <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold hover:bg-slate-900/10 text-slate-500 hover:text-slate-950 col-start-4 col-end-4 rounded-md flex justify-center items-center" onClick={onClose}>Cancel</button>
                     <button type="submit" className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center">Save</button>
                 </div>
@@ -231,4 +198,4 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
     )
 }
 
-export default RecipeModal
+export default EditRecipeModal
