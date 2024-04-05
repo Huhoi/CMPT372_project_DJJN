@@ -7,6 +7,9 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
     },
+    images: {
+        domains: ['img.spoonacular.com'], // Add the domain of the image source
+    },
 };
 
 export default nextConfig;
