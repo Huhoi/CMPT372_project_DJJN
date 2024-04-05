@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import CommunityRecipeModal from '@/app/ui/community/CommunityRecipeModal';
+import DisplayCommunity from '@/app/ui/community/DisplayCommunity';
 
 export default function CommunityPage() {
     const [image, setImage] = useState("/circle-plus-1.png");
@@ -34,6 +35,7 @@ export default function CommunityPage() {
                 </motion.div>
             </div>
             <CommunityRecipeModal modalTitle={"Find a Recipe"} isOpen={checkIsOpen} onClose={closeModal}> </CommunityRecipeModal>
+            <DisplayCommunity />
         </>
 
     )

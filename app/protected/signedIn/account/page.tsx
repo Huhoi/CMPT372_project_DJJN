@@ -3,8 +3,8 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from 'next/navigation';
 import { useTestContext } from "../../layout";
 import { useState, useEffect } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { TrashIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Trade_Winds } from "next/font/google";
 
 interface UserData {
     uid: number;
@@ -113,31 +113,33 @@ export default function AccountPage() {
     }
 
     return (
+
         <div>
-            <h1 className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
-                Table of Registered Users</h1>
-            <Table aria-label="User data table" className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
-                <TableHeader >
-                    <TableColumn>Username</TableColumn>
-                    <TableColumn>User ID</TableColumn>
-                    <TableColumn> </TableColumn>
-                </TableHeader>
-                <TableBody className="border-2 border-blackrounded-full">
+
+            <table aria-label="User data table" className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
+                <thead >
+                    <tr>
+                        <th>Username</th>
+                        <th>User ID</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody className="border-2 border-blackrounded-full">
                     {userData.map((user) => (
-                        <TableRow key={user.uid}>
-                            <TableCell>{user.username}</TableCell>
-                            <TableCell>{user.uid}</TableCell>
-                            <TableCell>
+                        <tr key={user.uid}>
+                            <td>{user.username}</td>
+                            <td>{user.uid}</td>
+                            <td>
                                 <button onClick={() => handleDelete(user.uid)}>
                                     <TrashIcon className="h-6 w-6 hover:text-red-600" />
                                 </button>
 
-                            </TableCell>
-                        </TableRow>
+                            </td>
+                        </tr>
                     ))}
-                </TableBody>
+                </tbody>
 
-            </Table>
+            </table>
             <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
                 <ArrowLeftEndOnRectangleIcon className="h-6 w-6 hover:text-red-600 mr-2" />
                 Log Out
