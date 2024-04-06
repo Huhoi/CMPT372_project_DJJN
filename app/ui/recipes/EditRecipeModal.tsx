@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import Modal, { ModalProps } from '../Modal'
 import CreatableSelect from 'react-select/creatable'
 import { Switch } from '@headlessui/react'
-import { Ingredient } from '../inventory/IngredientModal'
 import { useTestContext } from '@/app/protected/layout'
+import { AmountType, Ingredient } from '@/app/utils/interfaces'
 
 export interface EditModalProps {
     rid: number;
@@ -49,9 +49,10 @@ const EditRecipeModal: React.FC<EditModalProps> = ({ rid, title_prop, instructio
         if (selected) {
             const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
                 iid: 0, // Unknown until created
-                iname: selection.label,
-                expiration: Date(),
+                ingredient_name: selection.label,
+                expiration: new Date(),
                 amount: 0,
+                amount_type: AmountType.GRAM,
                 cid: 0,
             }));
             setIngredients(selectedIngredients);
