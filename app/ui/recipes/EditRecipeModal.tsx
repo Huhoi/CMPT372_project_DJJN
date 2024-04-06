@@ -8,23 +8,30 @@ import { Ingredient } from '../inventory/IngredientModal'
 import { useTestContext } from '@/app/protected/layout'
 
 export interface EditModalProps {
-    rid: number,
+    rid: number;
+    title_prop: string;
+    instruction_prop: string;
+    last_modified_prop: Date;
+    favorite_prop: boolean;
     modalTitle: string;
     isOpen: boolean;
     onClose: () => void;
     children: React.ReactNode;
 }
 
-const EditRecipeModal: React.FC<EditModalProps> = ({ rid, modalTitle, isOpen, onClose, children }) => {
-    const [title, setTitle] = useState("");
+const EditRecipeModal: React.FC<EditModalProps> = ({ rid, title_prop, instruction_prop, last_modified_prop, favorite_prop, modalTitle, isOpen, onClose, children }) => {
+    const [title, setTitle] = useState(title_prop);
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-    const [instructions, setInstructions] = useState("");
-    const [favorite, setFavorite] = useState(false);
+    const [instructions, setInstructions] = useState(instruction_prop);
+    const [favorite, setFavorite] = useState(favorite_prop);
 
     const [selected, setSelected] = useState<any[]>([])
     const [selectOptions, setSelectOptions] = useState<any[]>([]);
 
     const uid = useTestContext()
+
+    var displayDate = new Date(last_modified_prop).toLocaleDateString('en-us', { year: "numeric", month: "long", day: "numeric" }) + ", " +
+        new Date(last_modified_prop).toLocaleTimeString('en-us');
 
     // The values from a multi-change input returns an object-- use 
     // this function to handle the values 
@@ -72,9 +79,28 @@ const EditRecipeModal: React.FC<EditModalProps> = ({ rid, modalTitle, isOpen, on
         // window.location.href = "/pages/signedIn/recipes"
     }
 
+    async function handleUpdate() {
+        const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        try {
+          const response = await fetch(`../../api/recipes`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rid: rid, title: title, instruction: instructions, last_modified: formattedDate, uid: uid })
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to UPDATE');
+          }
+    
+        } catch (error) {
+          console.error('Error with UPDATE');
+        }
+      }
+
     return (
         <Modal modalTitle={modalTitle} isOpen={isOpen} onClose={onClose}>
-            <form className="font-dm_sans h-[550px]">
+            <p className="italic text-sm text-slate-400">Last modified: {displayDate}</p>
+            <form onSubmit={handleUpdate} className="font-dm_sans h-[550px]">
                 <div id="titleInput" className="py-2">
                     <p className="py-2 text-2xl">Recipe name</p>
                     <input value={title}

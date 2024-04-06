@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react'
 import Modal, { ModalProps } from '../Modal'
 import CreatableSelect from 'react-select/creatable'
 import { Switch } from '@headlessui/react'
-import { Ingredient } from '../inventory/IngredientModal'
 import { useTestContext } from '@/app/protected/layout'
+import Details from './Details'
+import { AmountType, Ingredient } from '@/app/utils/interfaces'
 
 const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [title, setTitle] = useState("");
@@ -17,6 +18,9 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
     const [selectOptions, setSelectOptions] = useState<any[]>([]);
 
     const uid = useTestContext()
+
+    const [count, setCount] = useState(0);
+    const [modalHeight, setModalHeight] = useState(550);
 
     // The values from a multi-change input returns an object-- use 
     // this function to handle the values 
@@ -52,14 +56,14 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                 console.log(fetched);
                 const items: Ingredient[] = fetched.map((item: any) => ({
                     iid: item.iid,
-                    iname: item.name,
+                    ingredient_name: item.name,
                 }))
                 setIngredients(items);
 
                 // Add as Select form options
                 var selectOptionsList: any[] = [];
                 items.forEach(ingredient => {
-                    selectOptionsList.push({ value: ingredient.iname, label: ingredient.iname });
+                    selectOptionsList.push({ value: ingredient.ingredient_name, label: ingredient.ingredient_name });
                 });
                 setSelectOptions(selectOptionsList);
 
@@ -77,14 +81,38 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         if (selected) {
             const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
                 iid: 0, // Unknown until created
-                iname: selection.label,
-                expiration: Date(),
+                ingredient_name: selection.label,
+                expiration: new Date(),
                 amount: 0,
+                amount_type: AmountType.GRAM,
                 cid: 0,
             }));
             setIngredients(selectedIngredients);
         }
+        
+        // If item is added, increase size of modal
+        if (selected.length > count) {
+            grow();
+        }
+        // Otherwise shrink
+        else if (selected.length < count) {
+            shrink();
+        }
+        updateSize();
+
     }, [selected])
+
+    const grow = () => {
+        setModalHeight(modalHeight => modalHeight + 50);
+    }
+
+    const shrink = () => {
+        setModalHeight(modalHeight => modalHeight - 50);
+    }
+
+    const updateSize = () => {
+        setCount(count => selected.length);
+    }
 
     async function handleCreate(e: { preventDefault: () => void }) {
         const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -107,7 +135,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
 
     return (
         <Modal modalTitle={modalTitle} isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={handleCreate} className="font-dm_sans h-[550px]">
+            <form onSubmit={handleCreate} className="font-dm_sans" style={{ height: modalHeight }}>
                 <div id="titleInput" className="py-2">
                     <p className="py-2 text-2xl">Recipe name</p>
                     <input value={title}
@@ -193,6 +221,10 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                 }
                             })
                         }} />
+                        {/* NOTE: Only iid and ingredient_name is used-- the other parameters are kept in because TypeScript complains */}
+                        { ingredients.map((ingredient, index) => (
+                            <Details key={index} iid={ingredient.iid} ingredient_name={ingredient.ingredient_name} expiration={new Date()} amount={0} amount_type={AmountType.GRAM} cid={0}/>
+                        ))}
                 </div>
 
                 <div id="instructionInput" className="py-2">

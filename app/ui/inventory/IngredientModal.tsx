@@ -4,14 +4,6 @@ import CreatableSelect from 'react-select/creatable'
 import { Category } from './CategoryModal';
 import moment from 'moment';
 
-export interface Ingredient {
-    iid: number,
-    iname: string,
-    expiration: string,
-    amount: number,
-    cid: number,
-}
-
 const IngredientModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [name, setName] = useState("");
     const [category, setCategory] = useState<Category[]>([]);
