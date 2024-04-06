@@ -18,7 +18,7 @@ function DisplayRecipes() {
   useEffect(() => {
     const handlePageLoad = async () => {
       try {
-        const response = await fetch(`/api/recipes`);
+        const response = await fetch(`../../api/recipes`);
 
         if (!response.ok) {
           throw new Error('Failed to GET');
@@ -29,7 +29,7 @@ function DisplayRecipes() {
         console.log(fetched);
         const items: Recipe[] = fetched.map((item: any) => ({
           rid: item.rid,
-          title: item.title,
+          title: item.recipe_name,
           instruction: item.instruction,
           last_modified: item.last_modified,
           favorite: item.favorite,
