@@ -55,6 +55,23 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
         console.log("save", { id })
     }
 
+    function getIngredientUnit(ingredient: any): string {
+        if (ingredient.measures.metric && ingredient.measures.metric.unitLong) {
+            return ingredient.measures.metric.unitLong;
+        } else if (ingredient.measures.us && ingredient.measures.us.unitLong) {
+            return ingredient.measures.us.unitLong;
+        } else {
+            return ''; // Return an empty string if both metric and US units are missing
+        }
+    }
+
+    function getIngredientAmount(ingredient: any): string {
+        if (ingredient.amount) {
+            return ingredient.amount.toFixed(1);
+        } else {
+            return '';
+        }
+    }
     return (
         <>
             <button className="py-4 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
@@ -67,11 +84,33 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
                 {recipeInfo && (
                     <div>
                         <h2 className="text-lg font-semibold">{recipeInfo.title}</h2>
-                        <p>{recipeInfo.instructions}</p>
+                        <hr />
+                        <h3 className="text-md font-semibold">Ingredients:</h3>
+                        <div className="grid grid-cols-3 gap-3">
 
+                            {recipeInfo.extendedIngredients && recipeInfo.extendedIngredients.map((ingredient: any, index: number) => (
+                                <div key={index}>{getIngredientAmount(ingredient)} {getIngredientUnit(ingredient)} {ingredient.name}</div>
+                            ))}
+                        </div>
+                        <hr />
+                        <div>
+                            <h3 className="text-md font-semibold">Instructions:</h3>
+
+                            <ol className="grid grid-cols-1 gap-3">
+                                {recipeInfo.instructions.replace(/<\/?[^>]+(>|$)/g, '').split('.').map((instruction: string, index: number) => {
+                                    const trimmedInstruction = instruction.trim();
+                                    if (trimmedInstruction) {
+                                        return <li key={index}><strong>{index + 1}:</strong> {trimmedInstruction}{index !== recipeInfo.instructions.split('.').length - 1 ? '.' : ''}</li>;
+                                    }
+                                    return null;
+                                })}
+                            </ol>
+
+                        </div>
                     </div>
                 )}
             </Modal>
+
         </>
     );
 };
