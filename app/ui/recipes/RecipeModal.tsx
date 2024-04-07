@@ -78,6 +78,18 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
     // Every time the "selected" variable (aka. the values of the input)
     // is changed, detect it and adjust list of selected ingredients
     useEffect(() => {
+        const grow = () => {
+            setModalHeight(modalHeight => modalHeight + 50);
+        }
+    
+        const shrink = () => {
+            setModalHeight(modalHeight => modalHeight - 50);
+        }
+    
+        const updateSize = () => {
+            setCount(count => selected.length);
+        }
+        
         if (selected) {
             const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
                 iid: 0, // Unknown until created
@@ -99,20 +111,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
             shrink();
         }
         updateSize();
-
     }, [selected])
-
-    const grow = () => {
-        setModalHeight(modalHeight => modalHeight + 50);
-    }
-
-    const shrink = () => {
-        setModalHeight(modalHeight => modalHeight - 50);
-    }
-
-    const updateSize = () => {
-        setCount(count => selected.length);
-    }
 
     async function handleCreate(e: { preventDefault: () => void }) {
         const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
