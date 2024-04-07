@@ -7,6 +7,14 @@ import { InformationCircleIcon, BookmarkIcon } from '@heroicons/react/24/outline
 interface ShowButtonProps {
     id: number;
 }
+
+interface ExtendedIngredient {
+    name: string;
+    amount: number;
+    unitLong: string; // Add this property
+    // Add other properties if needed
+}
+
 // modal for adding a new category using Modal component
 const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,8 +60,38 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
 
 
     const handleSave = async () => {
-        console.log("save", { id })
-    }
+        if (recipeInfo) {
+            try {
+                // Format the ingredients
+                const formattedIngredients = formatIngredients(recipeInfo.extendedIngredients);
+
+                // Prepare the recipe data for the POST request
+                const recipeData = {
+                    recipe_name: recipeInfo.title,
+                    instruction: recipeInfo.instructions,
+                    favourite: false, // Assuming the recipe is not marked as a favorite initially
+                    ingredients: formattedIngredients
+                };
+
+                // Make a POST request to the server endpoint
+                const response = await fetch('/api/community', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(recipeData)
+                });
+
+                if (response.ok) {
+                    console.log('Recipe and ingredients saved successfully on the server.');
+                } else {
+                    console.error('Failed to save recipe and ingredients on the server:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error saving recipe and ingredients:', error);
+            }
+        }
+    };
 
     function getIngredientUnit(ingredient: any): string {
         if (ingredient.measures.metric && ingredient.measures.metric.unitLong) {
@@ -72,6 +110,20 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
             return '';
         }
     }
+
+    function formatIngredients(extendedIngredients: ExtendedIngredient[]) {
+        console.log("Formatted Ingredients:");
+
+        // Iterate through the extendedIngredients array
+        extendedIngredients.forEach((ingredient, index) => {
+            // Check if unitLong is defined, if not, use an empty string
+            const unit = ingredient.unitLong ? ingredient.unitLong : '';
+
+            // Log the formatted ingredient with unit
+            console.log(`${index + 1}. ${ingredient.amount} ${getIngredientUnit(ingredient)} ${ingredient.name}`);
+        });
+    }
+
     return (
         <>
             <button className="py-4 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
