@@ -41,30 +41,26 @@ function ExpireSoonList() {
     };
 
     return (
-        <div>
-            <div className="flex flex-wrap gap-4">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th className="px-6 py-3">Item</th>
-                            <th className="px-6 py-3">Amount</th>
-                            <th className="px-6 py-3">Expiration</th>
-                            <th className="px-6 py-3">Category</th>
-                        </tr>
-                    </thead>
-                    {ingredients.map(ingredient => (
-                        <tbody key={ingredient.iid}>
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td className="px-6 py-4">{ingredient.ingredient_name}</td>
-                                <td className="px-6 py-4">{ingredient.amount} {ingredient.amount_type}</td>
-                                <td className="px-6 py-4">{convertDate(new Date(ingredient.expiration))}</td>
-                                <td className="px-6 py-4">{ingredient.category_name}</td>
-                            </tr>
-                        </tbody>
-                    ))}
-                </table>
-            </div>
-        </div>
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="flex w-full text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr className="flex w-full">
+                    <th className="px-6 py-3 w-1/4">Item</th>
+                    <th className="px-6 py-3 w-1/4">Amount</th>
+                    <th className="px-6 py-3 w-1/4">Expiration</th>
+                    <th className="px-6 py-3 w-1/4">Category</th>
+                </tr>
+            </thead>
+            <tbody className="w-full h-64 flex flex-col items-center justify-between overflow-y-scroll">
+                {ingredients.map(ingredient => (
+                    <tr key={ingredient.iid} className="flex w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td className="px-6 py-4 w-1/4">{ingredient.ingredient_name}</td>
+                        <td className="px-6 py-4 w-1/4">{ingredient.amount} {ingredient.amount_type}</td>
+                        <td className="px-6 py-4 w-1/4">{convertDate(new Date(ingredient.expiration))}</td>
+                        <td className="px-6 py-4 w-1/4">{ingredient.category_name}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     )
 }
 

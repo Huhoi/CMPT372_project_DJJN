@@ -5,7 +5,6 @@ import { useTestContext } from "../../layout";
 import AddButton from "@/app/ui/inventory/AddButton";
 import AddModal from "@/app/ui/inventory/AddModal";
 import { Category, Ingredient } from "@/app/utils/interfaces";
-import { m } from "framer-motion";
 
 interface ModalState {
     [cid: number]: boolean;
