@@ -1,7 +1,6 @@
 'use client'
 import { useTestContext } from "@/app/protected/layout";
 import { useEffect, useState } from "react";
-import { Category, Ingredient } from "@/app/utils/interfaces";
 
 interface ExpiringIngredient {
     iid: number;
@@ -23,7 +22,7 @@ function ExpireSoonList() {
             const response = await fetch('/api/expiring?uid=' + uid);
 
             if (response.ok) {
-                const data = await response.json(); // data is list of categories and list of ingredients
+                const data = await response.json();
                 setIngredients(data.ingredients);
             } else {
                 console.error('Failed to fetch ingredients:', response.statusText);

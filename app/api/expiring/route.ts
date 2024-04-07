@@ -1,3 +1,4 @@
+// app/api/expiring/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import pool from '../../utils/connectDB';
 
@@ -5,8 +6,9 @@ import pool from '../../utils/connectDB';
 // params: uid
 // returns: list of ingredients (iid, ingredient_name, expiration, amount, amount_type, cid, category_name)
 export async function GET(req: NextRequest, res: NextResponse) {
+    const uid: number = parseInt(req.nextUrl.searchParams.get('uid') as string);
     try {
-        const uid: number = parseInt(req.nextUrl.searchParams.get('uid') as string);
+        
         const client = await pool.connect();
 
         // Get all ingredients for the category if expiration is within a week
@@ -23,7 +25,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
         return NextResponse.json({ ingredients: ingredientResult.rows });
     } catch (error) {
-        console.error('Error getting categories: ', error);
+        console.error('Error getting expiring ingredients: ', error);
         return NextResponse.json({ error: 'Internal server error' });
     }
 }
