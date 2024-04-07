@@ -8,7 +8,7 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     images: {
-        remotePatterns: ['https://img.spoonacular.com/*'], // Add the domain pattern of the image source
+        domains: ['img.spoonacular.com'], // Add the domain of the image source
     },
 
     async headers() {
