@@ -23,7 +23,7 @@ function ReminderModule() {
         <Image className="absolute top-9 left-16 pt-1 pl-2 pointer-events-none select-none" src="/clock.png" alt="icon" width={23} height={23}></Image>
         <p className="absolute top-9 left-20 pt-0.5 pl-2.5 font-dm_mono text-sm tracking-tighter text-slate-500 select-none">UPCOMING</p>
       </div>
-      <div>
+      <div className="container h-full">
         <ExpireSoonList />
       </div>
     </motion.div>
