@@ -7,7 +7,7 @@ export interface Community {
     id: number;
     title: string;
     image: string;
-    image_type: string;
+    imageType: string;
 
 }
 
@@ -27,7 +27,7 @@ function DisplayCommunity() {
     return (
         <div className="pt-6 grid grid-cols-3 gap-4 h-full w-full">
             {recipes.map((recipe, index) => (
-                <CommunityCard key={index} id={recipe.id} title={recipe.title} image={recipe.image} image_type={recipe.image_type}></CommunityCard>
+                <CommunityCard key={index} id={recipe.id} title={recipe.title} image={recipe.image} imageType={recipe.imageType}></CommunityCard>
             ))}
         </div>
     )
