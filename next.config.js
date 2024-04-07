@@ -13,13 +13,11 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'img.spoonacular.com',
                 port: '',
-                pathname: '/.*',
             },
             {
                 protocol: 'https',
                 hostname: 'spoonacular.com',
                 port: '',
-                pathname: '/.*',
             },
         ],
     },

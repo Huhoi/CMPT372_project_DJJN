@@ -23,7 +23,7 @@ function CommunityCard({ id, title, image, imageType }: Community) {
         >
             <div className="flex flex-col items-center h-full">
                 <div className="mb-2 mt-8"> {/* Added mt-4 for margin-top */}
-                    <Image src={image +`?not-from-cache-please`} alt={title} className="rounded-xl" width={200} height={200} />
+                    <Image src={image} alt={title} className="rounded-xl" width={200} height={200} />
                 </div >
                 <p className="text-center py-2 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold text-gray">{title}</p>
             </div >
