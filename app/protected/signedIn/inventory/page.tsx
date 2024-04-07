@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTestContext } from "../../layout";
 import AddButton from "@/app/ui/inventory/AddButton";
 import AddModal from "@/app/ui/inventory/AddModal";
+import IngredientRow from "@/app/ui/inventory/IngredientRow";
 import { Category, Ingredient } from "@/app/utils/interfaces";
 
 interface ModalState {
@@ -19,6 +20,7 @@ export default function InventoryPage() {
 
     const uid = useTestContext();
 
+    // Gets the user's categories
     const fetchData = async () => {
         try {
             const response = await fetch('/api/categories?uid=' + uid, {method: 'GET'});
@@ -29,6 +31,7 @@ export default function InventoryPage() {
                 // Check if user has any categories
                 if (data.categories.length > 0) {
                     setCategories(data.categories);
+                    // Fetch ingredients if the user has categories
                     fetchIngredients();
                 }
             } else {
@@ -39,6 +42,7 @@ export default function InventoryPage() {
         }
     };
 
+    // Gets the user's ingredients
     const fetchIngredients = async () => {
         try {
                 const response = await fetch('/api/inventory?uid=' + uid, {method: 'GET'});
@@ -54,10 +58,12 @@ export default function InventoryPage() {
         }
     };
 
+    // Fetch data on page load
     useEffect(() => {
         fetchData();
     }, []);
 
+    // Function to call API to delete a category
     const handleDeleteCategory = async (categoryId: number) => {
         try {
             const data = { cid: categoryId };
@@ -77,7 +83,7 @@ export default function InventoryPage() {
         }
     };
 
-
+    // Function to call API to delete an ingredient
     const handleDeleteIngredient = async (ingredientId: number) => {
         try {
             const data = { iid: ingredientId };
@@ -99,10 +105,19 @@ export default function InventoryPage() {
         }
     };
 
-    const convertDate = (date: Date) => {
-        return date.toISOString().split('T')[0];
+    // Function to update the displayed list of ingredients after an edit
+    // This function is passed to IngredientRow as a prop where the edit is made
+    const handleEditIngredient = (editedIngredient: Ingredient) => {
+        const updatedIngredients = ingredients.map(ingredient => {
+            if (ingredient.iid === editedIngredient.iid) {
+                return editedIngredient;
+            }
+            return ingredient;
+        });
+        setIngredients(updatedIngredients);
     };
 
+    // Opens the modal for ingredient adding
     const handleModalOpen = (cid: number) => {
         setModalStates(prevStates => ({
             ...prevStates,
@@ -110,6 +125,7 @@ export default function InventoryPage() {
         }));
     };
 
+    // Closes the modal for ingredient adding
     const handleModalClose = (cid: number) => {
         setModalStates(prevStates => ({
             ...prevStates,
@@ -136,20 +152,19 @@ export default function InventoryPage() {
                                         <th className="px-6 py-3">Amount</th>
                                         <th className="px-6 py-3">Expiration</th>
                                         <th className="px-6 py-3"></th>
+                                        <th className="px-6 py-3"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {ingredients
                                         .filter(ingredient => ingredient.cid === category.cid)
                                         .map(ingredient => (
-                                            <tr key={ingredient.iid} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <td className="px-6 py-4">{ingredient.ingredient_name}</td>
-                                                <td className="px-6 py-4">{ingredient.amount} {ingredient.amount_type}</td>
-                                                <td className="px-6 py-4">{convertDate(new Date(ingredient.expiration))}</td>
-                                                <td className="px-6 py-4">
-                                                    <button onClick={() => handleDeleteIngredient(ingredient.iid)} className="text-red-500 ml-2">Delete Ingredient</button>
-                                                </td>
-                                            </tr>
+                                            <IngredientRow 
+                                                key={ingredient.iid} 
+                                                ingredient={ingredient} 
+                                                handleDeleteIngredient={handleDeleteIngredient} 
+                                                notifySave={handleEditIngredient}
+                                            />
                                     ))}
                                 </tbody>
                             </table>
