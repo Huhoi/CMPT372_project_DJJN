@@ -2,24 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useTestContext } from "../../layout";
+import { Category, Ingredient } from "@/app/utils/interfaces";
 import AddButton from "@/app/ui/inventory/AddButton";
 import AddModal from "@/app/ui/inventory/AddModal";
 import IngredientRow from "@/app/ui/inventory/IngredientRow";
-import { Category, Ingredient } from "@/app/utils/interfaces";
 
 interface ModalState {
     [cid: number]: boolean;
 }
 
 export default function InventoryPage() {
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
-
+    
+    const uid = useTestContext();
+    
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    
     // Keep track of which modal is open for each category
     const [modalState, setModalStates] = useState<ModalState>({});
-
-    const uid = useTestContext();
-
+    
     // Gets the user's categories
     const fetchData = async () => {
         try {
@@ -27,11 +28,8 @@ export default function InventoryPage() {
 
             if (response.ok) {
                 const data = await response.json();
-
-                // Check if user has any categories
                 if (data.categories.length > 0) {
                     setCategories(data.categories);
-                    // Fetch ingredients if the user has categories
                     fetchIngredients();
                 }
             } else {
@@ -134,6 +132,34 @@ export default function InventoryPage() {
         fetchData();
     };
 
+    const handleDragDrop = async (e: React.DragEvent<HTMLTableElement>, cid: number) => {
+        e.preventDefault();
+
+        let droppedIngredient: Ingredient = JSON.parse(e.dataTransfer.getData('text/plain')) as Ingredient;
+        console.log(droppedIngredient);
+
+        droppedIngredient = { ...droppedIngredient, cid: cid };
+
+        try {
+            const response = await fetch('/api/inventory', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(droppedIngredient)
+            });
+
+            if (response.ok) {
+                handleEditIngredient(droppedIngredient);
+            } else {
+                console.error('Error updating ingredient:', response.statusText);
+            }
+        }
+        catch (error) {
+            console.error('Error updating ingredient:', error);
+        }
+    };
+
     return (
         <>
             <AddButton />
@@ -154,19 +180,17 @@ export default function InventoryPage() {
                                         <th className="px-6 py-3"></th>
                                         <th className="px-6 py-3"></th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {ingredients
-                                        .filter(ingredient => ingredient.cid === category.cid)
-                                        .map(ingredient => (
-                                            <IngredientRow 
-                                                key={ingredient.iid} 
-                                                ingredient={ingredient} 
-                                                handleDeleteIngredient={handleDeleteIngredient} 
-                                                notifySave={handleEditIngredient}
-                                            />
-                                    ))}
-                                </tbody>
+                                </thead>                        
+                                {ingredients
+                                    .filter(ingredient => ingredient.cid === category.cid)
+                                    .map(ingredient => (
+                                        <IngredientRow 
+                                            key={ingredient.iid} 
+                                            ingredient={ingredient} 
+                                            handleDeleteIngredient={handleDeleteIngredient} 
+                                            notifySave={handleEditIngredient}
+                                        />
+                                ))}
                             </table>
                             <AddModal cid={category.cid} isOpen={modalState[category.cid] || false} onClose={() => handleModalClose(category.cid)} onOpen={() => handleModalOpen(category.cid)}/>
                         </div>
