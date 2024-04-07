@@ -69,18 +69,49 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
         return date.toISOString().split('T')[0];
     };
 
+    const handleDragStart = (e: React.DragEvent) => {
+        e.dataTransfer.setData('text/plain', JSON.stringify(ingredient));
+    };
+
+    const handleDragDrop = async (e: React.DragEvent) => {
+        e.preventDefault();
+
+        let droppedIngredient: Ingredient = JSON.parse(e.dataTransfer.getData('text/plain')) as Ingredient;
+        droppedIngredient = { ...droppedIngredient, cid: ingredient.cid };
+
+        try {
+            const response = await fetch('/api/inventory', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(droppedIngredient)
+            });
+
+            if (response.ok) {
+                notifySave(droppedIngredient);
+            } else {
+                console.error('Error updating ingredient:', response.statusText);
+            }
+        }
+        catch (error) {
+            console.error('Error updating ingredient:', error);
+        }
+    };
+
     return (
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tbody>
             {isEditing ? (
                 // EDIT MODE 
                 <>
+                <tr>
                     <td className="px-6 py-4 w-1/5">
                         <input
                             type="text"
                             name="ingredient_name"
                             value={editedIngredient.ingredient_name}
                             onChange={handleInputChange}
-                        />
+                            />
                     </td>
                     <td className="px-6 py-4 w-1/5">
                         <input
@@ -88,13 +119,13 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="amount"
                             value={editedIngredient.amount}
                             onChange={handleInputChange}
-                        />
+                            />
                         <select 
                             name="amountType" 
                             id="amountType" 
                             value={editedIngredient.amount_type as AmountType} 
                             onChange={handleSelectChange}
-                        >
+                            >
                             {Object.values(AmountType).map((type) => (
                                 <option key={type} value={type}>{type}</option>
                             ))}
@@ -106,7 +137,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="expiration"
                             value={convertDate(new Date(editedIngredient.expiration))}
                             onChange={handleInputChange}
-                        />
+                            />
                     </td>
                     <td className="px-6 py-4 w-1/5">
                         <button onClick={handleSaveEdit}>Save</button>
@@ -114,10 +145,18 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     <td className="px-6 py-4 w-1/5">
                         <button onClick={handleCancelEdit}>Cancel</button>
                     </td>
+                </tr>
                 </>
             ) : (
                 // DISPLAY MODE
                 <>
+                <tr
+                    draggable
+                    onDragStart={handleDragStart}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDragDrop}
+                    className="hover:bg-gray-600 cursor-pointer"
+                >
                     <td className="px-6 py-4 w-1/5">{ingredient.ingredient_name}</td>
                     <td className="px-6 py-4 w-1/5">{ingredient.amount} {ingredient.amount_type}</td>
                     <td className="px-6 py-4 w-1/5">{convertDate(new Date(ingredient.expiration))}</td>
@@ -127,9 +166,11 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     <td className="px-6 py-4 w-1/5">
                         <button onClick={() => handleDeleteIngredient(ingredient.iid)}> Delete</button>
                     </td>
+                </tr>
                 </>
             )}
-        </tr>
+
+        </tbody>
     );
 };
 
