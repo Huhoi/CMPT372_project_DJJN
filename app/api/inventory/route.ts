@@ -1,7 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from '../../utils/connectDB';
 
+// Endpoint for getting all ingredients for a user
+// params: uid
+// returns: list of ingredients (iid, ingredient_name, expiration, amount, amount_type, cid)
+export async function GET(req: NextRequest, res: NextResponse) {
+    if (req.method === 'GET') {
+        try {
+            const uid = parseInt(req.nextUrl.searchParams.get('uid') as string);
+            const client = await pool.connect();
+            const query = `
+                SELECT i.*
+                FROM inventory i
+                JOIN category c ON i.cid = c.cid
+                WHERE c.uid = $1
+                `;
+            const result = await client.query(query, [uid]);
+            client.release();
+            return NextResponse.json({ ingredients: result.rows });
+        } catch (error) {
+            console.error('Error getting ingredients: ', error);
+            return NextResponse.json({ error: 'Internal server error' });
+        }
+    
+    }
+}
 
+// Endpoint for adding a new ingredient
+// params: ingredient_name, expiration, amount, amount_type, cid
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
 
@@ -27,6 +53,8 @@ export async function POST(req: NextRequest) {
     }
 }
 
+// Endpoint for updating an ingredient
+// params: iid
 export async function DELETE(req: NextRequest) {
     if (req.method === 'DELETE') {
         try {

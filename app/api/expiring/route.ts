@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from '../../utils/connectDB';
 
+// Endpoint to get user's ingredients that are expiring within a week
+// params: uid
+// returns: list of ingredients (iid, ingredient_name, expiration, amount, amount_type, cid, category_name)
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const uid: number = parseInt(req.nextUrl.searchParams.get('uid') as string);
