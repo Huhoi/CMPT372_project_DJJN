@@ -8,7 +8,7 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     images: {
-        domains: ['spoonacular.com'], // Add the domain of the image source
+        domains: ['img.spoonacular.com', 'spoonacular.com'], // Add the domain of the image source
     },
 
     async headers() {
