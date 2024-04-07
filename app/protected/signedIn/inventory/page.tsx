@@ -38,7 +38,7 @@ export default function InventoryPage() {
 
     useEffect(() => {
         fetchIngredients();
-    });
+    }, []);
 
     const handleDeleteCategory = async (categoryId: number) => {
         try {
