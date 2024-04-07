@@ -5,6 +5,7 @@ import { useTestContext } from "../../layout";
 import AddButton from "@/app/ui/inventory/AddButton";
 import AddModal from "@/app/ui/inventory/AddModal";
 import { Category, Ingredient } from "@/app/utils/interfaces";
+import { m } from "framer-motion";
 
 interface ModalState {
     [cid: number]: boolean;
@@ -19,26 +20,44 @@ export default function InventoryPage() {
 
     const uid = useTestContext();
 
-    const fetchIngredients = async () => {
+    const fetchData = async () => {
         try {
-
-            const response = await fetch('/api/categories?uid=' + uid);
+            const response = await fetch('/api/categories?uid=' + uid, {method: 'GET'});
 
             if (response.ok) {
-                const data = await response.json(); // data is list of categories and list of ingredients
-                setCategories(data.categories);
-                setIngredients(data.ingredients);
+                const data = await response.json();
+
+                // Check if user has any categories
+                if (data.categories.length > 0) {
+                    setCategories(data.categories);
+                    fetchIngredients();
+                }
             } else {
-                console.error('Failed to fetch ingredients:', response.statusText);
+                console.error('Failed to fetch categories:', response.statusText);
             }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    const fetchIngredients = async () => {
+        try {
+                const response = await fetch('/api/inventory?uid=' + uid, {method: 'GET'});
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setIngredients(data.ingredients);
+                } else {
+                    console.error('Failed to fetch ingredients:', response.statusText);
+                }
         } catch (error) {
             console.error('Error fetching ingredients:', error);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchIngredients();
-    });
+        fetchData();
+    }, []);
 
     const handleDeleteCategory = async (categoryId: number) => {
         try {
@@ -50,7 +69,7 @@ export default function InventoryPage() {
             if (response.ok) {
                 // If deletion is successful, remove the deleted category from the state
                 setCategories(categories.filter(category => category.cid !== categoryId));
-                fetchIngredients();
+                fetchData();
             } else {
                 console.error('Failed to delete category:', response.statusText);
             }
@@ -90,15 +109,15 @@ export default function InventoryPage() {
             ...prevStates,
             [cid]: true
         }));
-    }
+    };
 
     const handleModalClose = (cid: number) => {
         setModalStates(prevStates => ({
             ...prevStates,
             [cid]: false
         }));
-        fetchIngredients();
-    }
+        fetchData();
+    };
 
     return (
         <>
