@@ -8,7 +8,20 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     images: {
-        domains: ['img.spoonacular.com', 'spoonacular.com'], // Add the domain of the image source
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'img.spoonacular.com',
+                port: '',
+                pathname: '/.*',
+            },
+            {
+                protocol: 'https',
+                hostname: 'spoonacular.com',
+                port: '',
+                pathname: '/.*',
+            },
+        ],
     },
 
     async headers() {
