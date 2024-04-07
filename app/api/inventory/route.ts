@@ -73,3 +73,22 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ error: 'Method not allowed' });
     }
 }
+
+export async function PUT(req: NextRequest) {
+    if (req.method === 'PUT') {
+        try {
+            const { iid, ingredient_name, expiration, amount, amount_type, cid } = await req.json();
+            const client = await pool.connect();
+            const query = "UPDATE inventory SET ingredient_name = $1, expiration = $2, amount = $3, amount_type = $4, cid = $5 WHERE iid = $6";
+            await client.query(query, [ingredient_name, expiration, amount, amount_type, cid, iid]);
+            client.release();
+        } catch (error) {
+            console.error('Error updating ingredient: ', error);
+            return NextResponse.json({ error: 'Internal server error' });
+        }
+
+        return NextResponse.json({ message: 'Ingredient successfully updated' });
+    } else {
+        return NextResponse.json({ error: 'Method not allowed' });
+    }
+}
