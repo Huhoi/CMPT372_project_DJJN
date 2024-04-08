@@ -12,6 +12,8 @@ interface IngredientRowProps {
 const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteIngredient, notifySave }) => {
     const [isEditing, setIsEditing] = useState(false); // State to change the row to edit mode
     const [editedIngredient, setEditedIngredient] = useState<Ingredient>(ingredient);
+    const isExpired = new Date(ingredient.expiration) < new Date();
+    const isEmpty = ingredient.amount <= 0;
 
     // Set the row to edit mode
     const setEdit = () => {
@@ -163,16 +165,16 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     onDragStart={handleDragStart}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDragDrop}
-                    className="hover:bg-blue-100 cursor-pointer"
+                    className={`hover:bg-blue-100 cursor-pointer ${isEmpty ? 'text-gray-400' : ''}`}
                 >
                     <td className="px-6 py-4 w-1/5">{ingredient.ingredient_name}</td>
                     <td className="px-6 py-4 w-1/5">{ingredient.amount} {ingredient.amount_type}</td>
-                    <td className="px-6 py-4 w-1/5">{convertDate(new Date(ingredient.expiration))}</td>
-                    <td className="px-6 py-4 w-1/5">
+                    <td className={`px-6 py-4 w-1/5 ${isExpired ? 'text-red-400' : ''}`}>{convertDate(new Date(ingredient.expiration))}</td>     
+                    <td className="px-6 py-4 w-1/5 text-gray-800">
                         <button onClick={setEdit}>Edit</button>
                     </td>
                     <td className="px-6 py-4 w-1/5">
-                        <button onClick={() => handleDeleteIngredient(ingredient.iid)}> Delete</button>
+                        <button onClick={() => handleDeleteIngredient(ingredient.iid)} className="text-red-500"> Delete</button>
                     </td>
                 </tr>
                 </>

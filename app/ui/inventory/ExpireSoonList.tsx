@@ -41,8 +41,8 @@ function ExpireSoonList() {
     };
 
     return (
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="flex w-full text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-500">
+            <thead className="flex w-full text-xs text-gray-800 uppercase bg-blue-200">
                 <tr className="flex w-full">
                     <th className="px-6 py-3 w-1/4">Item</th>
                     <th className="px-6 py-3 w-1/4">Amount</th>
@@ -52,7 +52,7 @@ function ExpireSoonList() {
             </thead>
             <tbody className="w-full h-64 flex flex-col items-center justify-between overflow-y-scroll">
                 {ingredients.map(ingredient => (
-                    <tr key={ingredient.iid} className="flex w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr key={ingredient.iid} className="flex w-full text-gray-800 bg-slate-100">
                         <td className="px-6 py-4 w-1/4">{ingredient.ingredient_name}</td>
                         <td className="px-6 py-4 w-1/4">{ingredient.amount} {ingredient.amount_type}</td>
                         <td className="px-6 py-4 w-1/4">{convertDate(new Date(ingredient.expiration))}</td>
