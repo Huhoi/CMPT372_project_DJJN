@@ -66,7 +66,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
 
     // Convert the date to a string for display
     const convertDate = (date: Date) => {
-        if (date === null) return '';
+        if (isNaN(date.getDate())) return '';
         return date.toISOString().split('T')[0];
     };
 
@@ -112,6 +112,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="ingredient_name"
                             value={editedIngredient.ingredient_name}
                             onChange={handleInputChange}
+                            required
                             className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400"
                             />
                     </td>
@@ -121,6 +122,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="amount"
                             value={editedIngredient.amount}
                             onChange={handleInputChange}
+                            required
                             className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400"
                             />
                         <select 
@@ -141,6 +143,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="expiration"
                             value={convertDate(new Date(editedIngredient.expiration))}
                             onChange={handleInputChange}
+                            required
                             className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400 hover:cursor-pointer"
                             />
                     </td>
