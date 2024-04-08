@@ -18,7 +18,10 @@ export enum AmountType {
     CUP = 'cup',
     TABLESPOON = 'tbsp',
     TEASPOON = 'tsp',
-    FLUID_OUNCE = 'fl oz'
+    FLUID_OUNCE = 'fl oz',
+
+    PINCH = 'pinch',
+    SERVING = 'serving'
 };
 
 export interface Category {

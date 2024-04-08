@@ -8,13 +8,6 @@ import ShowButton from './ShowButton';
 
 // NOTE: Can get rid of some of these parameters if we decide to do another call when clicking on a recipe
 function CommunityCard({ id, title, image, imageType }: Community) {
-
-    const handleSetQuery = () => {
-        console.log('Query:', id); // Log the query
-    };
-    console.log('Query:', image); // Log the query
-    console.log(`https://spoonacular.com/recipes/${id}.${imageType} `);
-
     return (
         <motion.div
             className="bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl"
