@@ -63,6 +63,7 @@ export default function InventoryPage() {
 
     // Function to call API to delete a category
     const handleDeleteCategory = async (categoryId: number) => {
+        if (confirm('Are you sure you want to delete this category?') === false) return;
         try {
             const data = { cid: categoryId };
             const response = await fetch(`/api/categories?cid=` + data.cid, {
@@ -83,6 +84,7 @@ export default function InventoryPage() {
 
     // Function to call API to delete an ingredient
     const handleDeleteIngredient = async (ingredientId: number) => {
+        if (confirm('Are you sure you want to delete this ingredient?') === false) return;
         try {
             const data = { iid: ingredientId };
             const response = await fetch(`/api/inventory?iid=` + data.iid, {
@@ -166,13 +168,13 @@ export default function InventoryPage() {
             <div className="flex justify-center items-center h-screen">
                 <div className="flex flex-wrap gap-4">
                     {categories.map(category => (
-                        <div key={category.cid} className="py-4 px-4 w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 rounded">
+                        <div key={category.cid} className="py-4 px-4 w-full bg-slate-100 border-2 rounded">
                             <div className="flex justify-between items-center mb-2">
-                                <h2 className="text-lg text-white">{category.category_name}</h2>
+                                <h2 className="text-lg text-gray-800">{category.category_name}</h2>
                                 <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete Category</button>
                             </div>
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <table className="w-full text-sm text-left rtl:text-right text-gray-700">
+                                <thead className="text-xs text-gray-800 uppercase bg-blue-200">
                                     <tr>
                                         <th className="px-6 py-3">Item</th>
                                         <th className="px-6 py-3">Amount</th>
