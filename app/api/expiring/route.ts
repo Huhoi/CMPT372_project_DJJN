@@ -18,6 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
             JOIN category c ON i.cid = c.cid
             WHERE c.uid = $1
                 AND expiration BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '7 days'
+                AND i.amount > 0
             ORDER BY i.expiration ASC
             `;
         const ingredientResult = await client.query(ingredientQuery, [uid]);

@@ -23,6 +23,16 @@
   position: relative;
 }
 
+@layer base {
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+  }
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

@@ -12,6 +12,8 @@ interface IngredientRowProps {
 const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteIngredient, notifySave }) => {
     const [isEditing, setIsEditing] = useState(false); // State to change the row to edit mode
     const [editedIngredient, setEditedIngredient] = useState<Ingredient>(ingredient);
+    const isExpired = new Date(ingredient.expiration) < new Date();
+    const isEmpty = ingredient.amount <= 0;
 
     // Set the row to edit mode
     const setEdit = () => {
@@ -66,6 +68,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
 
     // Convert the date to a string for display
     const convertDate = (date: Date) => {
+        if (isNaN(date.getDate())) return '';
         return date.toISOString().split('T')[0];
     };
 
@@ -111,20 +114,25 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="ingredient_name"
                             value={editedIngredient.ingredient_name}
                             onChange={handleInputChange}
+                            required
+                            className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400"
                             />
                     </td>
-                    <td className="px-6 py-4 w-1/5">
+                    <td className="px-6 py-4 flex items-center">
                         <input
                             type="number"
                             name="amount"
                             value={editedIngredient.amount}
                             onChange={handleInputChange}
+                            required
+                            className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400"
                             />
                         <select 
                             name="amountType" 
                             id="amountType" 
                             value={editedIngredient.amount_type as AmountType} 
                             onChange={handleSelectChange}
+                            className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400 hover:cursor-pointer"
                             >
                             {Object.values(AmountType).map((type) => (
                                 <option key={type} value={type}>{type}</option>
@@ -137,6 +145,8 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="expiration"
                             value={convertDate(new Date(editedIngredient.expiration))}
                             onChange={handleInputChange}
+                            required
+                            className="bg-slate-200 appearance-none border-2 border-gray-400 rounded w-full leading-tight focus:outline-none focus focus:border-slate-400 hover:cursor-pointer"
                             />
                     </td>
                     <td className="px-6 py-4 w-1/5">
@@ -155,16 +165,16 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     onDragStart={handleDragStart}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDragDrop}
-                    className="hover:bg-gray-600 cursor-pointer"
+                    className={`hover:bg-blue-100 cursor-pointer ${isEmpty ? 'text-gray-400' : ''}`}
                 >
                     <td className="px-6 py-4 w-1/5">{ingredient.ingredient_name}</td>
                     <td className="px-6 py-4 w-1/5">{ingredient.amount} {ingredient.amount_type}</td>
-                    <td className="px-6 py-4 w-1/5">{convertDate(new Date(ingredient.expiration))}</td>
-                    <td className="px-6 py-4 w-1/5">
+                    <td className={`px-6 py-4 w-1/5 ${isExpired ? 'text-red-400' : ''}`}>{convertDate(new Date(ingredient.expiration))}</td>     
+                    <td className="px-6 py-4 w-1/5 text-gray-800">
                         <button onClick={setEdit}>Edit</button>
                     </td>
                     <td className="px-6 py-4 w-1/5">
-                        <button onClick={() => handleDeleteIngredient(ingredient.iid)}> Delete</button>
+                        <button onClick={() => handleDeleteIngredient(ingredient.iid)} className="text-red-500"> Delete</button>
                     </td>
                 </tr>
                 </>
