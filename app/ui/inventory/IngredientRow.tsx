@@ -111,20 +111,23 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="ingredient_name"
                             value={editedIngredient.ingredient_name}
                             onChange={handleInputChange}
+                            className="bg-gray-900 appearance-none border-2 border-gray-700 rounded w-full text-slate-400 leading-tight focus:outline-none focus:text-slate-400 focus:border-slate-400"
                             />
                     </td>
-                    <td className="px-6 py-4 w-1/5">
+                    <td className="px-6 py-4 flex items-center">
                         <input
                             type="number"
                             name="amount"
                             value={editedIngredient.amount}
                             onChange={handleInputChange}
+                            className="bg-gray-900 appearance-none border-2 border-gray-700 rounded w-full text-slate-400 leading-tight focus:outline-none focus:text-slate-400 focus:border-slate-400"
                             />
                         <select 
                             name="amountType" 
                             id="amountType" 
                             value={editedIngredient.amount_type as AmountType} 
                             onChange={handleSelectChange}
+                            className="bg-gray-900 appearance-none border-2 border-gray-700 rounded w-full text-slate-400 leading-tight focus:outline-none focus:text-slate-400 focus:border-slate-400 hover:cursor-pointer"
                             >
                             {Object.values(AmountType).map((type) => (
                                 <option key={type} value={type}>{type}</option>
@@ -137,6 +140,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                             name="expiration"
                             value={convertDate(new Date(editedIngredient.expiration))}
                             onChange={handleInputChange}
+                            className="bg-gray-900 appearance-none border-2 border-gray-700 rounded w-full text-slate-400 leading-tight focus:outline-none focus:text-slate-400 focus:border-slate-400"
                             />
                     </td>
                     <td className="px-6 py-4 w-1/5">
