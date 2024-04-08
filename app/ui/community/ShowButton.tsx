@@ -11,7 +11,7 @@ interface ShowButtonProps {
 interface ExtendedIngredient {
     name: string;
     amount: number;
-    unitLong: string; // Add this property
+    unitShort: string; // Add this property
     // Add other properties if needed
 }
 
@@ -70,7 +70,8 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
                     recipe_name: recipeInfo.title,
                     instruction: recipeInfo.instructions,
                     favourite: false, // Assuming the recipe is not marked as a favorite initially
-                    ingredients: formattedIngredients
+                    ingredients: formattedIngredients,
+                    image: recipeInfo.image
                 };
 
                 // Make a POST request to the server endpoint
@@ -94,12 +95,117 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
     };
 
     function getIngredientUnit(ingredient: any): string {
-        if (ingredient.measures.metric && ingredient.measures.metric.unitLong) {
-            return ingredient.measures.metric.unitLong;
-        } else if (ingredient.measures.us && ingredient.measures.us.unitLong) {
-            return ingredient.measures.us.unitLong;
+        const metricUnit = ingredient?.measures?.metric?.unitLong;
+        const usUnit = ingredient?.measures?.us?.unitLong;
+
+        if (metricUnit) {
+            switch (metricUnit.toLowerCase()) {
+                case 'g':
+                case 'grams':
+                    return 'g';
+                case 'kg':
+                case 'kilograms':
+                    return 'kg';
+                case 'ml':
+                case 'milliliters':
+                    return 'ml';
+                case 'l':
+                case 'liters':
+                    return 'l';
+                case 'tsps':
+                    return 'tsp';
+                case 'tsp':
+                case 'teaspoon':
+                case 'teaspoons':
+                    return 'tsp';
+                case 'tbsp':
+                case 'tablespoon':
+                case 'tablespoons':
+                    return 'tbsp';
+                case 'fl oz':
+                case 'fluid ounce':
+                case 'fluid ounces':
+                    return 'fl oz';
+                case 'lb':
+                case 'pound':
+                case 'pounds':
+                    return 'lb';
+                case 'oz':
+                case 'ounce':
+                case 'ounces':
+                    return 'oz';
+                case 'gal':
+                case 'gallon':
+                case 'gallons':
+                    return 'gal';
+                case 'qt':
+                case 'quart':
+                case 'quarts':
+                    return 'qt';
+                case 'pt':
+                case 'pint':
+                case 'pints':
+                    return 'pt';
+                case 'pinch':
+                    return 'pinch';
+                default:
+                    return 'serving'; // If unit is not one of the predefined options, return 'serving'
+            }
+        } else if (usUnit) {
+            switch (usUnit.toLowerCase()) {
+                case 'g':
+                case 'grams':
+                    return 'g';
+                case 'kg':
+                case 'kilograms':
+                    return 'kg';
+                case 'ml':
+                case 'milliliters':
+                    return 'ml';
+                case 'l':
+                case 'liters':
+                    return 'l';
+                case 'tsps':
+                    return 'tsp';
+                case 'tsp':
+                case 'teaspoon':
+                case 'teaspoons':
+                    return 'tsp';
+                case 'tbsp':
+                case 'tablespoon':
+                case 'tablespoons':
+                    return 'tbsp';
+                case 'fl oz':
+                case 'fluid ounce':
+                case 'fluid ounces':
+                    return 'fl oz';
+                case 'lb':
+                case 'pound':
+                case 'pounds':
+                    return 'lb';
+                case 'oz':
+                case 'ounce':
+                case 'ounces':
+                    return 'oz';
+                case 'gal':
+                case 'gallon':
+                case 'gallons':
+                    return 'gal';
+                case 'qt':
+                case 'quart':
+                case 'quarts':
+                    return 'qt';
+                case 'pt':
+                case 'pint':
+                case 'pints':
+                    return 'pt';
+                case 'pinch':
+                    return 'pinch';
+                default:
+                    return 'serving'; // If unit is not one of the predefined options, return 'serving'
+            }
         } else {
-            return ''; // Return an empty string if both metric and US units are missing
+            return 'serving'; // Return 'serving' if both metric and US units are missing
         }
     }
 
@@ -111,17 +217,30 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
         }
     }
 
-    function formatIngredients(extendedIngredients: ExtendedIngredient[]) {
-        console.log("Formatted Ingredients:");
+    function formatIngredients(extendedIngredients: any[]) {
+        // Initialize an array to store formated ingredients
+        const formattedIngredients: ExtendedIngredient[] = [];
 
         // Iterate through the extendedIngredients array
         extendedIngredients.forEach((ingredient, index) => {
-            // Check if unitLong is defined, if not, use an empty string
-            const unit = ingredient.unitLong ? ingredient.unitLong : '';
+            // Check if unitShort is defined in the ingredient object
+            let unit = '';
+            if (ingredient.metric && ingredient.metric.unitShort) {
+                unit = ingredient.metric.unitShort;
+            } else if (ingredient.us && ingredient.us.unitShort) {
+                unit = ingredient.us.unitShort;
+            }
 
-            // Log the formatted ingredient with unit
-            console.log(`${index + 1}. ${ingredient.amount} ${getIngredientUnit(ingredient)} ${ingredient.name}`);
+            // Push the formatted ingredient to the array
+            formattedIngredients.push({
+                name: ingredient.name,
+                amount: ingredient.amount,
+                unitShort: getIngredientUnit(ingredient)
+            });
         });
+
+        // Return the formatted ingredients array
+        return formattedIngredients;
     }
 
     return (
