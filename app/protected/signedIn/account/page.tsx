@@ -60,33 +60,6 @@ export default function AccountPage() {
         }
     };
 
-    // Move this to recipe page afterwards
-    //Remember to test that it only request 1 per submission capped at 150
-    const handleFetch = async () => {
-        const query = 'pasta'
-        const apiKey = '66a1a479f6384fcf8319c6a701e0637b'
-
-        const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${apiKey}`;
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-            } else {
-                console.error('Failed to fetch data:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
-    }
-
-
     const logout = async () => {
         if (confirm('Are you sure you want to log out?')) {
             try {
@@ -113,46 +86,34 @@ export default function AccountPage() {
     }
 
     return (
-
         <div>
-
-            <table aria-label="User data table" className="border-2 border-blackrounded-full px-10 py-2 inline-block font-semibold bg-slate-600 text-white rounded-2xl">
-                <thead >
+            <table aria-label="User data table" className="w-full text-sm text-left text-gray-500">
+                <thead className="text-4xl text-black uppercase ">
                     <tr>
                         <th>Username</th>
                         <th>User ID</th>
                         <th> </th>
                     </tr>
                 </thead>
-                <tbody className="border-2 border-blackrounded-full">
+                <tbody className="text-xl text-gray-800 " >
                     {userData.map((user) => (
-                        <tr key={user.uid}>
-                            <td>{user.username}</td>
+                        <tr key={user.uid} className="hover:bg-gray-100 font-semibold rounded-full">
+                            <td >{user.username}</td>
                             <td>{user.uid}</td>
                             <td>
                                 <button onClick={() => handleDelete(user.uid)}>
                                     <TrashIcon className="h-6 w-6 hover:text-red-600" />
                                 </button>
-
                             </td>
                         </tr>
                     ))}
                 </tbody>
-
             </table>
-            <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
+            <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold mt-4 ">
                 <ArrowLeftEndOnRectangleIcon className="h-6 w-6 hover:text-red-600 mr-2" />
                 Log Out
             </button>
 
-            <div>
-                dasd
-                asd
-                asd
-            </div>
-            <button onClick={handleFetch} className="flex items-center hover:text-red-600 mr-2 font-semibold ">
-                TEST SPOONACULAR API DONT CLICK UNLESS ITS NEEDED
-            </button>
         </div>
     );
 }
