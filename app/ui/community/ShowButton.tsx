@@ -19,78 +19,83 @@ interface ExtendedIngredient {
 const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [recipeInfo, setRecipeInfo] = useState<any>(null);
-
-    const openModal = () => setIsOpen(true);
-    const closeModal = () => setIsOpen(false);
-
+    const [loading, setLoading] = useState(false);
+    const [recipeSaved, setRecipeSaved] = useState(false);
 
     useEffect(() => {
-        const saveRecipe = async () => {
-            if (recipeInfo) {
-                try {
-                    // Format the ingredients
-                    const formattedIngredients = formatIngredients(recipeInfo.extendedIngredients);
+        const storedRecipeInfo = localStorage.getItem(`${id}`);
+        if (storedRecipeInfo) {
+            setRecipeInfo(JSON.parse(storedRecipeInfo));
+        }
+    }, [id]);
 
-                    // Prepare the recipe data for the POST request
-                    const recipeData = {
-                        recipe_name: recipeInfo.title,
-                        instruction: recipeInfo.instructions,
-                        favourite: false, // Assuming the recipe is not marked as a favorite initially
-                        ingredients: formattedIngredients,
-                        image: recipeInfo.image
-                    };
+    const closeModal = () => setIsOpen(false);
 
-                    // Make a POST request to the server endpoint
-                    const response = await fetch('/api/community', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(recipeData)
-                    });
+    const openModal = async () => {
+        setIsOpen(true);
+        if (!recipeInfo) {
+            await fetchRecipeInfo();
+        }
+    };
 
-                    if (response.ok) {
-                        console.log('Recipe and ingredients saved successfully on the server.');
-                    } else {
-                        console.error('Failed to save recipe and ingredients on the server:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error saving recipe and ingredients:', error);
-                }
+    const fetchRecipeInfo = async () => {
+        setLoading(true);
+        try {
+            const apiKey = '66a1a479f6384fcf8319c6a701e0637b';
+            const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                setRecipeInfo(data);
+                localStorage.setItem(`${id}`, JSON.stringify(data));
+            } else {
+                console.error('Failed to fetch recipe information:', response.statusText);
             }
-        };
-
-        saveRecipe(); // Call the saveRecipe function when recipeInfo changes
-    }, [recipeInfo]);
+        } catch (error) {
+            console.error('Error fetching recipe information:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
     const handleSave = async () => {
-        try {
-            let dataFromLocalStorage = localStorage.getItem(`${id}`);
+        if (!recipeInfo) {
+            await fetchRecipeInfo();
+        }
 
-            if (!recipeInfo && dataFromLocalStorage) {
-                // Use the data from localStorage if recipeInfo doesn't exist
-                setRecipeInfo(JSON.parse(dataFromLocalStorage));
-            } else if (!recipeInfo && !dataFromLocalStorage) {
-                // Fetch recipe info from Spoonacular API if both recipeInfo and dataFromLocalStorage don't exist
-                const apiKey = '66a1a479f6384fcf8319c6a701e0637b';
-                const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
-                const response = await fetch(url, {
-                    method: 'GET',
+        try {
+            // Check if the recipe is already saved
+            if (!recipeSaved) {
+                // Set recipeSaved to true to disable the save button
+                setRecipeSaved(true);
+
+                const formattedIngredients: ExtendedIngredient[] = recipeInfo.extendedIngredients.map((ingredient: any) => ({
+                    name: ingredient.name,
+                    amount: parseFloat(ingredient.measures.metric.amount.toFixed(1)),
+                    unit: ingredient.measures.metric.unitShort || 'serving',
+                }));
+
+                const recipeData = {
+                    recipe_name: recipeInfo.title,
+                    instruction: recipeInfo.instructions,
+                    favourite: false,
+                    ingredients: formattedIngredients,
+                    image: recipeInfo.image,
+                };
+
+                const saveResponse = await fetch('/api/community', {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(recipeData),
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setRecipeInfo(data);
-                    localStorage.setItem(`${id}`, JSON.stringify(data)); // Save recipe information to local storage
+                if (saveResponse.ok) {
+                    console.log('Recipe and ingredients saved successfully on the server.');
                 } else {
-                    console.error('Failed to fetch recipe information:', response.statusText);
-                    return; // Exit the function if fetching recipe info fails
+                    console.error('Failed to save recipe and ingredients on the server:', saveResponse.statusText);
                 }
             }
-
-            // No need to make the POST request here, instead move it inside useEffect
         } catch (error) {
             console.error('Error saving recipe and ingredients:', error);
         }
