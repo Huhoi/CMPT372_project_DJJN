@@ -13,6 +13,8 @@ interface ModalState {
 
 export default function InventoryPage() {
     const [categories, setCategories] = useState<Category[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchedCid, setSearchedCid] = useState<number | null>(null);
     
     const uid = useTestContext();
     
@@ -134,56 +136,54 @@ export default function InventoryPage() {
         fetchData();
     };
 
-    const handleDragDrop = async (e: React.DragEvent<HTMLTableElement>, cid: number) => {
-        e.preventDefault();
-
-        let droppedIngredient: Ingredient = JSON.parse(e.dataTransfer.getData('text/plain')) as Ingredient;
-        console.log(droppedIngredient);
-
-        droppedIngredient = { ...droppedIngredient, cid: cid };
-
-        try {
-            const response = await fetch('/api/inventory', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(droppedIngredient)
-            });
-
-            if (response.ok) {
-                handleEditIngredient(droppedIngredient);
-            } else {
-                console.error('Error updating ingredient:', response.statusText);
-            }
-        }
-        catch (error) {
-            console.error('Error updating ingredient:', error);
-        }
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>, cid: number) => {
+        setSearchedCid(cid);
+        setSearchQuery(e.target.value.toLowerCase());
     };
 
     return (
         <>
             <AddButton />
-            <div className="flex justify-center items-center h-screen">
-                <div className="flex flex-wrap gap-4">
-                    {categories.map(category => (
-                        <div key={category.cid} className="py-4 px-4 w-full bg-slate-100 border-2 rounded">
-                            <div className="flex justify-between items-center mb-2">
-                                <h2 className="text-lg text-gray-800">{category.category_name}</h2>
-                                <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete Category</button>
-                            </div>
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-700">
-                                <thead className="text-xs text-gray-800 uppercase bg-blue-200">
-                                    <tr>
-                                        <th className="px-6 py-3">Item</th>
-                                        <th className="px-6 py-3">Amount</th>
-                                        <th className="px-6 py-3">Expiration</th>
-                                        <th className="px-6 py-3"></th>
-                                        <th className="px-6 py-3"></th>
-                                    </tr>
-                                </thead>                        
-                                {ingredients
+            <div className="flex flex-wrap w-full items-center h-screen">
+                {categories.map(category => (
+                    <div key={category.cid} className="py-4 px-4 w-full bg-slate-100 border-2 rounded">
+                        <div className="flex justify-between items-center mb-2">
+                            <h2 className="text-lg text-gray-800">{category.category_name}</h2>
+                            <button onClick={() => handleDeleteCategory(category.cid)} className="text-red-500 ml-2">Delete Category</button>
+                        </div>
+                        <div className="text-sm text-gray-800">
+                            <input
+                                type="text"
+                                onChange={(e, cid = category.cid) => handleSearchChange(e, cid)}
+                                className="w-full py-2 px-1 mb-1 bg-slate-200 appearance-none border-2 border-gray-300 rounded leading-tight focus:outline-none focus focus:border-slate-400" 
+                                placeholder="Search..." 
+                            />
+                        </div>
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-700">
+                            <thead className="text-xs text-gray-800 uppercase bg-blue-200">
+                                <tr>
+                                    <th className="px-6 py-3">Item</th>
+                                    <th className="px-6 py-3">Amount</th>
+                                    <th className="px-6 py-3">Expiration</th>
+                                    <th className="px-6 py-3"></th>
+                                    <th className="px-6 py-3"></th>
+                                </tr>
+                            </thead>
+                            {searchedCid === category.cid ?
+                                // If category is searched, filter ingredients by search query
+                                ingredients
+                                    .filter(ingredient => (ingredient.cid === category.cid) && (ingredient.ingredient_name.toLowerCase().includes(searchQuery)))
+                                    .map(ingredient => (
+                                        <IngredientRow 
+                                            key={ingredient.iid} 
+                                            ingredient={ingredient} 
+                                            handleDeleteIngredient={handleDeleteIngredient} 
+                                            notifySave={handleEditIngredient}
+                                        />
+                                ))
+                                :
+                                // Not the category being searched, display all ingredients
+                                ingredients
                                     .filter(ingredient => ingredient.cid === category.cid)
                                     .map(ingredient => (
                                         <IngredientRow 
@@ -192,12 +192,12 @@ export default function InventoryPage() {
                                             handleDeleteIngredient={handleDeleteIngredient} 
                                             notifySave={handleEditIngredient}
                                         />
-                                ))}
-                            </table>
-                            <AddModal cid={category.cid} isOpen={modalState[category.cid] || false} onClose={() => handleModalClose(category.cid)} onOpen={() => handleModalOpen(category.cid)}/>
-                        </div>
-                    ))}
-                </div>
+                                ))
+                            }
+                        </table>
+                        <AddModal cid={category.cid} isOpen={modalState[category.cid] || false} onClose={() => handleModalClose(category.cid)} onOpen={() => handleModalOpen(category.cid)}/>
+                    </div>
+                ))}
             </div>
         </>
     );
