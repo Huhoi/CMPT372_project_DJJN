@@ -20,7 +20,7 @@ const CommunityRecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClos
         const apiQuery = query;
         const apiKey = "66a1a479f6384fcf8319c6a701e0637b"
 
-        const url = `https://api.spoonacular.com/recipes/complexSearch?query=${apiQuery}&apiKey=${apiKey}`;
+        const url = `https://api.spoonacular.com/recipes/complexSearch?query=${apiQuery}&apiKey=${apiKey}&number=18`;
 
         try {
             const response = await fetch(url, {
