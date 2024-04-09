@@ -50,7 +50,7 @@ function ExpireSoonList() {
                     <th className="px-6 py-3 w-1/4">Category</th>
                 </tr>
             </thead>
-            <tbody className="w-full h-64 flex flex-col items-center justify-between overflow-y-scroll">
+            <tbody className="w-full h-80 flex flex-col items-center justify-between overflow-y-scroll no-scrollbar">
                 {ingredients.map(ingredient => (
                     <tr key={ingredient.iid} className="flex w-full text-gray-800 bg-slate-100">
                         <td className="px-6 py-4 w-1/4">{ingredient.ingredient_name}</td>

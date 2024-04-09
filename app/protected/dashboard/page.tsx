@@ -17,15 +17,15 @@ export default async function Home() {
     <>
       <div id="homePageContainer" className="absolute grid grid-rows-12 grid-cols-12 gap-6 h-screen w-screen">
         
-        <div className="row-start-3 row-end-7 col-start-4 col-end-10">
+        <div className="row-start-3 row-end-10 col-start-3 col-end-7">
           <ReminderModule />
         </div>
 
-        <div className="row-start-7 row-end-11 col-start-4 col-end-10">
+        <div className="row-start-3 row-end-10 col-start-7 col-end-11">
           <RecipeModule />
         </div>
         
-        <div className="row-start-11 row-end-12 col-start-7 col-end-10">
+        <div className="row-start-10 row-end-11 col-start-7 col-end-11">
           <CommunityModule />
         </div>
       </div>
