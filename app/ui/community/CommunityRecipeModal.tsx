@@ -47,11 +47,9 @@ const CommunityRecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClos
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
         handleFetch();
-
-        console.log("fetched Data form API")
-        console.log(data)
-
-        console.log("Query:", query);
+        setTimeout(() => {
+            window.location.reload(); // Reload the page after a delay
+        }, 1000);
     }
 
 
@@ -72,7 +70,7 @@ const CommunityRecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClos
                 <div id="buttonContainer" className="absolute px-4 bottom-0 left-0 h-1/8 w-full bg-gradient-to-r from-blue-100 to-indigo-100 grid grid-cols-5 grid-rows-1 gap-2 justify-center items-center">
                     <button type="reset" className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold col-start-1 col-end-1 text-indigo-400 hover:text-white bg-transparent hover:bg-indigo-500 border-2 border-indigo-400 hover:border-indigo-500 rounded-md flex justify-center items-center" onClick={reset}>Reset</button>
                     <button className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold hover:bg-slate-900/10 text-slate-500 hover:text-slate-950 col-start-4 col-end-4 rounded-md flex justify-center items-center" onClick={onClose}>Cancel</button>
-                    <button type="submit" className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center">Send</button>
+                    <button type="submit" className="py-4 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={onClose}>Send</button>
                 </div>
             </form>
         </Modal>
