@@ -12,10 +12,10 @@ interface AddModalProps {
 
 // modal for adding a new category using Modal component
 const AddModal: React.FC<AddModalProps> = ({ cid , isOpen , onClose, onOpen}) => {
-    const [ingredientName, setIngredientName] = useState('' as string);
-    const [expiration, setExpiration] = useState(null as Date | null);
-    const [amount, setAmount] = useState(0 as number);
-    const [amountType, setAmountType] = useState(AmountType.GRAM);
+    const [ingredientName, setIngredientName] = useState<string>('' as string);
+    const [expiration, setExpiration] = useState<Date | null>(null as Date | null);
+    const [amount, setAmount] = useState<number | null>(null);
+    const [amountType, setAmountType] = useState<AmountType>(AmountType.GRAM);
 
     const openModal = () => onOpen();
     const closeModal = () => onClose();
@@ -52,7 +52,7 @@ const AddModal: React.FC<AddModalProps> = ({ cid , isOpen , onClose, onOpen}) =>
 
     return (
         <>
-            <button className="py-4 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
+            <button className="py-1 px-2 mt-1 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
                 Add Ingredient
             </button>
             <Modal modalTitle="Add Ingredient" isOpen={isOpen} onClose={closeModal}>
@@ -91,8 +91,8 @@ const AddModal: React.FC<AddModalProps> = ({ cid , isOpen , onClose, onOpen}) =>
                             required
                             autoComplete="off"
                             className="resize-none bg-slate-200 appearance-none border-2 border-slate-300 rounded py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
-                            value={amount}
                             onChange={(e) => setAmount(e.target.valueAsNumber)}
+                            placeholder="Enter Amount"
                             />
                         <select 
                             name="amountType" 
