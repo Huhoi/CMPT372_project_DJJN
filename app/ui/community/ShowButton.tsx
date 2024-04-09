@@ -118,6 +118,8 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
                 case 'teaspoon':
                 case 'teaspoons':
                     return 'tsp';
+                case 'tbsps':
+                    return 'tbsp';
                 case 'tbsp':
                 case 'tablespoon':
                 case 'tablespoons':
@@ -209,32 +211,27 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
         }
     }
 
-    function getIngredientAmount(ingredient: any): string {
-        if (ingredient.amount) {
-            return ingredient.amount.toFixed(1);
+    function getIngredientAmount(ingredient: any): number {
+        // Check if metric or us object is available
+        if (ingredient.measures && (ingredient.measures.metric || ingredient.measures.us)) {
+            // Use the value from the metric object if available, otherwise from the us object
+            const amount = ingredient.measures.metric ? ingredient.measures.metric.amount : ingredient.measures.us.amount;
+            return parseFloat(amount.toFixed(1));
         } else {
-            return '';
+            return NaN; // Return NaN if both metric and us objects are missing
         }
     }
 
     function formatIngredients(extendedIngredients: any[]) {
-        // Initialize an array to store formated ingredients
+        // Initialize an array to store formatted ingredients
         const formattedIngredients: ExtendedIngredient[] = [];
 
         // Iterate through the extendedIngredients array
         extendedIngredients.forEach((ingredient, index) => {
-            // Check if unitShort is defined in the ingredient object
-            let unit = '';
-            if (ingredient.metric && ingredient.metric.unitShort) {
-                unit = ingredient.metric.unitShort;
-            } else if (ingredient.us && ingredient.us.unitShort) {
-                unit = ingredient.us.unitShort;
-            }
-
             // Push the formatted ingredient to the array
             formattedIngredients.push({
                 name: ingredient.name,
-                amount: ingredient.amount,
+                amount: getIngredientAmount(ingredient),
                 unitShort: getIngredientUnit(ingredient)
             });
         });
@@ -242,7 +239,6 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
         // Return the formatted ingredients array
         return formattedIngredients;
     }
-
     return (
         <>
             <button className="py-4 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
