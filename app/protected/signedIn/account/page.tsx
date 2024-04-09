@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from 'next/navigation';
 import { useTestContext } from "../../layout";
 import { useState, useEffect } from 'react';
-import { TrashIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ArrowLeftEndOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Trade_Winds } from "next/font/google";
 
 interface UserData {
@@ -16,6 +16,8 @@ export default function AccountPage() {
     const router = useRouter();
     const uid = useTestContext();
     const [userData, setUserData] = useState<UserData[]>([]);
+    const [searchQueryUsername, setSearchQueryUsername] = useState<string>('');
+    const [searchQueryUid, setSearchQueryUid] = useState<number | ''>('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -73,6 +75,21 @@ export default function AccountPage() {
         }
     };
 
+    const handleUsernameSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQueryUsername(event.target.value);
+    };
+
+    const handleUidSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchQueryUid(value === '' ? '' : parseInt(value));
+    };
+
+    const filteredUsers = userData.filter(user =>
+        user.username.toLowerCase().includes(searchQueryUsername.toLowerCase()) &&
+        (searchQueryUid === '' || user.uid === searchQueryUid)
+    );
+
+
 
     if (uid !== 1) {
         return (
@@ -87,18 +104,47 @@ export default function AccountPage() {
 
     return (
         <div>
-            <table aria-label="User data table" className="w-full text-sm text-left text-gray-500">
-                <thead className="text-4xl text-black uppercase ">
+            <table className=" font-sans w-full border-gray-300 text-center border-2 rounded">
+                <thead className="text-4xl text-black uppercase bg-blue-200">
                     <tr>
                         <th>Username</th>
                         <th>User ID</th>
                         <th> </th>
                     </tr>
                 </thead>
-                <tbody className="text-xl text-gray-800 " >
-                    {userData.map((user) => (
+                <thead className="bg-gray-100">
+                    <tr>
+                        <th>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Search by username"
+                                    value={searchQueryUsername}
+                                    onChange={handleUsernameSearchChange}
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2"
+                                />
+                                <MagnifyingGlassIcon className="absolute top-0 left-3 h-6 w-6 text-gray-400" />
+                            </div>
+                        </th>
+                        <th>
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    placeholder="Search by UID"
+                                    value={searchQueryUid}
+                                    onChange={handleUidSearchChange}
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2"
+                                />
+                                <MagnifyingGlassIcon className="absolute top-0 left-3 h-6 w-6 text-gray-400" />
+                            </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody className="text-xl text-gray-800 bg-gray-100 font-mono">
+                    {filteredUsers.map((user) => (
                         <tr key={user.uid} className="hover:bg-gray-100 font-semibold rounded-full">
-                            <td >{user.username}</td>
+                            <td>{user.username}</td>
                             <td>{user.uid}</td>
                             <td>
                                 <button onClick={() => handleDelete(user.uid)}>
@@ -109,11 +155,10 @@ export default function AccountPage() {
                     ))}
                 </tbody>
             </table>
-            <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold mt-4 ">
+            <button onClick={logout} className="flex items-center hover:text-red-600 mr-2 font-semibold mt-4">
                 <ArrowLeftEndOnRectangleIcon className="h-6 w-6 hover:text-red-600 mr-2" />
                 Log Out
             </button>
-
         </div>
     );
 }

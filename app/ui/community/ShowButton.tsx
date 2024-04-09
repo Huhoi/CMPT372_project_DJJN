@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { AmountType } from "@/app/utils/interfaces";
 import { InformationCircleIcon, BookmarkIcon } from '@heroicons/react/24/outline';
+import { useTestContext } from "@/app/protected/layout";
+
 
 interface ShowButtonProps {
     id: number;
@@ -15,8 +17,10 @@ interface ExtendedIngredient {
     // Add other properties if needed
 }
 
+
 // modal for adding a new category using Modal component
 const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
+    const uid = useTestContext();
     const [isOpen, setIsOpen] = useState(false);
     const [recipeInfo, setRecipeInfo] = useState<any>(null);
     const [loading, setLoading] = useState(false);
@@ -82,6 +86,7 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
                     favourite: false,
                     ingredients: formattedIngredients,
                     image: recipeInfo.image,
+                    uid: uid
                 };
 
                 const saveResponse = await fetch('/api/community', {

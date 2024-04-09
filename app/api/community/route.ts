@@ -31,7 +31,7 @@ export async function POST(req: Request) {
                 await client.query('ROLLBACK');
                 throw error; // Rethrow the error to be caught by the outer catch block
             }
-            return NextResponse.json({ message: 'Category successfully added' });
+            return NextResponse.json({ message: 'Recipe successfully added' });
         } catch (error) {
             console.error("Error with adding recipe: ", error);
             return NextResponse.json({ error: "internal server error" });
@@ -43,22 +43,3 @@ export async function POST(req: Request) {
 }
 
 
-// export async function POST(req: Request) {
-//     if (req.method === 'POST') {
-//         try {
-//             // Parse the request body as JSON
-//             const recipeData = await req.json();
-
-//             // Log the received data
-//             console.log("Received recipe data:", recipeData);
-
-//             // Respond with a success message
-//             return NextResponse.json({ message: "Recipe data received successfully" });
-//         } catch (error) {
-//             console.error("Error with adding recipe: ", error);
-//             return NextResponse.json({ error: "internal server error" });
-//         }
-//     } else {
-//         return NextResponse.json({ error: `Method ${req.method} Not Allowed` });
-//     }
-// }
