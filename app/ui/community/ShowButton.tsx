@@ -25,72 +25,74 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
 
 
     useEffect(() => {
-        const fetchRecipeInfo = async () => {
-            const storedRecipeInfo = localStorage.getItem(`${id}`);
-            if (storedRecipeInfo) {
-                // Recipe information found in local storage, use it directly
-                setRecipeInfo(JSON.parse(storedRecipeInfo));
-            } else {
-                const apiKey = '66a1a479f6384fcf8319c6a701e0637b';
-                const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
-
+        const saveRecipe = async () => {
+            if (recipeInfo) {
                 try {
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' },
+                    // Format the ingredients
+                    const formattedIngredients = formatIngredients(recipeInfo.extendedIngredients);
+
+                    // Prepare the recipe data for the POST request
+                    const recipeData = {
+                        recipe_name: recipeInfo.title,
+                        instruction: recipeInfo.instructions,
+                        favourite: false, // Assuming the recipe is not marked as a favorite initially
+                        ingredients: formattedIngredients,
+                        image: recipeInfo.image
+                    };
+
+                    // Make a POST request to the server endpoint
+                    const response = await fetch('/api/community', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(recipeData)
                     });
 
                     if (response.ok) {
-                        const data = await response.json();
-                        setRecipeInfo(data);
-                        localStorage.setItem(`${id}`, JSON.stringify(data)); // Save recipe information to local storage
+                        console.log('Recipe and ingredients saved successfully on the server.');
                     } else {
-                        console.error('Failed to fetch recipe information:', response.statusText);
+                        console.error('Failed to save recipe and ingredients on the server:', response.statusText);
                     }
                 } catch (error) {
-                    console.error('Error fetching recipe information:', error);
+                    console.error('Error saving recipe and ingredients:', error);
                 }
             }
         };
 
-        if (isOpen) {
-            fetchRecipeInfo();
-        }
-    }, [id, isOpen]);
+        saveRecipe(); // Call the saveRecipe function when recipeInfo changes
+    }, [recipeInfo]);
 
 
     const handleSave = async () => {
-        if (recipeInfo) {
-            try {
-                // Format the ingredients
-                const formattedIngredients = formatIngredients(recipeInfo.extendedIngredients);
+        try {
+            let dataFromLocalStorage = localStorage.getItem(`${id}`);
 
-                // Prepare the recipe data for the POST request
-                const recipeData = {
-                    recipe_name: recipeInfo.title,
-                    instruction: recipeInfo.instructions,
-                    favourite: false, // Assuming the recipe is not marked as a favorite initially
-                    ingredients: formattedIngredients,
-                    image: recipeInfo.image
-                };
-
-                // Make a POST request to the server endpoint
-                const response = await fetch('/api/community', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(recipeData)
+            if (!recipeInfo && dataFromLocalStorage) {
+                // Use the data from localStorage if recipeInfo doesn't exist
+                setRecipeInfo(JSON.parse(dataFromLocalStorage));
+            } else if (!recipeInfo && !dataFromLocalStorage) {
+                // Fetch recipe info from Spoonacular API if both recipeInfo and dataFromLocalStorage don't exist
+                const apiKey = '66a1a479f6384fcf8319c6a701e0637b';
+                const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
                 });
 
                 if (response.ok) {
-                    console.log('Recipe and ingredients saved successfully on the server.');
+                    const data = await response.json();
+                    setRecipeInfo(data);
+                    localStorage.setItem(`${id}`, JSON.stringify(data)); // Save recipe information to local storage
                 } else {
-                    console.error('Failed to save recipe and ingredients on the server:', response.statusText);
+                    console.error('Failed to fetch recipe information:', response.statusText);
+                    return; // Exit the function if fetching recipe info fails
                 }
-            } catch (error) {
-                console.error('Error saving recipe and ingredients:', error);
             }
+
+            // No need to make the POST request here, instead move it inside useEffect
+        } catch (error) {
+            console.error('Error saving recipe and ingredients:', error);
         }
     };
 
@@ -239,6 +241,7 @@ const ShowButton: React.FC<ShowButtonProps> = ({ id }) => {
         // Return the formatted ingredients array
         return formattedIngredients;
     }
+
     return (
         <>
             <button className="py-4 px-2 my-4 h-10 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
