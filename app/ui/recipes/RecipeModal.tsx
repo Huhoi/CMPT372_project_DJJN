@@ -21,7 +21,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
     const uid = useTestContext()
 
     const [count, setCount] = useState(0);
-    const [modalHeight, setModalHeight] = useState(550);
+    const [modalHeight, setModalHeight] = useState(600);
     const [details, setDetails] = useState<RecipeIngredient[]>([]);
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -277,9 +277,11 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                         required
                                         readOnly
                                         className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-6/12 py-2 px-4 text-slate-400 leading-tight focus:outline-none"
-                                        type="text"/>
+                                        type="text"
+                                        placeholder="Choose your first ingredient"/>
+                                    { details.length != 0 ? (
                                     <div className='w-3/12 flex justify-between gap-2'>
-                                        <input value={details[index].amount}
+                                            <input value={details[index].amount}
                                             required
                                             className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-3/5 py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
                                             type="text"
@@ -308,6 +310,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                             <option value="serving">Serving</option>
                                         </select>
                                     </div>
+                                    ) : ( <p></p> )}
                                 </div>
                             // <Details key={index} ingredient_name={ingredient.ingredient_name} amount={amount[index]} amountType={amountType[index]}
                             // handleInputChange={(event) => handleInputChange(event, index)}/>
