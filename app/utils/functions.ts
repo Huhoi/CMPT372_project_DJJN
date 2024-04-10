@@ -22,7 +22,6 @@ export async function fetchData() {
         const decodedToken = verify(value, secret) as JwtPayload;
 
         data = decodedToken;
-        console.log("Decoded token:", data.uid);
 
         return data.uid;
     } catch (error) {

@@ -45,14 +45,12 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
 
         // ADDING
         if (actionMeta.action === 'select-option') {
-            console.log('New option selected:', values[values.length - 1]);
 
             // Increase size of array
             const updatedDetails: RecipeIngredient[] = [...details, { ingredient_name: values[values.length - 1].label, amount: "", amount_type: "" }];
             setDetails(updatedDetails)
         }
         else if (actionMeta.action === 'create-option') {
-            console.log('New option created:', values[values.length - 1].value);
 
             // Increase size of array
             const updatedDetails: RecipeIngredient[] = [...details, { ingredient_name: values[values.length - 1].value, amount: "", amount_type: "" }];
@@ -62,7 +60,6 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         // DELETING
         if ((actionMeta.action === 'remove-value' || actionMeta.action === 'pop-value') && actionMeta.removedValue) {
             const removedItem = actionMeta.removedValue;
-            console.log('Deleted item:', removedItem);
 
             const detailsCopy = [...details];
             for (var i = detailsCopy.length - 1; i >= 0; i--) {

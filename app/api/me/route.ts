@@ -40,7 +40,6 @@ export async function GET() {
       uid: uid
     };
 
-    console.log(response);
 
     return NextResponse.json(response, { status: 200 }); // Return a Next.js JSON response
   } catch (e) {
