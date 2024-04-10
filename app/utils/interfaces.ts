@@ -38,3 +38,9 @@ export interface Ingredient {
     amount_type: AmountType;
     cid: number;
 }
+
+export interface RecipeIngredient {
+    ingredient_name: string;
+    amount: string;
+    amount_type: string;
+}

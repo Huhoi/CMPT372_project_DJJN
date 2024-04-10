@@ -5,8 +5,9 @@ import Modal, { ModalProps } from '../Modal'
 import CreatableSelect from 'react-select/creatable'
 import { Switch } from '@headlessui/react'
 import { useTestContext } from '@/app/protected/layout'
-import Details from './Details'
-import { AmountType, Ingredient } from '@/app/utils/interfaces'
+import { AmountType, Ingredient, RecipeIngredient } from '@/app/utils/interfaces'
+
+
 
 const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [title, setTitle] = useState("");
@@ -21,11 +22,60 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
 
     const [count, setCount] = useState(0);
     const [modalHeight, setModalHeight] = useState(550);
+    const [details, setDetails] = useState<RecipeIngredient[]>([]);
+
+    const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const { value } = event.target;
+        const updatedDetails = [...details];
+        updatedDetails[index].amount = value;
+        setDetails(updatedDetails);
+    };
+
+    const handleAmountTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+        const { value } = event.target;
+        const updatedDetails = [...details];
+        updatedDetails[index].amount_type = value;
+        setDetails(updatedDetails);
+    };
 
     // The values from a multi-change input returns an object-- use 
     // this function to handle the values 
-    function handleMultiChange(values: any) {
+    function handleMultiChange(values: any, actionMeta: any) {
         setSelected(values);
+
+        // ADDING
+        if (actionMeta.action === 'select-option') {
+            console.log('New option selected:', values[values.length - 1]);
+
+            // Increase size of array
+            const updatedDetails: RecipeIngredient[] = [...details, { ingredient_name: values[values.length - 1].label, amount: "", amount_type: "" }];
+            setDetails(updatedDetails)
+        }
+        else if (actionMeta.action === 'create-option') {
+            console.log('New option created:', values[values.length - 1].value);
+
+            // Increase size of array
+            const updatedDetails: RecipeIngredient[] = [...details, { ingredient_name: values[values.length - 1].value, amount: "", amount_type: "" }];
+            setDetails(updatedDetails)
+        }
+
+        // DELETING
+        if ((actionMeta.action === 'remove-value' || actionMeta.action === 'pop-value') && actionMeta.removedValue) {
+            const removedItem = actionMeta.removedValue;
+            console.log('Deleted item:', removedItem);
+
+            const detailsCopy = [...details];
+            for (var i = detailsCopy.length - 1; i >= 0; i--) {
+                if (detailsCopy[i].ingredient_name == removedItem.label) {
+                    detailsCopy.splice(i, 1);
+                }
+            }
+
+            setTimeout(() => {
+                setDetails(detailsCopy);
+                console.log(detailsCopy);
+            }, 50)
+        }
     }
 
     const handleCheckbox = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,6 +87,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         setInstructions("");
         setSelected([]);
         setIngredients([]);
+        setDetails([]);
         setFavorite(false);
     }
 
@@ -53,7 +104,6 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
 
                 var fetched = await response1.json();
                 fetched = fetched.ingredients;
-                console.log(fetched);
                 const items: Ingredient[] = fetched.map((item: any) => ({
                     iid: item.iid,
                     ingredient_name: item.name,
@@ -119,7 +169,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
             const response = await fetch(`../../api/recipes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, ingredients: ingredients, instruction: instructions, last_modified: formattedDate, favorite: favorite, uid: uid})
+                body: JSON.stringify({ title: title, recipe_ingredients: details, instruction: instructions, last_modified: formattedDate, favorite: favorite, uid: uid})
             });
 
             if (!response.ok) {
@@ -153,21 +203,21 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                         options={selectOptions}
                         required
                         isMulti
-                        isClearable
+                        isClearable={false}
                         styles={{
                             option: defaultStyles => ({
                                 ...defaultStyles,
                                 color: "black"
                             }),
-                            clearIndicator: defaultStyles => ({
-                                ...defaultStyles,
-                                color: "#94a3b8",
-                                borderColor: "rgb(14 165 233)",
-                                ":hover": {
-                                    color: "#020617",
-                                    cursor: "pointer"
-                                }
-                            }),
+                            // clearIndicator: defaultStyles => ({
+                            //     ...defaultStyles,
+                            //     color: "#94a3b8",
+                            //     borderColor: "rgb(14 165 233)",
+                            //     ":hover": {
+                            //         color: "#020617",
+                            //         cursor: "pointer"
+                            //     }
+                            // }),
                             dropdownIndicator: defaultStyles => ({
                                 ...defaultStyles,
                                 color: "#94a3b8",
@@ -220,9 +270,47 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                 }
                             })
                         }} />
-                        {/* NOTE: Only iid and ingredient_name is used-- the other parameters are kept in because TypeScript complains */}
+                        
                         { ingredients.map((ingredient, index) => (
-                            <Details key={index} iid={ingredient.iid} ingredient_name={ingredient.ingredient_name} expiration={new Date()} amount={0} amount_type={AmountType.GRAM} cid={0}/>
+                                <div className="flex justify-between" key={index}>
+                                    <input value={ingredient.ingredient_name}
+                                        required
+                                        readOnly
+                                        className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-6/12 py-2 px-4 text-slate-400 leading-tight focus:outline-none"
+                                        type="text"/>
+                                    <div className='w-3/12 flex justify-between gap-2'>
+                                        <input value={details[index].amount}
+                                            required
+                                            className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-3/5 py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
+                                            type="text"
+                                            placeholder="Qty."
+                                            onChange={(e) => handleAmountChange(e, index)} />
+                                        <select value={details[index].amount_type}
+                                            required
+                                            className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-2/5 py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
+                                            onChange={(e) => handleAmountTypeChange(e, index)}>
+                                            <option value="" selected disabled hidden>Unit</option>
+                                            <option value="g">g</option>
+                                            <option value="kg">kg</option>
+                                            <option value="ml">mL</option>
+                                            <option value="litre">L</option>
+                                            <option value="lb">lb</option>
+                                            <option value="oz">oz</option>
+                                            <option value="gal">gal</option>
+                                            <option value="qt">qt</option>
+                                            <option value="pt">pt</option>
+                                            <option value="cup">cup</option>
+                                            <option value="tbsp">tbsp</option>
+                                            <option value="tsp">tsp</option>
+                                            <option value="fl oz">fl oz</option>
+                                            <option value="count">Count</option>
+                                            <option value="pinch">Pinch</option>
+                                            <option value="serving">Serving</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            // <Details key={index} ingredient_name={ingredient.ingredient_name} amount={amount[index]} amountType={amountType[index]}
+                            // handleInputChange={(event) => handleInputChange(event, index)}/>
                         ))}
                 </div>
 
