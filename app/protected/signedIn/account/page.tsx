@@ -105,8 +105,8 @@ export default function AccountPage() {
 
     return (
         <div>
-            <table className=" font-sans w-full border-gray-300 text-left border-2 rounded">
-                <thead className="text-4xl text-black uppercase bg-blue-200">
+            <table className="font-sans w-full border-4 border-gray-300 text-left border-2 rounded">
+                <thead className="text-4xl text-black bg-blue-200">
                     <tr>
                         <th>Username</th>
                         <th>User ID</th>
@@ -119,10 +119,10 @@ export default function AccountPage() {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Search by username"
+                                    placeholder="Search by Username"
                                     value={searchQueryUsername}
                                     onChange={handleUsernameSearchChange}
-                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-200 hover:text-white"
+                                    className="border border-gray-300 rounded-xl pl-10 pr-4 py-2 hover:bg-gray-200 hover:text-white"
                                 />
                                 <MagnifyingGlassIcon className="absolute top-2.5 left-3 h-6 w-6 text-gray-400" />
                             </div>
@@ -131,7 +131,7 @@ export default function AccountPage() {
                             <div className="relative">
                                 <input
                                     type="number"
-                                    placeholder="Search by UID"
+                                    placeholder="Search by User ID"
                                     value={searchQueryUid}
                                     onChange={handleUidSearchChange}
                                     className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-200 hover:text-white"
@@ -144,7 +144,7 @@ export default function AccountPage() {
                 </thead>
                 <tbody className="text-xl text-gray-800 bg-gray-100 font-mono">
                     {filteredUsers.map((user) => (
-                        <tr key={user.uid} className="hover:bg-gray-200 font-semibold rounded-full">
+                        <tr key={user.uid} className="hover:bg-gray-200 font-semibold rounded-full" >
                             <td>{user.username}</td>
                             <td>{user.uid}</td>
                             <td>
@@ -162,4 +162,8 @@ export default function AccountPage() {
             </button>
         </div>
     );
+
+
+
+
 }
