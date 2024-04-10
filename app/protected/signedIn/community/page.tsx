@@ -35,7 +35,10 @@ export default function CommunityPage() {
                 </motion.div>
             </div>
             <CommunityRecipeModal modalTitle={"Find a Recipe"} isOpen={checkIsOpen} onClose={closeModal}> </CommunityRecipeModal>
-            <DisplayCommunity />
+            <div className="flex flex-wrap w-full mt-8 justify-center items-center h-screen overflow-auto">
+                <DisplayCommunity />
+            </div>
+
         </>
 
     )
