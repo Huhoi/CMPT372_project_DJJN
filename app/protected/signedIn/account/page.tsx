@@ -66,7 +66,8 @@ export default function AccountPage() {
         if (confirm('Are you sure you want to log out?')) {
             try {
                 const { data } = await axios.post('/api/logout');
-                alert(JSON.stringify(data));
+                // test: alert if user logged out successfully checking the json 'message'
+                // alert(JSON.stringify(data));
                 router.push('/');
             } catch (e) {
                 const error = e as AxiosError;

@@ -7,32 +7,6 @@ import Background from "./ui/home/Background";
 export default function LoginPage() {
 
     const router = useRouter()
-
-    // async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    //     event.preventDefault()
-    
-    //     const formData = new FormData(event.currentTarget)
-    //     const username = formData.get('username') as string
-    //     const password = formData.get('password') as string
-    
-    //     const response = await fetch('/api/login', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ username, password }),
-    //     })
-        
-    //     if (response.ok) {
-    //         const data = await response.json();
-    //         if(data.message === 'User successful login') {
-    //             router.push('/pages/dashboard')
-    //         } else {
-    //             window.alert('Invalid Login Credentials')
-    //         }
-    //     } else {
-    //         window.alert('Failed to log in');
-    //     }
-
-    // }
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -43,16 +17,17 @@ export default function LoginPage() {
         };
     
         try {
-          const { data } = await axios.post("/api/login", payload);
+            const { data } = await axios.post("/api/login", payload);
+            
+            // test: alert if user is authenticated checking the json 'message'
+            // alert(JSON.stringify(data));
     
-          alert(JSON.stringify(data));
-    
-          // redirect the user to /dashboard
-          router.push('/protected/dashboard')
+            // redirect the user to /dashboard
+            router.push('/protected/dashboard')
         } catch (e) {
-          const error = e as AxiosError;
-    
-          alert(error.message);
+            const error = e as AxiosError;
+        
+            alert("Invalid Login Credentials");
         }
       };
 
