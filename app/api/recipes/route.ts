@@ -103,11 +103,12 @@ export async function DELETE(req: Request) {
 export async function PUT(req: Request) {
     if (req.method === 'PUT') {
         try {
-            const { rid, title, recipe_ingredients, instruction, last_modified, favorite, uid } = await req.json();
+            const { rid, title, recipe_ingredients, instruction, last_modified, favorite } = await req.json();
+            console.log({ rid, title, recipe_ingredients, instruction, last_modified, favorite })
 
-            const query1 = 'UPDATE Recipes SET recipe_name = $2, instruction = $3, last_modified = $4, favorite = $5 WHERE rid = $1 AND uid = $6';
+            const query1 = 'UPDATE recipes SET recipe_name = $2, instruction = $3, last_modified = $4, favorite = $5 WHERE rid = $1';
             const client = await pool.connect();
-            await client.query(query1, [rid, title, instruction, last_modified, favorite, uid]);
+            await client.query(query1, [rid, title, instruction, last_modified, favorite]);
 
             // Delete removed recipes
             // Retrieve all old recipes, compare with what's being uploaded, and remove old recipes
@@ -116,27 +117,21 @@ export async function PUT(req: Request) {
             const old_recipe_ingredients = result1.rows;
 
             // Loop to find ones to be deleted
-            var to_be_deleted = [];
-            for (const oldIngredient of old_recipe_ingredients) {
+            for (const newIngredient of recipe_ingredients) {
                 let found = false;
-                for (const newIngredient of recipe_ingredients) {
+                for (const oldIngredient of old_recipe_ingredients) {
                     if (oldIngredient.ingredient_name === newIngredient.ingredient_name) {
                         found = true;
                         break;
                     }
                 }
-
+            
                 if (!found) {
-                    to_be_deleted.push(oldIngredient);
+                    const { ingredient_name, amount, amount_type } = newIngredient;
+                    const query3 = 'INSERT INTO recipe_ingredients(rid, ingredient_name, amount, amount_type) VALUES ($1, $2, $3, $4)';
+                    await client.query(query3, [rid, ingredient_name, amount, amount_type]);
                 }
-            }
-
-            // Run loop to delete all removed ingredients
-            for (let i = 0; i < to_be_deleted.length; i++) {
-                var delete_ingredient_name = to_be_deleted[i].ingredient_name;
-                const query3 = 'DELETE FROM recipe_ingredients WHERE rid = $1 AND ingredient_name = $2'
-                await client.query(query3, [rid, delete_ingredient_name]);
-            }
+            }            
 
             // Update all ingredients
             for (let i = 0; i < recipe_ingredients.length; i++) {
