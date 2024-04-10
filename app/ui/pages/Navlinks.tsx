@@ -3,12 +3,12 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { QueueListIcon, CircleStackIcon, UserGroupIcon, UserIcon } from '@heroicons/react/24/outline';
+import { QueueListIcon, CircleStackIcon, UserGroupIcon, UserIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const links = [
   { name: 'Recipes', href: '/protected/signedIn/recipes', icon: QueueListIcon },
   { name: 'Inventory', href: '/protected/signedIn/inventory', icon: CircleStackIcon },
-  { name: 'Find Recipes', href: '/protected/signedIn/community', icon: UserGroupIcon },
+  { name: 'Find Recipes', href: '/protected/signedIn/community', icon: MagnifyingGlassIcon },
   { name: 'Account', href: '/protected/signedIn/account', icon: UserIcon },
 ];
 
