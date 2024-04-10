@@ -11,8 +11,8 @@ function RecipeCard() {
     <motion.div className="h-full w-full bg-slate-200/10 shadow-xl rounded-xl"
       whileHover={{ scale: 1.05, transition: { duration: 0.5 }, }}>
       <Link href="/protected/signedIn/recipes">
-        <div className="relative rounded-t-xl bg-gradient-to-r from-blue-300/20 to-indigo-300/20 h-screen flex items-center backdrop-blur-sm" style={{ height: "25%", width: "100%" }}>
-          <div className="m-4 bg-gradient-to-r from-red-500 to-orange-300 rounded-md flex justify-center items-center" style={{ height: "45px", width: "45px" }}>
+        <div className="relative rounded-t-xl bg-gradient-to-r from-blue-300/20 to-indigo-300/20 p-4 backdrop-blur-sm">
+          <div className="bg-gradient-to-r from-red-500 to-orange-300 rounded-md flex justify-center items-center w-12 h-12">
             <Image className="pointer-events-none select-none" src="/tools-kitchen-2.png" alt="icon" width={25} height={25}></Image>
           </div>
           <p className="absolute top-3 left-16 pl-2 font-dm_sans tracking-tighter text-xl font-bold text-slate-800 select-none">Recipes</p>
