@@ -40,6 +40,7 @@ export interface Ingredient {
 }
 
 export interface RecipeIngredient {
+    rid?: number;
     ingredient_name: string;
     amount: string;
     amount_type: string;

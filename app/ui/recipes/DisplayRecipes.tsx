@@ -9,7 +9,7 @@ export interface Recipe {
   rid: number;
   title: string;
   instruction: string;
-  ingredients: RecipeIngredient;
+  ingredients: RecipeIngredient[];
   last_modified: Date;
   favorite: boolean;
   uid: number;
@@ -17,6 +17,7 @@ export interface Recipe {
 
 function DisplayRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [allIngredients, setAllIngredients] = useState<RecipeIngredient[]>([]);
   const uid = useTestContext();
 
   useEffect(() => {
@@ -29,23 +30,34 @@ function DisplayRecipes() {
         }
 
         var fetched = await response.json();
+        var fetchedRecipeIngredients = fetched.recipe_ingredients;
         var fetchedRecipes = fetched.recipes;
-        const items: Recipe[] = fetchedRecipes.map((item: any) => ({
-          rid: item.rid,
-          title: item.recipe_name,
-          instruction: item.instruction,
-          last_modified: item.last_modified,
-          favorite: item.favorite,
-          uid: item.uid,
-        }));
-        setRecipes(items);
 
-        if (recipes.length > 0) {
-          const rid = recipes[0].rid;
-          var fetchedIngredients = fetched.ingredients;
-          const recipeIngredients = fetchedIngredients.filter((ingredient: { rid: number; }) => ingredient.rid === rid);
-          console.log(recipeIngredients)
-        }
+        setAllIngredients(fetchedRecipeIngredients);
+
+        const recipesWithIngredients: Recipe[] = fetchedRecipes.map((recipe: any) => {
+          const recipeIngredients: RecipeIngredient[] = fetchedRecipeIngredients
+            .filter((ingredient: any) => ingredient.rid === recipe.rid)
+            .map((ingredient: any) => ({
+              rid: ingredient.rid,
+              ingredient_name: ingredient.ingredient_name,
+              amount: ingredient.amount,
+              amount_type: ingredient.amount_type,
+            }));
+
+          return {
+            rid: recipe.rid,
+            title: recipe.recipe_name,
+            instruction: recipe.instruction,
+            ingredients: recipeIngredients,
+            last_modified: recipe.last_modified,
+            favorite: recipe.favorite,
+            uid: recipe.uid,
+          };
+        });
+
+        console.log(recipesWithIngredients)
+        setRecipes(recipesWithIngredients)
 
       } catch (error) {
         console.error('Error with retrieving: ', error);
@@ -58,7 +70,7 @@ function DisplayRecipes() {
   return (
     <div className="pt-6 grid grid-cols-3 gap-4 h-full w-full">
       { recipes.map((recipe, index) => (
-        <RecipeCard key={index} rid={recipe.rid} title={recipe.title} ingredients={recipe.ingredients} instruction={recipe.instruction} last_modified={recipe.last_modified} favorite={recipe.favorite} uid={recipe.uid}></RecipeCard>
+        <RecipeCard key={index} rid={recipe.rid} title_prop={recipe.title} ingredients_prop={recipe.ingredients} instruction_prop={recipe.instruction} last_modified_prop={recipe.last_modified} favorite_prop={recipe.favorite} allIngredients={allIngredients}></RecipeCard>
       ))}
     </div>
   )
