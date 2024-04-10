@@ -4,6 +4,7 @@ import React from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import Link from 'next/link';
+import FavouriteRecipesList from '../recipes/FavouriteRecipesList';
 
 function RecipeCard() {
   return (
@@ -19,6 +20,9 @@ function RecipeCard() {
           <p className="absolute top-9 left-20 pt-0.5 pl-2.5 font-dm_mono text-sm tracking-tighter text-slate-500 select-none">FAVORITES</p>
         </div>
       </Link>
+      <div>
+        <FavouriteRecipesList />
+      </div>
     </motion.div>
   )
 }
