@@ -188,7 +188,7 @@ const EditRecipeModal: React.FC<EditModalProps> = ({ rid, title_prop, ingredient
           const response = await fetch(`../../api/recipes`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ rid: rid, recipe_ingredients: details, instruction: instructions, last_modified: formattedDate, favorite: favorite })
+            body: JSON.stringify({ rid: rid, title: title, recipe_ingredients: details, instruction: instructions, last_modified: formattedDate, favorite: favorite })
           });
     
           if (!response.ok) {
