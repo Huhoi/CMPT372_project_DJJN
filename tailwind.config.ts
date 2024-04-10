@@ -25,6 +25,9 @@ const config: Config = {
       // Clearer blur
       backdropBlur: {
         xs: '2px',
+      },
+      maxHeight: {
+        '2/5': '40%',
       }
     },
   },
