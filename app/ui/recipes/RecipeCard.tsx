@@ -17,12 +17,17 @@ export interface RecipeCardProps {
   last_modified_prop: Date;
   favorite_prop: boolean;
   allIngredients?: RecipeIngredient[];
+  image: string;
 }
 
 // NOTE: Can get rid of some of these parameters if we decide to do another call when clicking on a recipe
-function RecipeCard({ rid, title_prop, ingredients_prop, instruction_prop, last_modified_prop, favorite_prop, allIngredients }: RecipeCardProps) {
-  const [image, setImage] = useState("/circle-plus-1.png");
+function RecipeCard({ rid, title_prop, ingredients_prop, instruction_prop, last_modified_prop, favorite_prop, allIngredients, image }: RecipeCardProps) {
+  // const [image, setImage] = useState("/circle-plus-1.png");
   const [checkIsOpen, setIsOpen] = useState(false);
+
+  if (!image) {
+    image = "/image-unavailable.png"
+  }
 
   function openModal() {
     if (!checkIsOpen) {
@@ -46,7 +51,7 @@ function RecipeCard({ rid, title_prop, ingredients_prop, instruction_prop, last_
       <motion.div className="cursor-pointer bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl" style={{ height: "400px", width: "90%" }}
         whileHover={{ scale: 1.03, transition: { duration: 0.3 }, }} onClick={() => openModal()}>
         <div id="imageContainer" className="flex justify-center items-center">
-          <Image src="/image-unavailable.png" alt={'Image not available'}
+          <Image src={image} alt={'Image not available'}
             className="rounded-xl"
             width={0}
             height={0}
