@@ -142,12 +142,38 @@ export default function InventoryPage() {
         setSearchQuery(e.target.value.toLowerCase());
     };
 
+    const handleDragDrop = async (e: React.DragEvent, cid: number) => {
+        e.preventDefault();
+
+        let droppedIngredient: Ingredient = JSON.parse(e.dataTransfer.getData('text/plain')) as Ingredient;
+        droppedIngredient = { ...droppedIngredient, cid: cid };
+
+        try {
+            const response = await fetch('/api/inventory', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(droppedIngredient)
+            });
+
+            if (response.ok) {
+                handleEditIngredient(droppedIngredient);
+            } else {
+                console.error('Error updating ingredient:', response.statusText);
+            }
+        }
+        catch (error) {
+            console.error('Error updating ingredient:', error);
+        }
+    };
+
     return (
         <>
             <AddButton />
             <div className="flex flex-wrap w-full mt-8 justify-center items-center h-screen overflow-auto">
                 {categories.map(category => (
-                    <div key={category.cid} className="flex flex-col py-4 px-4 w-11/12 mb-2 bg-slate-100 border-2 rounded h-2/5">
+                    <div key={category.cid} className="flex flex-col py-4 px-4 w-5/6 mb-2 bg-slate-100 border-2 rounded h-2/5">
                         <div className="h-28">
                             <div className="flex justify-between items-center mb-1">
                                 <h2 className="text-lg text-gray-800">{category.category_name}</h2>
@@ -163,8 +189,12 @@ export default function InventoryPage() {
                             </div>
                             <AddModal cid={category.cid} isOpen={modalState[category.cid] || false} onClose={() => handleModalClose(category.cid)} onOpen={() => handleModalOpen(category.cid)}/>
                         </div>
-                        <div className="flex-1 overflow-y-scroll mt-1">
-                            {/* <div className="absolute h-2/5 overflow-y-scroll overflow-hidden"> */}
+                        <div 
+                            className="flex-1 overflow-y-scroll mt-1" 
+                            onDrop={(e, cid = category.cid) => handleDragDrop(e, cid)}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDragEnter={(e) => e.preventDefault()}
+                        >
                             <table className="w-full text-sm text-left rtl:text-right text-gray-700 table-auto overflow-y-scroll">
                                 <thead className="text-xs text-gray-800 uppercase bg-blue-200">
                                     <tr>
@@ -201,7 +231,6 @@ export default function InventoryPage() {
                                     ))
                                 }
                             </table>
-                            {/* </div> */}
                         </div>
                     </div>
                 ))}
