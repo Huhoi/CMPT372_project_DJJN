@@ -23,7 +23,7 @@ function ReminderModule() {
           <Image src="/bell.png" alt="icon" width={25} height={25} />
         </div>
         <p className="absolute top-3 left-16 pl-2 font-dm_sans tracking-tighter text-xl font-bold text-slate-800 select-none">
-          Reminders
+          Expiring Items
         </p>
         <div className="absolute top-9 left-16 pt-1 pl-2 flex items-center space-x-1">
           <Image src="/clock.png" alt="icon" width={23} height={23} />
