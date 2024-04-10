@@ -17,11 +17,11 @@ export interface Recipe {
 
 function DisplayRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const uid = useTestContext();
 
   useEffect(() => {
-    const handlePageLoad = async () => {
+    const handlePageLoad = async (uid: number) => {
       try {
-        const uid = useTestContext();
         const response = await fetch('../../api/recipes?uid=' + uid, {method: 'GET'});
 
         if (!response.ok) {
@@ -52,7 +52,7 @@ function DisplayRecipes() {
       } 
     }
 
-    handlePageLoad();
+    handlePageLoad(uid);
   }, []);
 
   return (
