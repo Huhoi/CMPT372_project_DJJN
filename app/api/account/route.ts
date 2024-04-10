@@ -38,7 +38,6 @@ export async function DELETE(req: Request) {
     if (req.method === 'DELETE') {
         try {
             const { uid } = await req.json();
-            console.log(uid)
 
             if (!uid) {
                 return NextResponse.json({ error: 'User ID is required' });
