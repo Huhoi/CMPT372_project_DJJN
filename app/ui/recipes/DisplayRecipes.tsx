@@ -58,7 +58,7 @@ function DisplayRecipes() {
           };
         });
 
-        console.log(recipesWithIngredients)
+        // console.log(recipesWithIngredients)
         setRecipes(recipesWithIngredients)
 
       } catch (error) {

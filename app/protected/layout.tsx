@@ -31,7 +31,6 @@ export default function DashboardLayout({children,}: {children: React.ReactNode;
   useEffect(() => {
     (async () => {
       const { user, error } = await getUser();
-      console.log("User: ", user);
       if (error) {
         push("/");
         return;
