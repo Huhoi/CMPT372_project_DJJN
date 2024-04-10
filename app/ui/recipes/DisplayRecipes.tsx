@@ -13,6 +13,7 @@ export interface Recipe {
   last_modified: Date;
   favorite: boolean;
   uid: number;
+  image: string;
 }
 
 function DisplayRecipes() {
@@ -53,6 +54,7 @@ function DisplayRecipes() {
             last_modified: recipe.last_modified,
             favorite: recipe.favorite,
             uid: recipe.uid,
+            image: recipe.image
           };
         });
 
@@ -70,7 +72,7 @@ function DisplayRecipes() {
   return (
     <div className="pt-6 grid grid-cols-3 gap-4 h-full w-full">
       { recipes.map((recipe, index) => (
-        <RecipeCard key={index} rid={recipe.rid} title_prop={recipe.title} ingredients_prop={recipe.ingredients} instruction_prop={recipe.instruction} last_modified_prop={recipe.last_modified} favorite_prop={recipe.favorite} allIngredients={allIngredients}></RecipeCard>
+        <RecipeCard key={index} rid={recipe.rid} title_prop={recipe.title} ingredients_prop={recipe.ingredients} instruction_prop={recipe.instruction} last_modified_prop={recipe.last_modified} favorite_prop={recipe.favorite} allIngredients={allIngredients} image={recipe.image}></RecipeCard>
       ))}
     </div>
   )
