@@ -104,7 +104,7 @@ export default function AccountPage() {
 
     return (
         <div>
-            <table className=" font-sans w-full border-gray-300 text-center border-2 rounded">
+            <table className=" font-sans w-full border-gray-300 text-left border-2 rounded">
                 <thead className="text-4xl text-black uppercase bg-blue-200">
                     <tr>
                         <th>Username</th>
@@ -121,9 +121,9 @@ export default function AccountPage() {
                                     placeholder="Search by username"
                                     value={searchQueryUsername}
                                     onChange={handleUsernameSearchChange}
-                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2"
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-600"
                                 />
-                                <MagnifyingGlassIcon className="absolute top-0 left-3 h-6 w-6 text-gray-400" />
+                                <MagnifyingGlassIcon className="absolute top-2.5 left-3 h-6 w-6 text-gray-400" />
                             </div>
                         </th>
                         <th>
@@ -133,9 +133,9 @@ export default function AccountPage() {
                                     placeholder="Search by UID"
                                     value={searchQueryUid}
                                     onChange={handleUidSearchChange}
-                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2"
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-800"
                                 />
-                                <MagnifyingGlassIcon className="absolute top-0 left-3 h-6 w-6 text-gray-400" />
+                                <MagnifyingGlassIcon className="absolute top-2.5 left-3 h-6 w-6 text-gray-400" />
                             </div>
                         </th>
                         <th></th>
