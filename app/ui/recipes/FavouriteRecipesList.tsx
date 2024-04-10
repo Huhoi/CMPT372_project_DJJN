@@ -18,7 +18,6 @@ function FavouriteRecipesList() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data.recipes)
                 setRecipes(data.recipes);
             } else {
                 console.error('Failed to fetch favourites:', response.statusText);
@@ -34,11 +33,13 @@ function FavouriteRecipesList() {
 
     return (
         <>
-        {recipes.map((recipes) => (
-            <ul key={recipes.rid}>
-                <li>{recipes.recipe_name}</li>
-            </ul>
-        ))}
+        <div className="bg-slate-100">
+            {recipes.map((recipes) => (
+                <ul key={recipes.rid} className="list-disc px-8 py-4">
+                    <li>{recipes.recipe_name}</li>
+                </ul>
+            ))}
+        </div>
         </>
     )
 }
