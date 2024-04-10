@@ -14,7 +14,7 @@ function ReminderModule() {
 
   return (
     <motion.div
-      className="bg-slate-200/10 shadow-xl rounded-xl overflow-hidden"
+      className="h-full bg-slate-200/10 shadow-xl rounded-xl overflow-hidden"
       style={{ width: '100%' }}
       whileHover={{ scale: 1.05, transition: { duration: 0.5 } }}
     >
