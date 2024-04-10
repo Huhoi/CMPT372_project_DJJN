@@ -76,32 +76,6 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
         e.dataTransfer.setData('text/plain', JSON.stringify(ingredient));
     };
 
-    const handleDragDrop = async (e: React.DragEvent) => {
-        e.preventDefault();
-
-        let droppedIngredient: Ingredient = JSON.parse(e.dataTransfer.getData('text/plain')) as Ingredient;
-        droppedIngredient = { ...droppedIngredient, cid: ingredient.cid };
-
-        try {
-            const response = await fetch('/api/inventory', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(droppedIngredient)
-            });
-
-            if (response.ok) {
-                notifySave(droppedIngredient);
-            } else {
-                console.error('Error updating ingredient:', response.statusText);
-            }
-        }
-        catch (error) {
-            console.error('Error updating ingredient:', error);
-        }
-    };
-
     return (
         <tbody>
             {isEditing ? (
@@ -164,7 +138,6 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     draggable
                     onDragStart={handleDragStart}
                     onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDragDrop}
                     className={`hover:bg-blue-100 cursor-pointer ${isEmpty ? 'text-gray-400' : ''}`}
                 >
                     <td className="px-6 py-4 w-1/5">{ingredient.ingredient_name}</td>

@@ -53,12 +53,12 @@ const AddModal: React.FC<AddModalProps> = ({ cid , isOpen , onClose, onOpen}) =>
     return (
         <>
             <button className="py-1 px-2 mt-1 font-dm_sans tracking-tighter font-bold bg-indigo-600 hover:bg-indigo-700 text-white col-start-5 col-end-5 rounded-md flex justify-center items-center" onClick={openModal}>
-                Add Ingredient
+                Add Item
             </button>
             <Modal modalTitle="Add Ingredient" isOpen={isOpen} onClose={closeModal}>
                 <form onSubmit={handleSubmit} className="font-dm_sans h-[580px]">
                     <div id="nameInput" className="py-2">
-                        <p className="py-2 text-2xl">Ingredient Name</p>
+                        <p className="py-2 text-2xl">Item Name</p>
                         <input
                             type="text"
                             id="ingredient"
