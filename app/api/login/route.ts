@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     // Retrieve the authenticated user
     const user = result.rows[0];
-    console.log("Authenticated User", user.uid, user.username, user.password);
+    // console.log("Authenticated User", user.uid, user.username, user.password);
 
     // Always check this
     const secret = process.env.JWT_SECRET || "";
