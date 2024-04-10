@@ -15,7 +15,6 @@ export default function InventoryPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [searchedCid, setSearchedCid] = useState<number | null>(null);
-    const [categoryModal, setCategoryModal] = useState<boolean>(false);
     
     const uid = useTestContext();
     
@@ -137,16 +136,18 @@ export default function InventoryPage() {
         fetchData();
     };
 
+    // Updates the data after a category is added
     const categoryModalClose = () => {
-        setCategoryModal(false);
         fetchData();
     };
 
+    // Updates the search query string and the category id being searched
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>, cid: number) => {
         setSearchedCid(cid);
         setSearchQuery(e.target.value.toLowerCase());
     };
 
+    // If an ingredient is dragged and dropped into a category, update the ingredient's category
     const handleDragDrop = async (e: React.DragEvent, cid: number) => {
         e.preventDefault();
 

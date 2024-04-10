@@ -72,6 +72,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
         return date.toISOString().split('T')[0];
     };
 
+    // Store the ingredient data in the drag event
     const handleDragStart = (e: React.DragEvent) => {
         e.dataTransfer.setData('text/plain', JSON.stringify(ingredient));
     };

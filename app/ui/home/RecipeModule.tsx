@@ -4,12 +4,13 @@ import React from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import Link from 'next/link';
+import FavouriteRecipesList from '../recipes/FavouriteRecipesList';
 
 function RecipeCard() {
   return (
     <motion.div className="h-full w-full bg-slate-200/10 shadow-xl backdrop-blur-sm rounded-xl"
       whileHover={{ scale: 1.05, transition: { duration: 0.5 }, }}>
-      <Link href="/pages/signedIn/recipes">
+      <Link href="/protected/signedIn/recipes">
         <div className="relative rounded-t-xl bg-gradient-to-r from-blue-300/20 to-indigo-300/20 h-screen flex items-center" style={{ height: "25%", width: "100%" }}>
           <div className="m-4 bg-gradient-to-r from-red-500 to-orange-300 rounded-md flex justify-center items-center" style={{ height: "45px", width: "45px" }}>
             <Image className="pointer-events-none select-none" src="/tools-kitchen-2.png" alt="icon" width={25} height={25}></Image>
@@ -19,6 +20,9 @@ function RecipeCard() {
           <p className="absolute top-9 left-20 pt-0.5 pl-2.5 font-dm_mono text-sm tracking-tighter text-slate-500 select-none">FAVORITES</p>
         </div>
       </Link>
+      <div>
+        <FavouriteRecipesList />
+      </div>
     </motion.div>
   )
 }

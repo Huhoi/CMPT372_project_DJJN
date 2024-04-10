@@ -74,6 +74,8 @@ export async function DELETE(req: NextRequest) {
     }
 }
 
+// Endpoint for updating an ingredient
+// params: iid, ingredient_name, expiration, amount, amount_type, cid
 export async function PUT(req: NextRequest) {
     if (req.method === 'PUT') {
         try {
