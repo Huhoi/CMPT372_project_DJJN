@@ -122,7 +122,7 @@ export default function AccountPage() {
                                     placeholder="Search by username"
                                     value={searchQueryUsername}
                                     onChange={handleUsernameSearchChange}
-                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-600"
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-200 hover:text-white"
                                 />
                                 <MagnifyingGlassIcon className="absolute top-2.5 left-3 h-6 w-6 text-gray-400" />
                             </div>
@@ -134,7 +134,7 @@ export default function AccountPage() {
                                     placeholder="Search by UID"
                                     value={searchQueryUid}
                                     onChange={handleUidSearchChange}
-                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-800"
+                                    className="border border-gray-300 rounded-md pl-10 pr-4 py-2 hover:bg-gray-200 hover:text-white"
                                 />
                                 <MagnifyingGlassIcon className="absolute top-2.5 left-3 h-6 w-6 text-gray-400" />
                             </div>
@@ -144,7 +144,7 @@ export default function AccountPage() {
                 </thead>
                 <tbody className="text-xl text-gray-800 bg-gray-100 font-mono">
                     {filteredUsers.map((user) => (
-                        <tr key={user.uid} className="hover:bg-gray-100 font-semibold rounded-full">
+                        <tr key={user.uid} className="hover:bg-gray-200 font-semibold rounded-full">
                             <td>{user.username}</td>
                             <td>{user.uid}</td>
                             <td>
