@@ -10,7 +10,7 @@ function Navbar() {
       <nav id="navigation" className="pt-2 col-span-4 col-start-5 flex flex-row justify-around">
         <Link href="/protected/signedIn/recipes" className="font-dm_mono tracking-widester text-sm font-medium">RECIPES</Link>
         <Link href="/protected/signedIn/inventory" className="font-dm_mono tracking-widester text-sm font-medium">INVENTORY</Link>
-        <Link href="/protected/signedIn/community" className="font-dm_mono tracking-widester text-sm font-medium">COMMUNITY</Link>
+        <Link href="/protected/signedIn/community" className="font-dm_mono tracking-widester text-sm font-medium">FIND RECIPES</Link>
         <Link href="/protected/signedIn/account" className="font-dm_mono tracking-widester text-sm font-medium">ACCOUNT</Link>
       </nav>
     </div>

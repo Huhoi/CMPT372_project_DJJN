@@ -8,7 +8,7 @@ import { QueueListIcon, CircleStackIcon, UserGroupIcon, UserIcon } from '@heroic
 const links = [
   { name: 'Recipes', href: '/protected/signedIn/recipes', icon: QueueListIcon },
   { name: 'Inventory', href: '/protected/signedIn/inventory', icon: CircleStackIcon },
-  { name: 'Community', href: '/protected/signedIn/community', icon: UserGroupIcon },
+  { name: 'Find Recipes', href: '/protected/signedIn/community', icon: UserGroupIcon },
   { name: 'Account', href: '/protected/signedIn/account', icon: UserIcon },
 ];
 
