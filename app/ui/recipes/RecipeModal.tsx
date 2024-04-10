@@ -11,7 +11,7 @@ import { AmountType, Ingredient, RecipeIngredient } from '@/app/utils/interfaces
 
 const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, children }) => {
     const [title, setTitle] = useState("");
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [ingredients, setIngredients] = useState<RecipeIngredient[]>([]);
     const [instructions, setInstructions] = useState("");
     const [favorite, setFavorite] = useState(false);
 
@@ -21,7 +21,7 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
     const uid = useTestContext()
 
     const [count, setCount] = useState(0);
-    const [modalHeight, setModalHeight] = useState(600);
+    const [modalHeight, setModalHeight] = useState(550);
     const [details, setDetails] = useState<RecipeIngredient[]>([]);
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -96,26 +96,31 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         const handlePageLoad = async () => {
             try {
                 // First get ingredients
-                const response1 = await fetch(`../../api/recipes`);
+                const response = await fetch('../../api/recipes?uid=' + uid, {method: 'GET'});
 
-                if (!response1.ok) {
+                if (!response.ok) {
                     throw new Error('Failed to GET');
                 }
 
-                var fetched = await response1.json();
-                fetched = fetched.ingredients;
-                const items: Ingredient[] = fetched.map((item: any) => ({
-                    iid: item.iid,
-                    ingredient_name: item.name,
-                }))
-                setIngredients(items);
-
-                // Add as Select form options
+                var fetched = await response.json();
+                var fetchedIngredients = fetched.ingredients;
                 var selectOptionsList: any[] = [];
-                items.forEach(ingredient => {
-                    selectOptionsList.push({ value: ingredient.ingredient_name, label: ingredient.ingredient_name });
-                });
-                setSelectOptions(selectOptionsList);
+
+                if (fetchedIngredients.length > 0) {
+                    const items: RecipeIngredient[] = fetchedIngredients.map((item: any) => ({
+                        ingredient_name: item.ingredient_name,
+                        amount: item.amount,
+                        amount_type: item.amount_type,
+                    }));
+
+                    setIngredients(items);
+
+                    // Add as Select form options
+                    items.forEach(ingredient => {
+                        selectOptionsList.push({ value: ingredient.ingredient_name, label: ingredient.ingredient_name });
+                    });
+                    setSelectOptions(selectOptionsList);
+                }
 
             } catch (error) {
                 console.error('Error with retrieving: ', error);
@@ -141,13 +146,10 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         }
         
         if (selected) {
-            const selectedIngredients: Ingredient[] = selected.map((selection: any) => ({
-                iid: 0, // Unknown until created
+            const selectedIngredients: RecipeIngredient[] = selected.map((selection: any) => ({
                 ingredient_name: selection.label,
-                expiration: new Date(),
-                amount: 0,
-                amount_type: AmountType.GRAM,
-                cid: 0,
+                amount: "",
+                amount_type: "",
             }));
             setIngredients(selectedIngredients);
         }
@@ -163,13 +165,13 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
         updateSize();
     }, [selected])
 
-    async function handleCreate(e: { preventDefault: () => void }) {
+    async function handleCreate() {
         const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         try {
             const response = await fetch(`../../api/recipes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, recipe_ingredients: details, instruction: instructions, last_modified: formattedDate, favorite: favorite, uid: uid})
+                body: JSON.stringify({ title: title, recipe_ingredients: details, instruction: instructions, last_modified: formattedDate, favorite: favorite, uid: uid })
             });
 
             if (!response.ok) {
@@ -273,25 +275,29 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                         
                         { ingredients.map((ingredient, index) => (
                                 <div className="flex justify-between" key={index}>
+                                    { details.length != 0 ? (
                                     <input value={ingredient.ingredient_name}
                                         required
                                         readOnly
                                         className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-6/12 py-2 px-4 text-slate-400 leading-tight focus:outline-none"
                                         type="text"
                                         placeholder="Choose your first ingredient"/>
-                                    { details.length != 0 ? (
+                                    ) : ( <p></p>)}
                                     <div className='w-3/12 flex justify-between gap-2'>
-                                            <input value={details[index].amount}
+                                        { details.length != 0 ? (
+                                            <input value={details[index]?.amount}
                                             required
                                             className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-3/5 py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
                                             type="text"
-                                            placeholder="Qty."
+                                            placeholder="Amount"
                                             onChange={(e) => handleAmountChange(e, index)} />
-                                        <select value={details[index].amount_type}
+                                        ) : ( <p></p>)}
+                                        { details.length != 0 ? (
+                                        <select value={details[index]?.amount_type}
                                             required
                                             className="mt-2 bg-slate-200 appearance-none border-2 border-slate-300 rounded w-2/5 py-2 px-4 text-slate-600 leading-tight focus:outline-none focus:text-slate-950 focus:border-slate-400"
                                             onChange={(e) => handleAmountTypeChange(e, index)}>
-                                            <option value="" selected disabled hidden>Unit</option>
+                                            <option value="" disabled hidden>Unit</option>
                                             <option value="g">g</option>
                                             <option value="kg">kg</option>
                                             <option value="ml">mL</option>
@@ -309,8 +315,8 @@ const RecipeModal: React.FC<ModalProps> = ({ modalTitle, isOpen, onClose, childr
                                             <option value="pinch">Pinch</option>
                                             <option value="serving">Serving</option>
                                         </select>
+                                        ) : ( <p></p>)}
                                     </div>
-                                    ) : ( <p></p> )}
                                 </div>
                             // <Details key={index} ingredient_name={ingredient.ingredient_name} amount={amount[index]} amountType={amountType[index]}
                             // handleInputChange={(event) => handleInputChange(event, index)}/>
