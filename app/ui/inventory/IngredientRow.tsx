@@ -138,7 +138,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient, handleDeleteI
                     draggable
                     onDragStart={handleDragStart}
                     onDragOver={(e) => e.preventDefault()}
-                    className={`hover:bg-blue-100 cursor-pointer ${isEmpty ? 'text-gray-400' : ''}`}
+                    className={`hover:bg-blue-100 touch-pan-y cursor-pointer ${isEmpty ? 'text-gray-400' : ''}`}
                 >
                     <td className="px-6 py-4 w-1/5">{ingredient.ingredient_name}</td>
                     <td className="px-6 py-4 w-1/5">{ingredient.amount} {ingredient.amount_type}</td>

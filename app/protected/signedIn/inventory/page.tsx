@@ -15,6 +15,7 @@ export default function InventoryPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [searchedCid, setSearchedCid] = useState<number | null>(null);
+    const [categoryModal, setCategoryModal] = useState<boolean>(false);
     
     const uid = useTestContext();
     
@@ -136,6 +137,11 @@ export default function InventoryPage() {
         fetchData();
     };
 
+    const categoryModalClose = () => {
+        setCategoryModal(false);
+        fetchData();
+    };
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>, cid: number) => {
         setSearchedCid(cid);
         setSearchQuery(e.target.value.toLowerCase());
@@ -169,10 +175,10 @@ export default function InventoryPage() {
 
     return (
         <>
-            <AddButton />
-            <div className="flex flex-wrap w-full mt-8 justify-center items-center h-screen overflow-auto">
+            <AddButton onClose={categoryModalClose} />
+            <div className="flex flex-col w-full mt-8 justify-start items-center h-screen overflow-auto">
                 {categories.map(category => (
-                    <div key={category.cid} className="flex flex-col py-4 px-4 w-5/6 mb-2 bg-slate-100 border-2 rounded h-2/5">
+                    <div key={category.cid} className="flex flex-col py-4 px-4 w-5/6 mb-2 bg-slate-100 border-2 rounded max-h-2/5">
                         <div className="h-28">
                             <div className="flex justify-between items-center mb-1">
                                 <h2 className="text-lg text-gray-800">{category.category_name}</h2>

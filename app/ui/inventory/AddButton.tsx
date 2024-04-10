@@ -4,8 +4,13 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import SelectionModal from './SelectionModal';
+import CategoryModal from './CategoryModal';
 
-function AddButton() {
+interface AddButtonProps {
+  onClose: () => void;
+}
+
+const AddButton: React.FC<AddButtonProps> = ( { onClose }) => {
   const [image, setImage] = useState("/circle-plus-1.png");
   const [checkIsOpen, setIsOpen] = useState(false);
 
@@ -20,6 +25,7 @@ function AddButton() {
     if (checkIsOpen) {
       setIsOpen(!checkIsOpen);
     }
+    onClose();
   }
 
   return (
@@ -31,10 +37,10 @@ function AddButton() {
         onFocus={() => setImage("/circle-plus-1.png")}>
         <motion.div className="p-6 flex flex-grow justify-center items-center gap-2" whileHover={{ scale: 1.03, transition: { duration: 0.3 }, }}>
           <Image className="pointer-events-none select-none" priority src={image} alt="icon" width={50} height={50}></Image>
-          <p className="font-dm_sans text-4xl font-bold tracking-tighter">New inventory item</p>
+          <p className="font-dm_sans text-4xl font-bold tracking-tighter">New Category</p>
         </motion.div>
       </div>
-      <SelectionModal modalTitle={"Select action"} isOpen={checkIsOpen} onClose={closeModal}> </SelectionModal>
+      <CategoryModal modalTitle="Add Category" isOpen={checkIsOpen} onClose={closeModal}> </CategoryModal>
     </>
     
   )
